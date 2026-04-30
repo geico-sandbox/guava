@@ -23,6 +23,7 @@ import static com.google.common.collect.Multimaps.synchronizedMultimap;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.testing.Helpers.mapEntry;
 import static com.google.common.collect.testing.IteratorFeature.MODIFIABLE;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
@@ -37,7 +38,6 @@ import com.google.common.collect.testing.features.MapFeature;
 import com.google.common.collect.testing.google.SetMultimapTestSuiteBuilder;
 import com.google.common.collect.testing.google.TestStringSetMultimapGenerator;
 import com.google.common.testing.EqualsTester;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -151,7 +151,7 @@ public class LinkedHashMultimapTest extends TestCase {
   @GwtIncompatible // SeriazableTester
   public void testSerializationOrdering() {
     SetMultimap<String, Integer> multimap = initializeMultimap5();
-    SetMultimap<String, Integer> copy = SerializableTester.reserializeAndAssert(multimap);
+    SetMultimap<String, Integer> copy = reserializeAndAssert(multimap);
     assertOrderingReadOnly(copy);
   }
 
@@ -164,7 +164,7 @@ public class LinkedHashMultimapTest extends TestCase {
     multimap.put("a", 3);
     multimap.put("c", 4);
     multimap.remove("a", 1);
-    multimap = SerializableTester.reserializeAndAssert(multimap);
+    multimap = reserializeAndAssert(multimap);
     assertThat(multimap.keySet()).containsExactly("a", "b", "c").inOrder();
     assertThat(multimap.entries())
         .containsExactly(mapEntry("b", 2), mapEntry("a", 3), mapEntry("c", 4))

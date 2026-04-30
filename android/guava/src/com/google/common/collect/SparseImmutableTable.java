@@ -14,6 +14,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Maps.indexMap;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -47,7 +48,7 @@ final class SparseImmutableTable<R, C, V> extends RegularImmutableTable<R, C, V>
       ImmutableList<Cell<R, C, V>> cellList,
       ImmutableSet<R> rowSpace,
       ImmutableSet<C> columnSpace) {
-    Map<R, Integer> rowIndex = Maps.indexMap(rowSpace);
+    Map<R, Integer> rowIndex = indexMap(rowSpace);
     Map<R, Map<C, V>> rows = new LinkedHashMap<>();
     for (R row : rowSpace) {
       rows.put(row, new LinkedHashMap<C, V>());
@@ -131,7 +132,7 @@ final class SparseImmutableTable<R, C, V> extends RegularImmutableTable<R, C, V>
   @J2ktIncompatible
   @GwtIncompatible
     Object writeReplace() {
-    Map<C, Integer> columnKeyToIndex = Maps.indexMap(columnKeySet());
+    Map<C, Integer> columnKeyToIndex = indexMap(columnKeySet());
     int[] cellColumnIndices = new int[cellSet().size()];
     int i = 0;
     for (Cell<R, C, V> cell : cellSet()) {

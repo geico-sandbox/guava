@@ -23,6 +23,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.lang.Math.min;
 import static java.util.Arrays.asList;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.cache.CacheTesting.Receiver;
 import com.google.common.cache.TestingCacheLoaders.IdentityLoader;
 import com.google.common.cache.TestingRemovalListeners.CountingRemovalListener;
@@ -37,6 +39,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author mike nonemacher
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class CacheEvictionTest extends TestCase {
   static final int MAX_SIZE = 100;

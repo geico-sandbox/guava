@@ -17,11 +17,11 @@
 package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.asMap;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.Immutable;
 import com.google.errorprone.annotations.InlineMe;
@@ -100,7 +100,7 @@ public final class ImmutableValueGraph<N, V> extends StandardValueGraph<N, V> {
         ? DirectedGraphConnections.ofImmutable(
             node, graph.incidentEdges(node), successorNodeToValueFn)
         : UndirectedGraphConnections.ofImmutable(
-            Maps.asMap(graph.adjacentNodes(node), successorNodeToValueFn));
+            asMap(graph.adjacentNodes(node), successorNodeToValueFn));
   }
 
   /**
@@ -131,8 +131,7 @@ public final class ImmutableValueGraph<N, V> extends StandardValueGraph<N, V> {
     Builder(ValueGraphBuilder<N, V> graphBuilder) {
       // The incidentEdgeOrder for immutable graphs is always stable. However, we don't want to
       // modify this builder, so we make a copy instead.
-      this.mutableValueGraph =
-          graphBuilder.copy().incidentEdgeOrder(ElementOrder.<N>stable()).build();
+      this.mutableValueGraph = graphBuilder.copy().incidentEdgeOrder(ElementOrder.stable()).build();
     }
 
     /**
@@ -200,7 +199,7 @@ public final class ImmutableValueGraph<N, V> extends StandardValueGraph<N, V> {
      * Builder}.
      */
     public ImmutableValueGraph<N, V> build() {
-      return ImmutableValueGraph.copyOf(mutableValueGraph);
+      return copyOf(mutableValueGraph);
     }
   }
 }

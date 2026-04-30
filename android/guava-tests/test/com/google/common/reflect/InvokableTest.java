@@ -16,12 +16,13 @@
 
 package com.google.common.reflect;
 
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Collections.nCopies;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
 import com.google.errorprone.annotations.Keep;
@@ -34,7 +35,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.TypeVariable;
-import java.util.Collections;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
@@ -53,12 +53,12 @@ public class InvokableTest extends TestCase {
   // `boolean canAccess(Object)`.
   public void testApiCompatibleWithAccessibleObject() {
     ImmutableSet<String> invokableMethods =
-        publicMethodSignatures(Invokable.class, ImmutableSet.<String>of());
+        publicMethodSignatures(Invokable.class, ImmutableSet.of());
     ImmutableSet<String> accessibleObjectMethods =
         publicMethodSignatures(AccessibleObject.class, ImmutableSet.of("canAccess"));
     assertThat(invokableMethods).containsAtLeastElementsIn(accessibleObjectMethods);
     ImmutableSet<String> genericDeclarationMethods =
-        publicMethodSignatures(GenericDeclaration.class, ImmutableSet.<String>of());
+        publicMethodSignatures(GenericDeclaration.class, ImmutableSet.of());
     assertThat(invokableMethods).containsAtLeastElementsIn(genericDeclarationMethods);
   }
 
@@ -750,14 +750,14 @@ public class InvokableTest extends TestCase {
 
     @SuppressWarnings("UnusedTypeParameter") // examined with reflection
     static <T> Iterable<String> prepend(@NotBlank String first, Iterable<String> tail) {
-      return Iterables.concat(ImmutableList.of(first), tail);
+      return concat(ImmutableList.of(first), tail);
     }
 
     // We are testing reflective access to an unnecessary `throws` clause.
     @SuppressWarnings("ThrowsUncheckedException")
     Iterable<String> prepend(Iterable<String> tail)
         throws IllegalArgumentException, NullPointerException {
-      return Iterables.concat(Collections.nCopies(times, prefix), tail);
+      return concat(nCopies(times, prefix), tail);
     }
 
     static Invokable<?, Prepender> constructor(Class<?>... parameterTypes) throws Exception {

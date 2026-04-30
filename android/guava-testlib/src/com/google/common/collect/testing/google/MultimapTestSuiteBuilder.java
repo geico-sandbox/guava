@@ -19,6 +19,7 @@ package com.google.common.collect.testing.google;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.testing.Helpers.copyToSet;
 import static com.google.common.collect.testing.Helpers.mapEntry;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static java.util.Collections.singleton;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -42,7 +43,6 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.Feature;
 import com.google.common.collect.testing.features.ListFeature;
 import com.google.common.collect.testing.features.MapFeature;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -112,8 +112,7 @@ public class MultimapTestSuiteBuilder<K, V, M extends Multimap<K, V>>
 
     if (parentBuilder.getFeatures().contains(CollectionFeature.SERIALIZABLE)) {
       derivedSuites.add(
-          MultimapTestSuiteBuilder.using(
-                  new ReserializedMultimapGenerator<K, V, M>(parentBuilder.getSubjectGenerator()))
+          using(new ReserializedMultimapGenerator<K, V, M>(parentBuilder.getSubjectGenerator()))
               .withFeatures(computeReserializedMultimapFeatures(parentBuilder.getFeatures()))
               .named(parentBuilder.getName() + " reserialized")
               .suppressing(parentBuilder.getSuppressedTests())
@@ -659,7 +658,7 @@ public class MultimapTestSuiteBuilder<K, V, M extends Multimap<K, V>>
 
     @Override
     public M create(Object... elements) {
-      return SerializableTester.reserialize(
+      return reserialize(
           ((TestMultimapGenerator<K, V, M>) multimapGenerator.getInnerGenerator())
               .create(elements));
     }

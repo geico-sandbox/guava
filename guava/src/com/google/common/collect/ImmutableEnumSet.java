@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Iterables.getOnlyElement;
+import static com.google.common.collect.Iterators.unmodifiableIterator;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -71,7 +72,7 @@ final class ImmutableEnumSet<E extends Enum<E>> extends ImmutableSet<E> {
 
   @Override
   public UnmodifiableIterator<E> iterator() {
-    return Iterators.unmodifiableIterator(delegate.iterator());
+    return unmodifiableIterator(delegate.iterator());
   }
 
   @Override

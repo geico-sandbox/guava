@@ -18,10 +18,12 @@ package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+import static com.google.common.collect.Maps.newLinkedHashMapWithExpectedSize;
+import static com.google.common.collect.Maps.newTreeMap;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import com.google.errorprone.annotations.Immutable;
 import java.util.Comparator;
@@ -128,7 +130,7 @@ public final class ElementOrder<T> {
    * Returns an instance which specifies that the natural ordering of the elements is guaranteed.
    */
   public static <S extends Comparable<? super S>> ElementOrder<S> natural() {
-    return new ElementOrder<>(Type.SORTED, Ordering.<S>natural());
+    return new ElementOrder<>(Type.SORTED, Ordering.natural());
   }
 
   /**
@@ -187,12 +189,12 @@ public final class ElementOrder<T> {
   <K extends T, V> Map<K, V> createMap(int expectedSize) {
     switch (type) {
       case UNORDERED:
-        return Maps.newHashMapWithExpectedSize(expectedSize);
+        return newHashMapWithExpectedSize(expectedSize);
       case INSERTION:
       case STABLE:
-        return Maps.newLinkedHashMapWithExpectedSize(expectedSize);
+        return newLinkedHashMapWithExpectedSize(expectedSize);
       case SORTED:
-        return Maps.newTreeMap(comparator());
+        return newTreeMap(comparator());
     }
     throw new AssertionError();
   }

@@ -432,7 +432,7 @@ abstract class AbstractFutureState<V extends @Nullable Object> extends InternalF
    *
    * Additionally, it seems that nestmates do not help with runtime reflection under *Android*, even
    * when we use a newer -source and -target. That doesn't normally matter for AbstractFutureState,
-   * since Android should normally succed in using UnsafeAtomicHelper and thus never even try the
+   * since Android should normally succeed in using UnsafeAtomicHelper and thus never even try the
    * problematic AtomicReferenceFieldUpdaterAtomicHelper code path. However, the same problem *does*
    * matter with AggregateFutureState, which does not have an Unsafe-based helper.
    *
@@ -571,7 +571,7 @@ abstract class AbstractFutureState<V extends @Nullable Object> extends InternalF
    * <p>Static initialization of this class will fail if the {@link sun.misc.Unsafe} object cannot
    * be accessed.
    */
-  @SuppressWarnings("SunApi") // b/345822163
+  @SuppressWarnings({"SunApi", "removal"}) // b/345822163
   private static final class UnsafeAtomicHelper extends AtomicHelper {
     static final Unsafe UNSAFE;
     static final long LISTENERS_OFFSET;

@@ -155,7 +155,7 @@ public class FuturesGetCheckedTest extends TestCase {
             () ->
                 getChecked(
                     FAILED_FUTURE_CHECKED_EXCEPTION, ExceptionWithGoodAndBadConstructor.class));
-    assertThat(expected).hasCauseThat().isSameInstanceAs(CHECKED_EXCEPTION);
+    assertThat(expected).hasCauseThat().isEqualTo(CHECKED_EXCEPTION);
   }
 
   // Boring timed-get tests:
@@ -280,7 +280,7 @@ public class FuturesGetCheckedTest extends TestCase {
                     ExceptionWithGoodAndBadConstructor.class,
                     1,
                     SECONDS));
-    assertThat(expected).hasCauseThat().isSameInstanceAs(CHECKED_EXCEPTION);
+    assertThat(expected).hasCauseThat().isEqualTo(CHECKED_EXCEPTION);
   }
 
   // Edge case tests of the exception-construction code through untimed get():

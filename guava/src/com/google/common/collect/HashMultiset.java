@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -66,11 +68,11 @@ public final class HashMultiset<E extends @Nullable Object> extends AbstractMapB
   }
 
   private HashMultiset() {
-    super(new HashMap<E, Count>());
+    super(new HashMap<>());
   }
 
   private HashMultiset(int distinctElements) {
-    super(Maps.newHashMapWithExpectedSize(distinctElements));
+    super(newHashMapWithExpectedSize(distinctElements));
   }
 
   /**

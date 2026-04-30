@@ -17,6 +17,9 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Sets.equalsImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
+import static com.google.common.collect.Sets.removeAllImpl;
 
 import com.google.common.annotations.GwtCompatible;
 import java.util.Collection;
@@ -75,7 +78,7 @@ public abstract class ForwardingSet<E extends @Nullable Object> extends Forwardi
    */
   @Override
   protected boolean standardRemoveAll(Collection<?> collection) {
-    return Sets.removeAllImpl(this, checkNotNull(collection)); // for GWT
+    return removeAllImpl(this, checkNotNull(collection)); // for GWT
   }
 
   /**
@@ -86,7 +89,7 @@ public abstract class ForwardingSet<E extends @Nullable Object> extends Forwardi
    * @since 7.0
    */
   protected boolean standardEquals(@Nullable Object object) {
-    return Sets.equalsImpl(this, object);
+    return equalsImpl(this, object);
   }
 
   /**
@@ -96,6 +99,6 @@ public abstract class ForwardingSet<E extends @Nullable Object> extends Forwardi
    * @since 7.0
    */
   protected int standardHashCode() {
-    return Sets.hashCodeImpl(this);
+    return hashCodeImpl(this);
   }
 }

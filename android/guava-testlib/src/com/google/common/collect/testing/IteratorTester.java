@@ -16,8 +16,9 @@
 
 package com.google.common.collect.testing;
 
+import static java.util.Collections.singleton;
+
 import com.google.common.annotations.GwtCompatible;
-import java.util.Collections;
 import java.util.Iterator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -98,7 +99,7 @@ public abstract class IteratorTester<E extends @Nullable Object>
       Iterable<? extends IteratorFeature> features,
       Iterable<E> expectedElements,
       KnownOrder knownOrder) {
-    super(steps, Collections.singleton(null), features, expectedElements, knownOrder, 0);
+    super(steps, singleton(null), features, expectedElements, knownOrder, 0);
   }
 
   @Override

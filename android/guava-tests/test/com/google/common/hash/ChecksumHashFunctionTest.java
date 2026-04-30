@@ -18,6 +18,7 @@ import static com.google.common.hash.Hashing.ChecksumType.ADLER_32;
 import static com.google.common.hash.Hashing.ChecksumType.CRC_32;
 import static com.google.common.truth.Truth.assertThat;
 
+import com.google.common.annotations.J2ktIncompatible;
 import java.util.zip.Checksum;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
@@ -28,6 +29,7 @@ import org.jspecify.annotations.NullUnmarked;
  * @author Colin Decker
  */
 @NullUnmarked
+@J2ktIncompatible
 public class ChecksumHashFunctionTest extends TestCase {
 
   public void testCrc32_equalsChecksumValue() throws Exception {

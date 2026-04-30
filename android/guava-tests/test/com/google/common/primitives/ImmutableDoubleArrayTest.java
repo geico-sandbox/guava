@@ -17,7 +17,9 @@ package com.google.common.primitives;
 import static com.google.common.primitives.TestPlatform.reduceIterationsIfGwt;
 import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static java.util.Collections.emptySet;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
@@ -32,7 +34,6 @@ import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.testing.EqualsTester;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -110,36 +111,36 @@ public class ImmutableDoubleArrayTest extends TestCase {
   }
 
   public void testCopyOf_iterable_notCollection_empty() {
-    Iterable<Double> iterable = iterable(Collections.<Double>emptySet());
+    Iterable<Double> iterable = iterable(Collections.emptySet());
     assertThat(ImmutableDoubleArray.copyOf(iterable)).isSameInstanceAs(ImmutableDoubleArray.of());
   }
 
   public void testCopyOf_iterable_notCollection_nonempty() {
-    List<Double> list = Arrays.asList(0.0, 1.0, 3.0);
+    List<Double> list = asList(0.0, 1.0, 3.0);
     ImmutableDoubleArray iia = ImmutableDoubleArray.copyOf(iterable(list));
     list.set(2, 2.0);
     assertThat(iia.asList()).containsExactly(0.0, 1.0, 3.0).inOrder();
   }
 
   public void testCopyOf_iterable_collection_empty() {
-    Iterable<Double> iterable = Collections.emptySet();
+    Iterable<Double> iterable = emptySet();
     assertThat(ImmutableDoubleArray.copyOf(iterable)).isSameInstanceAs(ImmutableDoubleArray.of());
   }
 
   public void testCopyOf_iterable_collection_nonempty() {
-    List<Double> list = Arrays.asList(0.0, 1.0, 3.0);
+    List<Double> list = asList(0.0, 1.0, 3.0);
     ImmutableDoubleArray iia = ImmutableDoubleArray.copyOf((Iterable<Double>) list);
     list.set(2, 2.0);
     assertThat(iia.asList()).containsExactly(0.0, 1.0, 3.0).inOrder();
   }
 
   public void testCopyOf_collection_empty() {
-    Collection<Double> iterable = Collections.emptySet();
+    Collection<Double> iterable = emptySet();
     assertThat(ImmutableDoubleArray.copyOf(iterable)).isSameInstanceAs(ImmutableDoubleArray.of());
   }
 
   public void testCopyOf_collection_nonempty() {
-    List<Double> list = Arrays.asList(0.0, 1.0, 3.0);
+    List<Double> list = asList(0.0, 1.0, 3.0);
     ImmutableDoubleArray iia = ImmutableDoubleArray.copyOf(list);
     list.set(2, 2.0);
     assertThat(iia.asList()).containsExactly(0.0, 1.0, 3.0).inOrder();
@@ -480,7 +481,7 @@ public class ImmutableDoubleArrayTest extends TestCase {
   @GwtIncompatible // used only from suite
   @AndroidIncompatible
   private static ImmutableDoubleArray makeArray(Double[] values) {
-    return ImmutableDoubleArray.copyOf(Arrays.asList(values));
+    return ImmutableDoubleArray.copyOf(asList(values));
   }
 
   // Test generators.  To let the GWT test suite generator access them, they need to be public named

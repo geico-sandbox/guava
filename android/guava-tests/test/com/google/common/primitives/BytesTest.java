@@ -16,17 +16,18 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.collect.testing.Helpers.misleadingSizeCollection;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.testing.NullPointerTester;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullMarked;
@@ -181,15 +182,15 @@ public class BytesTest extends TestCase {
 
   public void testToArray() {
     // need explicit type parameter to avoid javac warning!?
-    List<Byte> none = Arrays.<Byte>asList();
+    List<Byte> none = Arrays.asList();
     assertThat(Bytes.toArray(none)).isEqualTo(EMPTY);
 
-    List<Byte> one = Arrays.asList((byte) 1);
+    List<Byte> one = asList((byte) 1);
     assertThat(Bytes.toArray(one)).isEqualTo(ARRAY1);
 
     byte[] array = {(byte) 0, (byte) 1, (byte) 0x55};
 
-    List<Byte> three = Arrays.asList((byte) 0, (byte) 1, (byte) 0x55);
+    List<Byte> three = asList((byte) 0, (byte) 1, (byte) 0x55);
     assertThat(Bytes.toArray(three)).isEqualTo(array);
 
     assertThat(Bytes.toArray(Bytes.asList(array))).isEqualTo(array);
@@ -199,7 +200,7 @@ public class BytesTest extends TestCase {
     for (int delta : new int[] {+1, 0, -1}) {
       for (int i = 0; i < VALUES.length; i++) {
         List<Byte> list = Bytes.asList(VALUES).subList(0, i);
-        Collection<Byte> misleadingSize = Helpers.misleadingSizeCollection(delta);
+        Collection<Byte> misleadingSize = misleadingSizeCollection(delta);
         misleadingSize.addAll(list);
         byte[] arr = Bytes.toArray(misleadingSize);
         assertThat(arr).hasLength(i);
@@ -212,19 +213,19 @@ public class BytesTest extends TestCase {
 
   @SuppressWarnings("nullness") // test of a bogus call
   public void testToArray_withNull() {
-    List<@Nullable Byte> list = Arrays.asList((byte) 0, (byte) 1, null);
+    List<@Nullable Byte> list = asList((byte) 0, (byte) 1, null);
     assertThrows(NullPointerException.class, () -> Bytes.toArray(list));
   }
 
   public void testToArray_withConversion() {
     byte[] array = {(byte) 0, (byte) 1, (byte) 2};
 
-    List<Byte> bytes = Arrays.asList((byte) 0, (byte) 1, (byte) 2);
-    List<Short> shorts = Arrays.asList((short) 0, (short) 1, (short) 2);
-    List<Integer> ints = Arrays.asList(0, 1, 2);
-    List<Float> floats = Arrays.asList(0.0f, 1.0f, 2.0f);
-    List<Long> longs = Arrays.asList(0L, 1L, 2L);
-    List<Double> doubles = Arrays.asList(0.0, 1.0, 2.0);
+    List<Byte> bytes = asList((byte) 0, (byte) 1, (byte) 2);
+    List<Short> shorts = asList((short) 0, (short) 1, (short) 2);
+    List<Integer> ints = asList(0, 1, 2);
+    List<Float> floats = asList(0.0f, 1.0f, 2.0f);
+    List<Long> longs = asList(0L, 1L, 2L);
+    List<Double> doubles = asList(0.0, 1.0, 2.0);
 
     assertThat(Bytes.toArray(bytes)).isEqualTo(array);
     assertThat(Bytes.toArray(shorts)).isEqualTo(array);
@@ -267,7 +268,7 @@ public class BytesTest extends TestCase {
   // `primitives` can't depend on `collect`, so this is what the prod code has to return.
   @SuppressWarnings("EmptyList")
   public void testAsListEmpty() {
-    assertThat(Bytes.asList(EMPTY)).isSameInstanceAs(Collections.emptyList());
+    assertThat(Bytes.asList(EMPTY)).isSameInstanceAs(emptyList());
   }
 
   public void testReverse() {

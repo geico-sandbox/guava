@@ -16,11 +16,14 @@
 
 package com.google.common.collect;
 
+import static com.google.common.base.Predicates.alwaysFalse;
+import static com.google.common.collect.Maps.filterEntries;
+import static com.google.common.collect.Maps.filterKeys;
+import static com.google.common.collect.Maps.filterValues;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import java.util.Map;
 import java.util.Map.Entry;
 import junit.framework.TestCase;
@@ -40,7 +43,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
 
   public void testFilteredKeysIllegalPut() {
     Map<String, Integer> unfiltered = createUnfiltered();
-    Map<String, Integer> filtered = Maps.filterKeys(unfiltered, NOT_LENGTH_3);
+    Map<String, Integer> filtered = filterKeys(unfiltered, NOT_LENGTH_3);
     filtered.put("a", 1);
     filtered.put("b", 2);
     assertEquals(ImmutableMap.of("a", 1, "b", 2), filtered);
@@ -50,7 +53,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
 
   public void testFilteredKeysIllegalPutAll() {
     Map<String, Integer> unfiltered = createUnfiltered();
-    Map<String, Integer> filtered = Maps.filterKeys(unfiltered, NOT_LENGTH_3);
+    Map<String, Integer> filtered = filterKeys(unfiltered, NOT_LENGTH_3);
     filtered.put("a", 1);
     filtered.put("b", 2);
     assertEquals(ImmutableMap.of("a", 1, "b", 2), filtered);
@@ -64,7 +67,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
 
   public void testFilteredKeysFilteredReflectsBackingChanges() {
     Map<String, Integer> unfiltered = createUnfiltered();
-    Map<String, Integer> filtered = Maps.filterKeys(unfiltered, NOT_LENGTH_3);
+    Map<String, Integer> filtered = filterKeys(unfiltered, NOT_LENGTH_3);
     unfiltered.put("two", 2);
     unfiltered.put("three", 3);
     unfiltered.put("four", 4);
@@ -82,7 +85,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
 
   public void testFilteredValuesIllegalPut() {
     Map<String, Integer> unfiltered = createUnfiltered();
-    Map<String, Integer> filtered = Maps.filterValues(unfiltered, EVEN);
+    Map<String, Integer> filtered = filterValues(unfiltered, EVEN);
     filtered.put("a", 2);
     unfiltered.put("b", 4);
     unfiltered.put("c", 5);
@@ -94,7 +97,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
 
   public void testFilteredValuesIllegalPutAll() {
     Map<String, Integer> unfiltered = createUnfiltered();
-    Map<String, Integer> filtered = Maps.filterValues(unfiltered, EVEN);
+    Map<String, Integer> filtered = filterValues(unfiltered, EVEN);
     filtered.put("a", 2);
     unfiltered.put("b", 4);
     unfiltered.put("c", 5);
@@ -108,7 +111,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
 
   public void testFilteredValuesIllegalSetValue() {
     Map<String, Integer> unfiltered = createUnfiltered();
-    Map<String, Integer> filtered = Maps.filterValues(unfiltered, EVEN);
+    Map<String, Integer> filtered = filterValues(unfiltered, EVEN);
     filtered.put("a", 2);
     filtered.put("b", 4);
     assertEquals(ImmutableMap.of("a", 2, "b", 4), filtered);
@@ -125,7 +128,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
     unfiltered.put("two", 2);
     unfiltered.put("three", 3);
     unfiltered.put("four", 4);
-    Map<String, Integer> filtered = Maps.filterValues(unfiltered, EVEN);
+    Map<String, Integer> filtered = filterValues(unfiltered, EVEN);
     assertEquals(ImmutableMap.of("one", 1, "two", 2, "three", 3, "four", 4), unfiltered);
     assertEquals(ImmutableMap.of("two", 2, "four", 4), filtered);
 
@@ -139,7 +142,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
     unfiltered.put("cat", 3);
     unfiltered.put("dog", 2);
     unfiltered.put("horse", 5);
-    Map<String, Integer> filtered = Maps.filterEntries(unfiltered, CORRECT_LENGTH);
+    Map<String, Integer> filtered = filterEntries(unfiltered, CORRECT_LENGTH);
     assertEquals(ImmutableMap.of("cat", 3, "horse", 5), filtered);
 
     filtered.put("chicken", 7);
@@ -154,7 +157,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
     unfiltered.put("cat", 3);
     unfiltered.put("dog", 2);
     unfiltered.put("horse", 5);
-    Map<String, Integer> filtered = Maps.filterEntries(unfiltered, CORRECT_LENGTH);
+    Map<String, Integer> filtered = filterEntries(unfiltered, CORRECT_LENGTH);
     assertEquals(ImmutableMap.of("cat", 3, "horse", 5), filtered);
 
     filtered.put("chicken", 7);
@@ -171,8 +174,8 @@ abstract class AbstractFilteredMapTest extends TestCase {
     unfiltered.put("cat", 3);
     unfiltered.put("dog", 2);
     unfiltered.put("horse", 5);
-    Predicate<Object> predicate = Predicates.alwaysFalse();
-    Map<String, Integer> filtered = Maps.filterEntries(unfiltered, predicate);
+    Predicate<Object> predicate = alwaysFalse();
+    Map<String, Integer> filtered = filterEntries(unfiltered, predicate);
     assertTrue(filtered.isEmpty());
   }
 
@@ -182,7 +185,7 @@ abstract class AbstractFilteredMapTest extends TestCase {
     unfiltered.put("dog", 2);
     unfiltered.put("horse", 5);
     Predicate<Entry<?, ?>> predicate = e -> e.getKey().equals("cat") || e.getValue().equals(2);
-    Map<String, Integer> filtered = Maps.filterEntries(unfiltered, predicate);
+    Map<String, Integer> filtered = filterEntries(unfiltered, predicate);
     assertEquals(ImmutableMap.of("cat", 3, "dog", 2), filtered);
   }
 }

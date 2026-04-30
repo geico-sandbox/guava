@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Iterators.peekingIterator;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.testing.IteratorFeature.MODIFIABLE;
 import static com.google.common.collect.testing.IteratorFeature.UNMODIFIABLE;
 import static java.util.Collections.emptyList;
@@ -66,7 +67,7 @@ public class PeekingIteratorTest extends TestCase {
     @Override
     protected Iterator<T> newTargetIterator() {
       // make copy from master to verify later
-      targetList = Lists.newArrayList(master);
+      targetList = newArrayList(master);
       Iterator<T> iterator = targetList.iterator();
       return peekingIterator(iterator);
     }
@@ -104,7 +105,7 @@ public class PeekingIteratorTest extends TestCase {
   // TODO(cpovirk): instead of skipping, use a smaller number of steps
   @GwtIncompatible // works but takes 5 minutes to run
   public void testPeekingIteratorBehavesLikeIteratorOnThreeElementIterable() {
-    actsLikeIteratorHelper(Lists.newArrayList("A", "B", "C"));
+    actsLikeIteratorHelper(newArrayList("A", "B", "C"));
   }
 
   @GwtIncompatible // works but takes 5 minutes to run
@@ -121,7 +122,7 @@ public class PeekingIteratorTest extends TestCase {
   }
 
   public void testPeekDoesntChangeIteration() {
-    List<?> list = Lists.newArrayList("A", "B", "C");
+    List<?> list = newArrayList("A", "B", "C");
     Iterator<?> iterator = list.iterator();
     PeekingIterator<?> peekingIterator = peekingIterator(iterator);
 
@@ -149,7 +150,7 @@ public class PeekingIteratorTest extends TestCase {
   }
 
   public void testCantRemoveAfterPeek() {
-    List<String> list = Lists.newArrayList("A", "B", "C");
+    List<String> list = newArrayList("A", "B", "C");
     Iterator<String> iterator = list.iterator();
     PeekingIterator<?> peekingIterator = peekingIterator(iterator);
 
@@ -221,7 +222,7 @@ public class PeekingIteratorTest extends TestCase {
 
     /* Checks the case where a later element throws an exception. */
 
-    list = Lists.newArrayList(1, 2);
+    list = newArrayList(1, 2);
     iterator = peekingIterator(new ThrowsAtEndIterator<Integer>(list));
     assertTrue(iterator.hasNext());
     iterator.next();

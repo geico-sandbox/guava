@@ -16,17 +16,19 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.collect.testing.Helpers.misleadingSizeCollection;
+import static com.google.common.collect.testing.Helpers.testComparator;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -183,7 +185,7 @@ public class BooleansTest extends TestCase {
 
   public void testLexicographicalComparator() {
     List<boolean[]> ordered =
-        Arrays.asList(
+        asList(
             new boolean[] {},
             new boolean[] {false},
             new boolean[] {false, false},
@@ -194,14 +196,14 @@ public class BooleansTest extends TestCase {
             new boolean[] {true, true, true});
 
     Comparator<boolean[]> comparator = Booleans.lexicographicalComparator();
-    Helpers.testComparator(comparator, ordered);
+    testComparator(comparator, ordered);
   }
 
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testLexicographicalComparatorSerializable() {
     Comparator<boolean[]> comparator = Booleans.lexicographicalComparator();
-    assertThat(SerializableTester.reserialize(comparator)).isSameInstanceAs(comparator);
+    assertThat(reserialize(comparator)).isSameInstanceAs(comparator);
   }
 
   public void testReverse() {
@@ -468,15 +470,15 @@ public class BooleansTest extends TestCase {
 
   public void testToArray() {
     // need explicit type parameter to avoid javac warning!?
-    List<Boolean> none = Arrays.<Boolean>asList();
+    List<Boolean> none = Arrays.asList();
     assertThat(Booleans.toArray(none)).isEqualTo(EMPTY);
 
-    List<Boolean> one = Arrays.asList(false);
+    List<Boolean> one = asList(false);
     assertThat(Booleans.toArray(one)).isEqualTo(ARRAY_FALSE);
 
     boolean[] array = {false, false, true};
 
-    List<Boolean> three = Arrays.asList(false, false, true);
+    List<Boolean> three = asList(false, false, true);
     assertThat(Booleans.toArray(three)).isEqualTo(array);
 
     assertThat(Booleans.toArray(Booleans.asList(array))).isEqualTo(array);
@@ -490,7 +492,7 @@ public class BooleansTest extends TestCase {
     for (int delta : new int[] {+1, 0, -1}) {
       for (int i = 0; i < VALUES.length; i++) {
         List<Boolean> list = Booleans.asList(VALUES).subList(0, i);
-        Collection<Boolean> misleadingSize = Helpers.misleadingSizeCollection(delta);
+        Collection<Boolean> misleadingSize = misleadingSizeCollection(delta);
         misleadingSize.addAll(list);
         boolean[] arr = Booleans.toArray(misleadingSize);
         assertThat(arr).hasLength(i);
@@ -503,7 +505,7 @@ public class BooleansTest extends TestCase {
 
   @SuppressWarnings("nullness") // test of a bogus call
   public void testToArray_withNull() {
-    List<@Nullable Boolean> list = Arrays.asList(false, true, null);
+    List<@Nullable Boolean> list = asList(false, true, null);
     assertThrows(NullPointerException.class, () -> Booleans.toArray(list));
   }
 
@@ -591,10 +593,10 @@ public class BooleansTest extends TestCase {
     assertThat(list.get(0)).isSameInstanceAs(true);
     assertThat(list.get(1)).isSameInstanceAs(false);
     // The constructor is deprecated only in some versions of java.lang.Boolean.
-    @SuppressWarnings({"deprecation", "UnnecessaryJavacSuppressWarnings"})
+    @SuppressWarnings({"deprecation", "UnnecessaryJavacSuppressWarnings", "removal"})
     Boolean anotherTrue = new Boolean(true);
     // The constructor is deprecated only in some versions of java.lang.Boolean.
-    @SuppressWarnings({"deprecation", "UnnecessaryJavacSuppressWarnings"})
+    @SuppressWarnings({"deprecation", "UnnecessaryJavacSuppressWarnings", "removal"})
     Boolean anotherFalse = new Boolean(false);
     list.set(0, anotherTrue);
     assertThat(list.get(0)).isSameInstanceAs(true);

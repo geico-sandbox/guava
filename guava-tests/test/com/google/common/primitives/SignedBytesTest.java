@@ -16,18 +16,19 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.collect.testing.Helpers.testComparator;
 import static com.google.common.primitives.SignedBytes.max;
 import static com.google.common.primitives.SignedBytes.min;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -133,7 +134,7 @@ public class SignedBytesTest extends TestCase {
   @J2ktIncompatible // b/285319375
   public void testLexicographicalComparator() {
     List<byte[]> ordered =
-        Arrays.asList(
+        asList(
             new byte[] {},
             new byte[] {LEAST},
             new byte[] {LEAST, LEAST},
@@ -145,14 +146,14 @@ public class SignedBytesTest extends TestCase {
             new byte[] {GREATEST, GREATEST, GREATEST});
 
     Comparator<byte[]> comparator = SignedBytes.lexicographicalComparator();
-    Helpers.testComparator(comparator, ordered);
+    testComparator(comparator, ordered);
   }
 
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testLexicographicalComparatorSerializable() {
     Comparator<byte[]> comparator = SignedBytes.lexicographicalComparator();
-    assertThat(SerializableTester.reserialize(comparator)).isSameInstanceAs(comparator);
+    assertThat(reserialize(comparator)).isSameInstanceAs(comparator);
   }
 
   public void testSortDescending() {

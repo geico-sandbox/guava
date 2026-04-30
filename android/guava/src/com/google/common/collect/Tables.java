@@ -18,9 +18,14 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Collections2.transform;
+import static com.google.common.collect.Iterators.transform;
 import static com.google.common.collect.NullnessCasts.uncheckedCastNullableTToT;
+import static java.util.Collections.unmodifiableCollection;
 import static java.util.Collections.unmodifiableMap;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Collections.unmodifiableSortedMap;
+import static java.util.Collections.unmodifiableSortedSet;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -317,7 +322,7 @@ public final class Tables {
 
     @Override
     Iterator<Cell<C, R, V>> cellIterator() {
-      return Iterators.transform(original.cellSet().iterator(), Tables::transposeCell);
+      return transform(original.cellSet().iterator(), Tables::transposeCell);
     }
   }
 
@@ -480,7 +485,7 @@ public final class Tables {
 
     @Override
     Iterator<Cell<R, C, V2>> cellIterator() {
-      return Iterators.transform(fromTable.cellSet().iterator(), this::applyToValue);
+      return transform(fromTable.cellSet().iterator(), this::applyToValue);
     }
 
     @Override
@@ -495,7 +500,7 @@ public final class Tables {
 
     @Override
     Collection<V2> createValues() {
-      return Collections2.transform(fromTable.values(), function);
+      return transform(fromTable.values(), function);
     }
 
     @Override
@@ -544,7 +549,7 @@ public final class Tables {
 
     @Override
     public Set<Cell<R, C, V>> cellSet() {
-      return Collections.unmodifiableSet(super.cellSet());
+      return unmodifiableSet(super.cellSet());
     }
 
     @Override
@@ -554,12 +559,12 @@ public final class Tables {
 
     @Override
     public Map<R, V> column(@ParametricNullness C columnKey) {
-      return Collections.unmodifiableMap(super.column(columnKey));
+      return unmodifiableMap(super.column(columnKey));
     }
 
     @Override
     public Set<C> columnKeySet() {
-      return Collections.unmodifiableSet(super.columnKeySet());
+      return unmodifiableSet(super.columnKeySet());
     }
 
     @Override
@@ -587,12 +592,12 @@ public final class Tables {
 
     @Override
     public Map<C, V> row(@ParametricNullness R rowKey) {
-      return Collections.unmodifiableMap(super.row(rowKey));
+      return unmodifiableMap(super.row(rowKey));
     }
 
     @Override
     public Set<R> rowKeySet() {
-      return Collections.unmodifiableSet(super.rowKeySet());
+      return unmodifiableSet(super.rowKeySet());
     }
 
     @Override
@@ -602,7 +607,7 @@ public final class Tables {
 
     @Override
     public Collection<V> values() {
-      return Collections.unmodifiableCollection(super.values());
+      return unmodifiableCollection(super.values());
     }
 
     @GwtIncompatible @J2ktIncompatible private static final long serialVersionUID = 0;
@@ -652,7 +657,7 @@ public final class Tables {
 
     @Override
     public SortedSet<R> rowKeySet() {
-      return Collections.unmodifiableSortedSet(delegate().rowKeySet());
+      return unmodifiableSortedSet(delegate().rowKeySet());
     }
 
     @GwtIncompatible @J2ktIncompatible private static final long serialVersionUID = 0;

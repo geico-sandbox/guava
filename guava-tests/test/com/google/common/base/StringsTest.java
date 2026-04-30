@@ -16,6 +16,7 @@
 
 package com.google.common.base;
 
+import static com.google.common.base.Strings.repeat;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -105,20 +106,19 @@ public class StringsTest extends TestCase {
   @SuppressWarnings("InlineMeInliner") // test of method that doesn't just delegate
   public void testRepeat() {
     String input = "20";
-    assertThat(Strings.repeat(input, 0)).isEqualTo("");
-    assertThat(Strings.repeat(input, 1)).isEqualTo("20");
-    assertThat(Strings.repeat(input, 2)).isEqualTo("2020");
-    assertThat(Strings.repeat(input, 3)).isEqualTo("202020");
+    assertThat(repeat(input, 0)).isEqualTo("");
+    assertThat(repeat(input, 1)).isEqualTo("20");
+    assertThat(repeat(input, 2)).isEqualTo("2020");
+    assertThat(repeat(input, 3)).isEqualTo("202020");
 
-    assertThat(Strings.repeat("", 4)).isEqualTo("");
+    assertThat(repeat("", 4)).isEqualTo("");
 
     for (int i = 0; i < 100; ++i) {
-      assertEquals(2 * i, Strings.repeat(input, i).length());
+      assertEquals(2 * i, repeat(input, i).length());
     }
 
-    assertThrows(IllegalArgumentException.class, () -> Strings.repeat("x", -1));
-    assertThrows(
-        ArrayIndexOutOfBoundsException.class, () -> Strings.repeat("12345678", (1 << 30) + 3));
+    assertThrows(IllegalArgumentException.class, () -> repeat("x", -1));
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> repeat("12345678", (1 << 30) + 3));
   }
 
   @SuppressWarnings({
@@ -126,7 +126,7 @@ public class StringsTest extends TestCase {
     "nullness", // test of a bogus call
   })
   public void testRepeat_null() {
-    assertThrows(NullPointerException.class, () -> Strings.repeat(null, 5));
+    assertThrows(NullPointerException.class, () -> repeat(null, 5));
   }
 
   @SuppressWarnings("UnnecessaryStringBuilder") // We want to test a non-String CharSequence

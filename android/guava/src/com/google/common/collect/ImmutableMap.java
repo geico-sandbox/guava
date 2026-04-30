@@ -20,6 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.CollectPreconditions.checkEntryNotNull;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.Maps.equalsImpl;
+import static com.google.common.collect.Maps.toStringImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
 import static java.lang.System.arraycopy;
 import static java.util.Objects.requireNonNull;
 
@@ -1092,14 +1095,14 @@ public abstract class ImmutableMap<K, V> implements Map<K, V>, Serializable {
 
   @Override
   public boolean equals(@Nullable Object object) {
-    return Maps.equalsImpl(this, object);
+    return equalsImpl(this, object);
   }
 
   abstract boolean isPartialView();
 
   @Override
   public int hashCode() {
-    return Sets.hashCodeImpl(entrySet());
+    return hashCodeImpl(entrySet());
   }
 
   boolean isHashCodeFast() {
@@ -1108,7 +1111,7 @@ public abstract class ImmutableMap<K, V> implements Map<K, V>, Serializable {
 
   @Override
   public String toString() {
-    return Maps.toStringImpl(this);
+    return toStringImpl(this);
   }
 
   /**

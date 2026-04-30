@@ -21,6 +21,8 @@ import static com.google.common.math.MathPreconditions.checkNonNegative;
 import static com.google.common.math.MathPreconditions.checkPositive;
 import static com.google.common.math.MathPreconditions.checkRoundingUnnecessary;
 import static java.lang.Math.abs;
+import static java.lang.Math.ceil;
+import static java.lang.Math.floor;
 import static java.lang.Math.min;
 import static java.lang.Math.nextDown;
 import static java.lang.Math.nextUp;
@@ -828,7 +830,7 @@ public final class LongMath {
           }
           return result;
         } else {
-          int nBits = LongMath.log2(n, RoundingMode.CEILING);
+          int nBits = log2(n, RoundingMode.CEILING);
 
           long result = 1;
           long numerator = n--;
@@ -1293,12 +1295,12 @@ public final class LongMath {
             roundFloorAsDouble = roundArbitrarily;
             roundFloor = roundArbitrarilyAsLong;
             roundCeilingAsDouble = nextUp(roundArbitrarily);
-            roundCeiling = (long) Math.ceil(roundCeilingAsDouble);
+            roundCeiling = (long) ceil(roundCeilingAsDouble);
           } else {
             roundCeilingAsDouble = roundArbitrarily;
             roundCeiling = roundArbitrarilyAsLong;
             roundFloorAsDouble = nextDown(roundArbitrarily);
-            roundFloor = (long) Math.floor(roundFloorAsDouble);
+            roundFloor = (long) floor(roundFloorAsDouble);
           }
 
           long deltaToFloor = x - roundFloor;

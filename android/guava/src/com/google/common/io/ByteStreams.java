@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkPositionIndex;
 import static com.google.common.base.Preconditions.checkPositionIndexes;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.System.arraycopy;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -222,7 +223,7 @@ public final class ByteStreams {
       byte[] buf = bufs.remove();
       int bytesToCopy = min(remaining, buf.length);
       int resultOffset = totalLen - remaining;
-      System.arraycopy(buf, 0, result, resultOffset, bytesToCopy);
+      arraycopy(buf, 0, result, resultOffset, bytesToCopy);
       remaining -= bytesToCopy;
     }
     return result;

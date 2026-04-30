@@ -15,13 +15,13 @@
 package com.google.common.base;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Arrays.asList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -133,7 +133,7 @@ public final class Predicates {
    */
   public static <T extends @Nullable Object> Predicate<T> and(
       Predicate<? super T> first, Predicate<? super T> second) {
-    return new AndPredicate<>(Predicates.<T>asList(checkNotNull(first), checkNotNull(second)));
+    return new AndPredicate<>(asList(checkNotNull(first), checkNotNull(second)));
   }
 
   /**
@@ -173,7 +173,7 @@ public final class Predicates {
    */
   public static <T extends @Nullable Object> Predicate<T> or(
       Predicate<? super T> first, Predicate<? super T> second) {
-    return new OrPredicate<>(Predicates.<T>asList(checkNotNull(first), checkNotNull(second)));
+    return new OrPredicate<>(asList(checkNotNull(first), checkNotNull(second)));
   }
 
   /**
@@ -185,9 +185,7 @@ public final class Predicates {
    * serializable.
    */
   public static <T extends @Nullable Object> Predicate<T> equalTo(@ParametricNullness T target) {
-    return (target == null)
-        ? Predicates.<T>isNull()
-        : new IsEqualToPredicate(target).withNarrowedType();
+    return target == null ? isNull() : new IsEqualToPredicate(target).withNarrowedType();
   }
 
   /**
@@ -413,9 +411,9 @@ public final class Predicates {
    */
   private static final class AndPredicate<T extends @Nullable Object>
       implements Predicate<T>, Serializable {
-    private final List<? extends Predicate<? super T>> components;
+    private final List<Predicate<? super T>> components;
 
-    private AndPredicate(List<? extends Predicate<? super T>> components) {
+    private AndPredicate(List<Predicate<? super T>> components) {
       this.components = components;
     }
 
@@ -458,9 +456,9 @@ public final class Predicates {
    */
   private static final class OrPredicate<T extends @Nullable Object>
       implements Predicate<T>, Serializable {
-    private final List<? extends Predicate<? super T>> components;
+    private final List<Predicate<? super T>> components;
 
-    private OrPredicate(List<? extends Predicate<? super T>> components) {
+    private OrPredicate(List<Predicate<? super T>> components) {
       this.components = components;
     }
 
@@ -789,17 +787,11 @@ public final class Predicates {
     @GwtIncompatible @J2ktIncompatible private static final long serialVersionUID = 0;
   }
 
-  private static <T extends @Nullable Object> List<Predicate<? super T>> asList(
-      Predicate<? super T> first, Predicate<? super T> second) {
-    // TODO(kevinb): understand why we still get a warning despite @SafeVarargs!
-    return Arrays.<Predicate<? super T>>asList(first, second);
+  private static <T> List<T> defensiveCopy(T[] array) {
+    return defensiveCopy(asList(array));
   }
 
-  private static <T> List<T> defensiveCopy(T... array) {
-    return defensiveCopy(Arrays.asList(array));
-  }
-
-  static <T> List<T> defensiveCopy(Iterable<T> iterable) {
+  private static <T> List<T> defensiveCopy(Iterable<? extends T> iterable) {
     ArrayList<T> list = new ArrayList<>();
     for (T element : iterable) {
       list.add(checkNotNull(element));

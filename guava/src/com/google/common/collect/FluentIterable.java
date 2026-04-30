@@ -15,6 +15,11 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.all;
+import static com.google.common.collect.Iterables.any;
+import static com.google.common.collect.Lists.asList;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -26,7 +31,6 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.InlineMe;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -158,7 +162,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    * @since 20.0 (since 18.0 as an overload of {@code of})
    */
   public static <E extends @Nullable Object> FluentIterable<E> from(E[] elements) {
-    return from(Arrays.asList(elements));
+    return from(asList(elements));
   }
 
   /**
@@ -293,7 +297,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
             /* lazily generate the iterators on each input only as needed */
             new AbstractIndexedListIterator<Iterator<? extends T>>(inputs.length) {
               @Override
-              public Iterator<? extends T> get(int i) {
+              Iterator<? extends T> get(int i) {
                 return inputs[i].iterator();
               }
             });
@@ -310,7 +314,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    */
   @SuppressWarnings("EmptyList") // ImmutableList doesn't support nullable element types
   public static <E extends @Nullable Object> FluentIterable<E> of() {
-    return FluentIterable.from(Collections.emptyList());
+    return from(emptyList());
   }
 
   /**
@@ -323,7 +327,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    */
   public static <E extends @Nullable Object> FluentIterable<E> of(
       @ParametricNullness E element, E... elements) {
-    return from(Lists.asList(element, elements));
+    return from(asList(element, elements));
   }
 
   /**
@@ -390,7 +394,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    * @since 18.0
    */
   public final FluentIterable<E> append(Iterable<? extends E> other) {
-    return FluentIterable.concat(getDelegate(), other);
+    return concat(getDelegate(), other);
   }
 
   /**
@@ -402,7 +406,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    * @since 18.0
    */
   public final FluentIterable<E> append(E... elements) {
-    return FluentIterable.concat(getDelegate(), Arrays.asList(elements));
+    return concat(getDelegate(), asList(elements));
   }
 
   /**
@@ -439,7 +443,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    * <p><b>{@code Stream} equivalent:</b> {@link Stream#anyMatch} (same).
    */
   public final boolean anyMatch(Predicate<? super E> predicate) {
-    return Iterables.any(getDelegate(), predicate);
+    return any(getDelegate(), predicate);
   }
 
   /**
@@ -449,7 +453,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    * <p><b>{@code Stream} equivalent:</b> {@link Stream#allMatch} (same).
    */
   public final boolean allMatch(Predicate<? super E> predicate) {
-    return Iterables.all(getDelegate(), predicate);
+    return all(getDelegate(), predicate);
   }
 
   /**
@@ -496,7 +500,7 @@ public abstract class FluentIterable<E extends @Nullable Object> implements Iter
    */
   public <T extends @Nullable Object> FluentIterable<T> transformAndConcat(
       Function<? super E, ? extends Iterable<? extends T>> function) {
-    return FluentIterable.concat(transform(function));
+    return concat(transform(function));
   }
 
   /**

@@ -17,14 +17,15 @@ package com.google.common.net;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.hash.Hashing.murmur3_32_fixed;
+import static com.google.common.io.ByteStreams.newDataInput;
 import static java.lang.Math.max;
+import static java.lang.System.arraycopy;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.MoreObjects;
-import com.google.common.io.ByteStreams;
 import com.google.common.primitives.Ints;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.FormatMethod;
@@ -831,10 +832,10 @@ public final class InetAddresses {
     byte[] bytes = ip.getAddress();
     Inet4Address server = getInet4Address(Arrays.copyOfRange(bytes, 4, 8));
 
-    int flags = ByteStreams.newDataInput(bytes, 8).readShort() & 0xffff;
+    int flags = newDataInput(bytes, 8).readShort() & 0xffff;
 
     // Teredo obfuscates the mapped client port, per section 4 of the RFC.
-    int port = ~ByteStreams.newDataInput(bytes, 10).readShort() & 0xffff;
+    int port = ~newDataInput(bytes, 10).readShort() & 0xffff;
 
     byte[] clientBytes = Arrays.copyOfRange(bytes, 12, 16);
     for (int i = 0; i < clientBytes.length; i++) {
@@ -1062,7 +1063,7 @@ public final class InetAddresses {
    * @since 7.0
    */
   public static int coerceToInteger(InetAddress ip) {
-    return ByteStreams.newDataInput(getCoercedIPv4Address(ip).getAddress()).readInt();
+    return newDataInput(getCoercedIPv4Address(ip).getAddress()).readInt();
   }
 
   /**
@@ -1145,7 +1146,7 @@ public final class InetAddresses {
     }
 
     // Copy the bytes into the least significant positions.
-    System.arraycopy(addressBytes, srcPos, targetCopyArray, destPos, copyLength);
+    arraycopy(addressBytes, srcPos, targetCopyArray, destPos, copyLength);
 
     try {
       return InetAddress.getByAddress(targetCopyArray);

@@ -15,11 +15,11 @@
 package com.google.common.reflect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterators.transform;
 
 import com.google.common.collect.ForwardingMap;
 import com.google.common.collect.ForwardingMapEntry;
 import com.google.common.collect.ForwardingSet;
-import com.google.common.collect.Iterators;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.DoNotCall;
 import java.util.HashMap;
@@ -129,7 +129,7 @@ public final class MutableTypeToInstanceMap<B extends @Nullable Object>
 
         @Override
         public Iterator<Entry<K, V>> iterator() {
-          return UnmodifiableEntry.transformEntries(super.iterator());
+          return transformEntries(super.iterator());
         }
 
         @Override
@@ -155,7 +155,7 @@ public final class MutableTypeToInstanceMap<B extends @Nullable Object>
 
     private static <K, V extends @Nullable Object> Iterator<Entry<K, V>> transformEntries(
         Iterator<Entry<K, V>> entries) {
-      return Iterators.transform(entries, UnmodifiableEntry::new);
+      return transform(entries, UnmodifiableEntry::new);
     }
 
     private UnmodifiableEntry(Entry<K, V> delegate) {

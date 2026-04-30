@@ -18,6 +18,7 @@ package com.google.common.collect.testing.testers;
 
 import static com.google.common.collect.testing.Helpers.assertEqualInOrder;
 import static com.google.common.collect.testing.Helpers.copyToList;
+import static com.google.common.collect.testing.Helpers.entryComparator;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -26,7 +27,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.collect.testing.AbstractMapTester;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.collect.testing.features.CollectionSize;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -64,7 +64,7 @@ public class SortedMapNavigationTester<K, V> extends AbstractMapTester<K, V> {
         copyToList(
             getSubjectGenerator()
                 .getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
-    sort(entries, Helpers.entryComparator(navigableMap.comparator()));
+    sort(entries, entryComparator(navigableMap.comparator()));
 
     // some tests assume SEVERAL == 3
     if (entries.size() >= 1) {
@@ -120,7 +120,7 @@ public class SortedMapNavigationTester<K, V> extends AbstractMapTester<K, V> {
         copyToList(
             getSubjectGenerator()
                 .getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
-    sort(entries, Helpers.entryComparator(navigableMap.comparator()));
+    sort(entries, entryComparator(navigableMap.comparator()));
     for (int i = 0; i < entries.size(); i++) {
       assertEqualInOrder(
           entries.subList(0, i), navigableMap.headMap(entries.get(i).getKey()).entrySet());
@@ -132,7 +132,7 @@ public class SortedMapNavigationTester<K, V> extends AbstractMapTester<K, V> {
         copyToList(
             getSubjectGenerator()
                 .getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
-    sort(entries, Helpers.entryComparator(navigableMap.comparator()));
+    sort(entries, entryComparator(navigableMap.comparator()));
     for (int i = 0; i < entries.size(); i++) {
       assertEqualInOrder(
           entries.subList(i, entries.size()),
@@ -145,7 +145,7 @@ public class SortedMapNavigationTester<K, V> extends AbstractMapTester<K, V> {
         copyToList(
             getSubjectGenerator()
                 .getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
-    sort(entries, Helpers.entryComparator(navigableMap.comparator()));
+    sort(entries, entryComparator(navigableMap.comparator()));
     for (int i = 0; i < entries.size(); i++) {
       for (int j = i + 1; j < entries.size(); j++) {
         assertEqualInOrder(

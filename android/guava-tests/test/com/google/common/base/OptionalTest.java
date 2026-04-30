@@ -18,6 +18,7 @@ package com.google.common.base;
 
 import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Collections.singleton;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
@@ -27,7 +28,6 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import junit.framework.TestCase;
@@ -151,7 +151,7 @@ public final class OptionalTest extends TestCase {
   }
 
   public void testAsSet_present() {
-    Set<String> expected = Collections.singleton("a");
+    Set<String> expected = singleton("a");
     assertEquals(expected, Optional.of("a").asSet());
   }
 
@@ -219,14 +219,14 @@ public final class OptionalTest extends TestCase {
 
   public void testPresentInstances_somePresent() {
     List<Optional<String>> optionals =
-        ImmutableList.of(Optional.of("a"), Optional.<String>absent(), Optional.of("c"));
+        ImmutableList.of(Optional.of("a"), Optional.absent(), Optional.of("c"));
     assertThat(Optional.presentInstances(optionals)).containsExactly("a", "c").inOrder();
   }
 
   @SuppressWarnings("DuplicateAssertion") // We intentionally iterate multiple times.
   public void testPresentInstances_callingIteratorTwice() {
     List<Optional<String>> optionals =
-        ImmutableList.of(Optional.of("a"), Optional.<String>absent(), Optional.of("c"));
+        ImmutableList.of(Optional.of("a"), Optional.absent(), Optional.of("c"));
     Iterable<String> onlyPresent = Optional.presentInstances(optionals);
     assertThat(onlyPresent).containsExactly("a", "c").inOrder();
     assertThat(onlyPresent).containsExactly("a", "c").inOrder();
@@ -234,7 +234,7 @@ public final class OptionalTest extends TestCase {
 
   public void testPresentInstances_wildcards() {
     List<Optional<? extends Number>> optionals =
-        ImmutableList.<Optional<? extends Number>>of(Optional.<Double>absent(), Optional.of(2));
+        ImmutableList.of(Optional.<Double>absent(), Optional.of(2));
     Iterable<Number> onlyPresent = Optional.presentInstances(optionals);
     assertThat(onlyPresent).containsExactly(2);
   }
@@ -244,7 +244,7 @@ public final class OptionalTest extends TestCase {
   }
 
   private static FluentIterable<? extends Number> getSomeNumbers() {
-    return FluentIterable.from(ImmutableList.<Number>of());
+    return FluentIterable.from(ImmutableList.of());
   }
 
   /*

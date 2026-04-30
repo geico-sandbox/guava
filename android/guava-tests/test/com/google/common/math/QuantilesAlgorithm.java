@@ -16,11 +16,12 @@
 
 package com.google.common.math;
 
+import static java.util.Arrays.sort;
+
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableMap;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import org.jspecify.annotations.NullUnmarked;
@@ -47,14 +48,14 @@ enum QuantilesAlgorithm {
 
     @Override
     double singleQuantile(int index, int scale, double[] dataset) {
-      Arrays.sort(dataset);
+      sort(dataset);
       return singleQuantileFromSorted(index, scale, dataset);
     }
 
     @Override
     Map<Integer, Double> multipleQuantiles(
         Collection<Integer> indexes, int scale, double[] dataset) {
-      Arrays.sort(dataset);
+      sort(dataset);
       ImmutableMap.Builder<Integer, Double> builder = ImmutableMap.builder();
       for (int index : indexes) {
         builder.put(index, singleQuantileFromSorted(index, scale, dataset));

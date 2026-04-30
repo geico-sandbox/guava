@@ -19,6 +19,7 @@ package com.google.common.collect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.indexMap;
 import static java.lang.System.arraycopy;
 import static java.util.Collections.emptyMap;
 
@@ -159,8 +160,8 @@ public final class ArrayTable<R, C, V> extends AbstractTable<R, C, @Nullable V>
      * elements but rowKeySet() will be empty and containsRow() won't
      * acknowledge them.
      */
-    rowKeyToIndex = Maps.indexMap(rowList);
-    columnKeyToIndex = Maps.indexMap(columnList);
+    rowKeyToIndex = indexMap(rowList);
+    columnKeyToIndex = indexMap(columnList);
 
     @SuppressWarnings("unchecked")
     @Nullable V[][] tmpArray = (@Nullable V[][]) new Object[rowList.size()][columnList.size()];
@@ -248,7 +249,7 @@ public final class ArrayTable<R, C, V> extends AbstractTable<R, C, @Nullable V>
     Iterator<Entry<K, V>> entryIterator() {
       return new AbstractIndexedListIterator<Entry<K, V>>(size()) {
         @Override
-        protected Entry<K, V> get(int index) {
+        Entry<K, V> get(int index) {
           return getEntry(index);
         }
       };
@@ -546,7 +547,7 @@ public final class ArrayTable<R, C, V> extends AbstractTable<R, C, @Nullable V>
   Iterator<Cell<R, C, @Nullable V>> cellIterator() {
     return new AbstractIndexedListIterator<Cell<R, C, @Nullable V>>(size()) {
       @Override
-      protected Cell<R, C, @Nullable V> get(int index) {
+      Cell<R, C, @Nullable V> get(int index) {
         return getCell(index);
       }
     };
@@ -782,7 +783,7 @@ public final class ArrayTable<R, C, V> extends AbstractTable<R, C, @Nullable V>
   Iterator<@Nullable V> valuesIterator() {
     return new AbstractIndexedListIterator<@Nullable V>(size()) {
       @Override
-      protected @Nullable V get(int index) {
+      @Nullable V get(int index) {
         return getValue(index);
       }
     };

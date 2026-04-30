@@ -19,13 +19,16 @@ package com.google.common.graph;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterators.concat;
+import static com.google.common.collect.Iterators.transform;
+import static com.google.common.collect.Iterators.unmodifiableIterator;
+import static com.google.common.collect.Sets.difference;
+import static com.google.common.collect.Sets.union;
 import static com.google.common.graph.GraphConstants.ENDPOINTS_MISMATCH;
 import static com.google.common.graph.GraphConstants.NODE_PAIR_REMOVED_FROM_GRAPH;
 import static com.google.common.graph.GraphConstants.NODE_REMOVED_FROM_GRAPH;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Sets;
 import com.google.common.collect.UnmodifiableIterator;
 import com.google.common.math.IntMath;
 import com.google.common.primitives.Ints;
@@ -112,19 +115,19 @@ abstract class AbstractBaseGraph<N> implements BaseGraph<N> {
           @Override
           public UnmodifiableIterator<EndpointPair<N>> iterator() {
             if (graph.isDirected()) {
-              return Iterators.unmodifiableIterator(
-                  Iterators.concat(
-                      Iterators.transform(
+              return unmodifiableIterator(
+                  concat(
+                      transform(
                           graph.predecessors(node).iterator(),
                           (N predecessor) -> EndpointPair.ordered(predecessor, node)),
-                      Iterators.transform(
+                      transform(
                           // filter out 'node' from successors (already covered by predecessors,
                           // above)
-                          Sets.difference(graph.successors(node), ImmutableSet.of(node)).iterator(),
+                          difference(graph.successors(node), ImmutableSet.of(node)).iterator(),
                           (N successor) -> EndpointPair.ordered(node, successor))));
             } else {
-              return Iterators.unmodifiableIterator(
-                  Iterators.transform(
+              return unmodifiableIterator(
+                  transform(
                       graph.adjacentNodes(node).iterator(),
                       (N adjacentNode) -> EndpointPair.unordered(node, adjacentNode)));
             }
@@ -249,8 +252,8 @@ abstract class AbstractBaseGraph<N> implements BaseGraph<N> {
             new IncidentEdgeSet<N>(this, node, IncidentEdgeSet.EdgeType.INCOMING) {
               @Override
               public UnmodifiableIterator<EndpointPair<N>> iterator() {
-                return Iterators.unmodifiableIterator(
-                    Iterators.transform(
+                return unmodifiableIterator(
+                    transform(
                         graph.predecessors(node).iterator(),
                         (N predecessor) ->
                             graph.isDirected()
@@ -269,8 +272,8 @@ abstract class AbstractBaseGraph<N> implements BaseGraph<N> {
             new IncidentEdgeSet<N>(this, node, IncidentEdgeSet.EdgeType.OUTGOING) {
               @Override
               public UnmodifiableIterator<EndpointPair<N>> iterator() {
-                return Iterators.unmodifiableIterator(
-                    Iterators.transform(
+                return unmodifiableIterator(
+                    transform(
                         graph.successors(node).iterator(),
                         (N successor) ->
                             graph.isDirected()
@@ -287,9 +290,9 @@ abstract class AbstractBaseGraph<N> implements BaseGraph<N> {
         N nodeU = edge.nodeU();
         N nodeV = edge.nodeV();
         Set<EndpointPair<N>> endpointPairIncidentEdges =
-            Sets.union(incidentEdges(nodeU), incidentEdges(nodeV));
+            union(incidentEdges(nodeU), incidentEdges(nodeV));
         return nodePairInvalidatableSet(
-            Sets.difference(endpointPairIncidentEdges, ImmutableSet.of(edge)), nodeU, nodeV);
+            difference(endpointPairIncidentEdges, ImmutableSet.of(edge)), nodeU, nodeV);
       }
 
       @Override

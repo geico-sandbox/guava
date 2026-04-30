@@ -18,11 +18,16 @@ package com.google.common.collect;
 
 import static com.google.common.collect.Iterables.unmodifiableIterable;
 import static com.google.common.collect.Sets.cartesianProduct;
+import static com.google.common.collect.Sets.immutableEnumSet;
 import static com.google.common.collect.Sets.newEnumSet;
 import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Sets.newIdentityHashSet;
+import static com.google.common.collect.Sets.newLinkedHashSet;
+import static com.google.common.collect.Sets.newTreeSet;
 import static com.google.common.collect.Sets.powerSet;
 import static com.google.common.collect.Sets.unmodifiableNavigableSet;
 import static com.google.common.collect.testing.IteratorFeature.UNMODIFIABLE;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.io.ObjectStreamConstants.TC_REFERENCE;
@@ -50,7 +55,6 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -137,7 +141,7 @@ public class SetsTest extends TestCase {
                   protected Set<AnEnum> create(AnEnum[] elements) {
                     AnEnum[] otherElements = new AnEnum[elements.length - 1];
                     arraycopy(elements, 1, otherElements, 0, otherElements.length);
-                    return Sets.immutableEnumSet(elements[0], otherElements);
+                    return immutableEnumSet(elements[0], otherElements);
                   }
                 })
             .named("Sets.immutableEnumSet")
@@ -226,7 +230,7 @@ public class SetsTest extends TestCase {
                 new TestStringSetGenerator() {
                   @Override
                   public NavigableSet<String> create(String[] elements) {
-                    NavigableSet<String> unfiltered = Sets.newTreeSet();
+                    NavigableSet<String> unfiltered = newTreeSet();
                     unfiltered.add("yyy");
                     unfiltered.addAll(ImmutableList.copyOf(elements));
                     unfiltered.add("zzz");
@@ -286,7 +290,7 @@ public class SetsTest extends TestCase {
 
   @SuppressWarnings("DoNotCall")
   public void testImmutableEnumSet() {
-    Set<SomeEnum> units = Sets.immutableEnumSet(SomeEnum.D, SomeEnum.B);
+    Set<SomeEnum> units = immutableEnumSet(SomeEnum.D, SomeEnum.B);
 
     assertThat(units).containsExactly(SomeEnum.B, SomeEnum.D).inOrder();
     assertThrows(UnsupportedOperationException.class, () -> units.remove(SomeEnum.B));
@@ -296,29 +300,29 @@ public class SetsTest extends TestCase {
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testImmutableEnumSet_serialized() {
-    Set<SomeEnum> units = Sets.immutableEnumSet(SomeEnum.D, SomeEnum.B);
+    Set<SomeEnum> units = immutableEnumSet(SomeEnum.D, SomeEnum.B);
 
     assertThat(units).containsExactly(SomeEnum.B, SomeEnum.D).inOrder();
 
-    Set<SomeEnum> copy = SerializableTester.reserializeAndAssert(units);
+    Set<SomeEnum> copy = reserializeAndAssert(units);
     assertTrue(copy instanceof ImmutableEnumSet);
   }
 
   public void testImmutableEnumSet_fromIterable() {
-    ImmutableSet<SomeEnum> none = Sets.immutableEnumSet(MinimalIterable.<SomeEnum>of());
+    ImmutableSet<SomeEnum> none = immutableEnumSet(MinimalIterable.<SomeEnum>of());
     assertThat(none).isEmpty();
 
-    ImmutableSet<SomeEnum> one = Sets.immutableEnumSet(MinimalIterable.of(SomeEnum.B));
+    ImmutableSet<SomeEnum> one = immutableEnumSet(MinimalIterable.of(SomeEnum.B));
     assertThat(one).contains(SomeEnum.B);
 
-    ImmutableSet<SomeEnum> two = Sets.immutableEnumSet(MinimalIterable.of(SomeEnum.D, SomeEnum.B));
+    ImmutableSet<SomeEnum> two = immutableEnumSet(MinimalIterable.of(SomeEnum.D, SomeEnum.B));
     assertThat(two).containsExactly(SomeEnum.B, SomeEnum.D).inOrder();
   }
 
   @GwtIncompatible
   @J2ktIncompatible
     public void testImmutableEnumSet_deserializationMakesDefensiveCopy() throws Exception {
-    ImmutableSet<SomeEnum> original = Sets.immutableEnumSet(SomeEnum.A, SomeEnum.B);
+    ImmutableSet<SomeEnum> original = immutableEnumSet(SomeEnum.A, SomeEnum.B);
     int handleOffset = 6;
     byte[] serializedForm = serializeWithBackReference(original, handleOffset);
     ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(serializedForm));
@@ -428,19 +432,19 @@ public class SetsTest extends TestCase {
 
   public void testNewLinkedHashSetEmpty() {
     @SuppressWarnings("UseCollectionConstructor") // test of factory method
-    LinkedHashSet<Integer> set = Sets.newLinkedHashSet();
+    LinkedHashSet<Integer> set = newLinkedHashSet();
     verifyLinkedHashSetContents(set, EMPTY_COLLECTION);
   }
 
   public void testNewLinkedHashSetFromCollection() {
     @SuppressWarnings("UseCollectionConstructor") // test of factory method
-    LinkedHashSet<Integer> set = Sets.newLinkedHashSet(LONGER_LIST);
+    LinkedHashSet<Integer> set = newLinkedHashSet(LONGER_LIST);
     verifyLinkedHashSetContents(set, LONGER_LIST);
   }
 
   public void testNewLinkedHashSetFromIterable() {
     LinkedHashSet<Integer> set =
-        Sets.newLinkedHashSet(
+        newLinkedHashSet(
             new Iterable<Integer>() {
               @Override
               public Iterator<Integer> iterator() {
@@ -461,12 +465,12 @@ public class SetsTest extends TestCase {
   }
 
   public void testNewTreeSetEmpty() {
-    TreeSet<Integer> set = Sets.newTreeSet();
+    TreeSet<Integer> set = newTreeSet();
     verifySortedSetContents(set, EMPTY_COLLECTION, null);
   }
 
   public void testNewTreeSetEmptyDerived() {
-    TreeSet<Derived> set = Sets.newTreeSet();
+    TreeSet<Derived> set = newTreeSet();
     assertTrue(set.isEmpty());
     set.add(new Derived("foo"));
     set.add(new Derived("bar"));
@@ -474,7 +478,7 @@ public class SetsTest extends TestCase {
   }
 
   public void testNewTreeSetEmptyNonGeneric() {
-    TreeSet<LegacyComparable> set = Sets.newTreeSet();
+    TreeSet<LegacyComparable> set = newTreeSet();
     assertTrue(set.isEmpty());
     set.add(new LegacyComparable("foo"));
     set.add(new LegacyComparable("bar"));
@@ -484,37 +488,37 @@ public class SetsTest extends TestCase {
   }
 
   public void testNewTreeSetFromCollection() {
-    TreeSet<Integer> set = Sets.newTreeSet(SOME_COLLECTION);
+    TreeSet<Integer> set = newTreeSet(SOME_COLLECTION);
     verifySortedSetContents(set, SOME_COLLECTION, null);
   }
 
   public void testNewTreeSetFromIterable() {
-    TreeSet<Integer> set = Sets.newTreeSet(SOME_ITERABLE);
+    TreeSet<Integer> set = newTreeSet(SOME_ITERABLE);
     verifySortedSetContents(set, SOME_ITERABLE, null);
   }
 
   public void testNewTreeSetFromIterableDerived() {
     Iterable<Derived> iterable = asList(new Derived("foo"), new Derived("bar"));
-    TreeSet<Derived> set = Sets.newTreeSet(iterable);
+    TreeSet<Derived> set = newTreeSet(iterable);
     assertThat(set).containsExactly(new Derived("bar"), new Derived("foo")).inOrder();
   }
 
   public void testNewTreeSetFromIterableNonGeneric() {
     Iterable<LegacyComparable> iterable =
         asList(new LegacyComparable("foo"), new LegacyComparable("bar"));
-    TreeSet<LegacyComparable> set = Sets.newTreeSet(iterable);
+    TreeSet<LegacyComparable> set = newTreeSet(iterable);
     assertThat(set)
         .containsExactly(new LegacyComparable("bar"), new LegacyComparable("foo"))
         .inOrder();
   }
 
   public void testNewTreeSetEmptyWithComparator() {
-    TreeSet<Integer> set = Sets.newTreeSet(SOME_COMPARATOR);
+    TreeSet<Integer> set = newTreeSet(SOME_COMPARATOR);
     verifySortedSetContents(set, EMPTY_COLLECTION, SOME_COMPARATOR);
   }
 
   public void testNewIdentityHashSet() {
-    Set<MyInteger> set = Sets.newIdentityHashSet();
+    Set<MyInteger> set = newIdentityHashSet();
     MyInteger value1 = new MyInteger(12357);
     MyInteger value2 = new MyInteger(12357);
     assertTrue(set.add(value1));
@@ -623,7 +627,7 @@ public class SetsTest extends TestCase {
     @SuppressWarnings({"deprecation", "InlineMeInliner"}) // test of a deprecated method
     Set<Integer> set = Sets.newSetFromMap(new LinkedHashMap<Integer, Boolean>());
     set.addAll(SOME_COLLECTION);
-    Set<Integer> copy = SerializableTester.reserializeAndAssert(set);
+    Set<Integer> copy = reserializeAndAssert(set);
     assertThat(copy).containsExactly(0, 1).inOrder();
   }
 
@@ -1058,7 +1062,7 @@ public class SetsTest extends TestCase {
 
   @GwtIncompatible // NavigableSet
   public void testUnmodifiableNavigableSet() {
-    TreeSet<Integer> mod = Sets.newTreeSet();
+    TreeSet<Integer> mod = newTreeSet();
     mod.add(1);
     mod.add(2);
     mod.add(3);

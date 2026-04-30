@@ -17,6 +17,7 @@ package com.google.common.hash;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.common.annotations.Beta;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.io.FilterInputStream;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.io.InputStream;
  * @author Qian Huang
  * @since 16.0
  */
+@J2ktIncompatible
 @Beta
 public final class HashingInputStream extends FilterInputStream {
   private final Hasher hasher;

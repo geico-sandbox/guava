@@ -16,18 +16,15 @@
 
 package com.google.common.hash;
 
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static com.google.common.truth.Truth.assertThat;
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
+import static java.lang.Math.log;
+import static java.lang.System.arraycopy;
 import static java.nio.charset.StandardCharsets.US_ASCII;
-import static java.nio.charset.StandardCharsets.UTF_16;
-import static java.nio.charset.StandardCharsets.UTF_16BE;
-import static java.nio.charset.StandardCharsets.UTF_16LE;
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.google.common.primitives.Ints;
 import com.google.common.testing.EqualsTester;
 import java.nio.ByteBuffer;
@@ -73,7 +70,7 @@ final class HashTestUtils {
       key[i] = (byte) i;
       int seed = 256 - i;
       byte[] hash = hashFunction.hash(Arrays.copyOf(key, i), seed);
-      System.arraycopy(hash, 0, hashes, i * hashBytes, hash.length);
+      arraycopy(hash, 0, hashes, i * hashBytes, hash.length);
     }
 
     // Then hash the result array
@@ -295,7 +292,7 @@ final class HashTestUtils {
       int diff = 0x0; // bitset for output bits with different values
       int count = 0;
       // originally was 2 * Math.log(...), making it try more times to avoid flakiness issues
-      int maxCount = (int) (4 * Math.log(2 * keyBits * hashBits) + 1);
+      int maxCount = (int) (4 * log(2 * keyBits * hashBits) + 1);
       while (same != 0xffffffff || diff != 0xffffffff) {
         int key1 = rand.nextInt();
         // flip input bit for key2
@@ -470,7 +467,7 @@ final class HashTestUtils {
    */
   static void assertInvariants(HashFunction hashFunction) {
     int objects = 100;
-    Set<HashCode> hashcodes = Sets.newHashSetWithExpectedSize(objects);
+    Set<HashCode> hashcodes = newHashSetWithExpectedSize(objects);
     Random random = new Random(314159);
     for (int i = 0; i < objects; i++) {
       int value = random.nextInt();
@@ -634,9 +631,6 @@ final class HashTestUtils {
     assertEquals(hashFunction.hashLong(l), hashFunction.newHasher().putLong(l).hash());
   }
 
-  private static final ImmutableSet<Charset> CHARSETS =
-      ImmutableSet.of(ISO_8859_1, US_ASCII, UTF_16, UTF_16BE, UTF_16LE, UTF_8);
-
   private static void assertHashStringEquivalence(HashFunction hashFunction, Random random) {
     // Test that only data and data-order is important, not the individual operations.
     new EqualsTester()
@@ -663,7 +657,7 @@ final class HashTestUtils {
     assertEquals(
         hashFunction.hashUnencodedChars(string),
         hashFunction.newHasher().putUnencodedChars(string).hash());
-    for (Charset charset : CHARSETS) {
+    for (Charset charset : TestPlatform.getCharsets()) {
       assertEquals(
           hashFunction.hashString(string, charset),
           hashFunction.newHasher().putString(string, charset).hash());

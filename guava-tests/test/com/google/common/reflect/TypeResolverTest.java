@@ -16,6 +16,8 @@
 
 package com.google.common.reflect;
 
+import static com.google.common.reflect.Types.subtypeOf;
+import static com.google.common.reflect.Types.supertypeOf;
 import static org.junit.Assert.assertThrows;
 
 import java.lang.reflect.ParameterizedType;
@@ -119,14 +121,14 @@ public class TypeResolverTest extends TestCase {
                 new TypeCapture<List<String>>() {}.capture())
             .resolveType(t));
     assertEquals(
-        Types.subtypeOf(String.class),
+        subtypeOf(String.class),
         new TypeResolver()
             .where(
                 new TypeCapture<List<T>>() {}.capture(),
                 new TypeCapture<List<? extends String>>() {}.capture())
             .resolveType(t));
     assertEquals(
-        Types.supertypeOf(String.class),
+        supertypeOf(String.class),
         new TypeResolver()
             .where(
                 new TypeCapture<List<T>>() {}.capture(),

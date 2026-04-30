@@ -110,8 +110,7 @@ public class BiMapTestSuiteBuilder<K, V>
             .createTestSuite());
     if (!parentBuilder.getFeatures().contains(NoRecurse.INVERSE)) {
       derived.add(
-          BiMapTestSuiteBuilder.using(
-                  new InverseBiMapGenerator<K, V>(parentBuilder.getSubjectGenerator()))
+          using(new InverseBiMapGenerator<K, V>(parentBuilder.getSubjectGenerator()))
               .withFeatures(computeInverseFeatures(parentBuilder.getFeatures()))
               .named(parentBuilder.getName() + " inverse")
               .suppressing(parentBuilder.getSuppressedTests())

@@ -18,6 +18,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndexes;
+import static java.lang.System.arraycopy;
+import static java.util.Arrays.sort;
+import static java.util.Collections.emptyList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -29,7 +32,6 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.RandomAccess;
@@ -278,8 +280,6 @@ public final class Ints extends IntsMethodsForWeb {
    * @throws IllegalArgumentException if {@code min > max}
    * @since 21.0
    */
-  // A call to bare "min" or "max" would resolve to our varargs method, not to any static import.
-  @SuppressWarnings("StaticImportPreferred")
   public static int constrainToRange(int value, int min, int max) {
     checkArgument(min <= max, "min (%s) must be less than or equal to max (%s)", min, max);
     return Math.min(Math.max(value, min), max);
@@ -302,7 +302,7 @@ public final class Ints extends IntsMethodsForWeb {
     int[] result = new int[checkNoOverflow(length)];
     int pos = 0;
     for (int[] array : arrays) {
-      System.arraycopy(array, 0, result, pos, array.length);
+      arraycopy(array, 0, result, pos, array.length);
       pos += array.length;
     }
     return result;
@@ -460,8 +460,6 @@ public final class Ints extends IntsMethodsForWeb {
     INSTANCE;
 
     @Override
-    // A call to bare "min" or "max" would resolve to our varargs method, not to any static import.
-    @SuppressWarnings("StaticImportPreferred")
     public int compare(int[] left, int[] right) {
       int minLength = Math.min(left.length, right.length);
       for (int i = 0; i < minLength; i++) {
@@ -498,7 +496,7 @@ public final class Ints extends IntsMethodsForWeb {
   public static void sortDescending(int[] array, int fromIndex, int toIndex) {
     checkNotNull(array);
     checkPositionIndexes(fromIndex, toIndex, array.length);
-    Arrays.sort(array, fromIndex, toIndex);
+    sort(array, fromIndex, toIndex);
     reverse(array, fromIndex, toIndex);
   }
 
@@ -656,7 +654,7 @@ public final class Ints extends IntsMethodsForWeb {
    */
   public static List<Integer> asList(int... backingArray) {
     if (backingArray.length == 0) {
-      return Collections.emptyList();
+      return emptyList();
     }
     return new IntArrayAsList(backingArray);
   }
@@ -747,7 +745,7 @@ public final class Ints extends IntsMethodsForWeb {
       int size = size();
       checkPositionIndexes(fromIndex, toIndex, size);
       if (fromIndex == toIndex) {
-        return Collections.emptyList();
+        return emptyList();
       }
       return new IntArrayAsList(array, start + fromIndex, start + toIndex);
     }
@@ -801,7 +799,7 @@ public final class Ints extends IntsMethodsForWeb {
 
   /**
    * Parses the specified string as a signed decimal integer value. The ASCII character {@code '-'}
-   * (<code>'&#92;u002D'</code>) is recognized as the minus sign.
+   * (U+002D) is recognized as the minus sign.
    *
    * <p>Unlike {@link Integer#parseInt(String)}, this method returns {@code null} instead of
    * throwing an exception if parsing fails. Additionally, this method only accepts ASCII digits,
@@ -822,7 +820,7 @@ public final class Ints extends IntsMethodsForWeb {
 
   /**
    * Parses the specified string as a signed integer value using the specified radix. The ASCII
-   * character {@code '-'} (<code>'&#92;u002D'</code>) is recognized as the minus sign.
+   * character {@code '-'} (U+002D) is recognized as the minus sign.
    *
    * <p>Unlike {@link Integer#parseInt(String, int)}, this method returns {@code null} instead of
    * throwing an exception if parsing fails. Additionally, this method only accepts ASCII digits,

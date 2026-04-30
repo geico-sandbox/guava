@@ -15,14 +15,14 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.transformValues;
+import static java.util.Collections.unmodifiableMap;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Function;
-import com.google.common.collect.Maps;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -335,8 +335,8 @@ public final class AtomicLongMap<K> implements Serializable {
   }
 
   private Map<K, Long> createAsMap() {
-    return Collections.unmodifiableMap(
-        Maps.transformValues(
+    return unmodifiableMap(
+        transformValues(
             map,
             new Function<AtomicLong, Long>() {
               @Override

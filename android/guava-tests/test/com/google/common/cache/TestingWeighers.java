@@ -14,6 +14,8 @@
 
 package com.google.common.cache;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import org.jspecify.annotations.NullUnmarked;
 
 /**
@@ -21,6 +23,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author Charles Fry
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public final class TestingWeighers {
 

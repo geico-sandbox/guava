@@ -418,9 +418,6 @@ abstract class AbstractAbstractFutureTest extends TestCase {
 
     verifyGetOnPendingFuture(future);
     verifyTimedGetOnPendingFuture(future);
-
-    assertThrows(IllegalStateException.class, future::resultNow);
-    assertThrows(IllegalStateException.class, future::exceptionNow);
   }
 
   private static void assertSuccessful(
@@ -431,9 +428,6 @@ abstract class AbstractAbstractFutureTest extends TestCase {
 
     assertThat(getDone(future)).isEqualTo(expectedResult);
     assertThat(getDoneFromTimeoutOverload(future)).isEqualTo(expectedResult);
-
-    assertThat(future.resultNow()).isEqualTo(expectedResult);
-    assertThrows(IllegalStateException.class, future::exceptionNow);
   }
 
   private static void assertFailed(
@@ -443,14 +437,11 @@ abstract class AbstractAbstractFutureTest extends TestCase {
     assertThat(future.isCancelled()).isFalse();
 
     ExecutionException e1 = assertThrows(ExecutionException.class, () -> getDone(future));
-    assertThat(e1).hasCauseThat().isSameInstanceAs(expectedException);
+    assertThat(e1).hasCauseThat().isEqualTo(expectedException);
 
     ExecutionException e2 =
         assertThrows(ExecutionException.class, () -> getDoneFromTimeoutOverload(future));
-    assertThat(e2).hasCauseThat().isSameInstanceAs(expectedException);
-
-    assertThrows(IllegalStateException.class, future::resultNow);
-    assertThat(future.exceptionNow()).isSameInstanceAs(expectedException);
+    assertThat(e2).hasCauseThat().isEqualTo(expectedException);
   }
 
   private static void assertCancelled(
@@ -463,9 +454,6 @@ abstract class AbstractAbstractFutureTest extends TestCase {
     assertThrows(CancellationException.class, () -> getDone(future));
 
     assertThrows(CancellationException.class, () -> getDoneFromTimeoutOverload(future));
-
-    assertThrows(IllegalStateException.class, future::resultNow);
-    assertThrows(IllegalStateException.class, future::exceptionNow);
   }
 
   private static void assertDone(AbstractFuture<@Nullable Integer> future) {

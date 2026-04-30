@@ -22,6 +22,7 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.MapFeature.ALLOWS_NULL_KEYS;
 import static com.google.common.collect.testing.features.MapFeature.ALLOWS_NULL_VALUES;
 import static com.google.common.collect.testing.features.MapFeature.SUPPORTS_PUT;
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertThrows;
 
@@ -148,7 +149,7 @@ public class MultimapPutIterableTester<K, V> extends AbstractMultimapTester<K, V
   @SuppressWarnings("EmptyList") // ImmutableList doesn't support nullable element types
   @MapFeature.Require(SUPPORTS_PUT)
   public void testPutAllEmptyCollectionOnAbsentKey() {
-    assertFalse(multimap().putAll(k3(), Collections.emptyList()));
+    assertFalse(multimap().putAll(k3(), emptyList()));
     expectUnchanged();
   }
 
@@ -162,7 +163,7 @@ public class MultimapPutIterableTester<K, V> extends AbstractMultimapTester<K, V
   @CollectionSize.Require(absent = ZERO)
   @MapFeature.Require(SUPPORTS_PUT)
   public void testPutAllEmptyIterableOnPresentKey() {
-    multimap().putAll(k0(), Collections.emptyList());
+    multimap().putAll(k0(), emptyList());
     expectUnchanged();
   }
 

@@ -25,6 +25,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertThrows;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
@@ -46,6 +47,7 @@ import sun.security.jca.Providers;
  * @author Kurt Alfred Kluever
  */
 @NullUnmarked
+@J2ktIncompatible
 public class MacHashFunctionTest extends TestCase {
 
   private static final ImmutableSet<String> INPUTS = ImmutableSet.of("", "Z", "foobar");

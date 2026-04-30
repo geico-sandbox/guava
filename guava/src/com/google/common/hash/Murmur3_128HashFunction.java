@@ -28,6 +28,7 @@ package com.google.common.hash;
 import static com.google.common.hash.Hashing.GOOD_FAST_HASH_SEED;
 import static java.lang.Byte.toUnsignedInt;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.errorprone.annotations.Immutable;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -41,6 +42,7 @@ import org.jspecify.annotations.Nullable;
  * @author Austin Appleby
  * @author Dimitris Andreou
  */
+@J2ktIncompatible
 @Immutable
 @SuppressWarnings("IdentifierName") // the best we could do for adjacent digit blocks
 final class Murmur3_128HashFunction extends AbstractHashFunction implements Serializable {

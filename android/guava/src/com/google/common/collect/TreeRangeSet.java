@@ -20,6 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterators.emptyIterator;
 import static com.google.common.collect.Iterators.peekingIterator;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.valueOrNull;
+import static com.google.common.collect.Sets.equalsImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.VisibleForTesting;
@@ -110,12 +113,12 @@ public class TreeRangeSet<C extends Comparable<?>> extends AbstractRangeSet<C>
 
     @Override
     public int hashCode() {
-      return Sets.hashCodeImpl(this);
+      return hashCodeImpl(this);
     }
 
     @Override
     public boolean equals(@Nullable Object o) {
-      return Sets.equalsImpl(this, o);
+      return equalsImpl(this, o);
     }
   }
 
@@ -754,7 +757,7 @@ public class TreeRangeSet<C extends Comparable<?>> extends AbstractRangeSet<C>
             return null;
           } else if (cut.equals(restriction.lowerBound)) {
             // it might be present, truncated on the left
-            Range<C> candidate = Maps.valueOrNull(rangesByLowerBound.floorEntry(cut));
+            Range<C> candidate = valueOrNull(rangesByLowerBound.floorEntry(cut));
             if (candidate != null && candidate.upperBound.compareTo(restriction.lowerBound) > 0) {
               return candidate.intersection(restriction);
             }

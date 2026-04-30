@@ -19,9 +19,9 @@ package com.google.common.graph;
 import static com.google.common.graph.TestUtil.EdgeType.DIRECTED;
 import static com.google.common.graph.TestUtil.EdgeType.UNDIRECTED;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 
 import com.google.common.graph.TestUtil.EdgeType;
-import java.util.Arrays;
 import java.util.Collection;
 import org.jspecify.annotations.NullUnmarked;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public final class GraphEquivalenceTest {
   // add parameters: directed/undirected
   @Parameters
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(new Object[][] {{EdgeType.UNDIRECTED}, {EdgeType.DIRECTED}});
+    return asList(new Object[][] {{EdgeType.UNDIRECTED}, {EdgeType.DIRECTED}});
   }
 
   public GraphEquivalenceTest(EdgeType edgeType) {

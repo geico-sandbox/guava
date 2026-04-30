@@ -90,7 +90,7 @@ public class ClosingFutureFinishToValueAndCloserTest extends AbstractClosingFutu
       valueAndCloser.get();
       fail();
     } catch (ExecutionException expected) {
-      assertThat(expected).hasCauseThat().isSameInstanceAs(exception);
+      assertThat(expected).hasCauseThat().isEqualTo(exception);
     }
     valueAndCloser.closeAsync();
   }

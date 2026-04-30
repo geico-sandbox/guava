@@ -28,6 +28,7 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.System.arraycopy;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThrows;
@@ -138,7 +139,7 @@ public class ByteSourceTest extends IoTestCase {
 
           @Override
           public boolean processBytes(byte[] buf, int off, int len) throws IOException {
-            System.arraycopy(buf, off, processedBytes, pos, len);
+            arraycopy(buf, off, processedBytes, pos, len);
             pos += len;
             return true;
           }
@@ -263,7 +264,7 @@ public class ByteSourceTest extends IoTestCase {
 
     void append(byte[] b) {
       byte[] newBytes = Arrays.copyOf(bytes, bytes.length + b.length);
-      System.arraycopy(b, 0, newBytes, bytes.length, b.length);
+      arraycopy(b, 0, newBytes, bytes.length, b.length);
       bytes = newBytes;
     }
 
@@ -283,7 +284,7 @@ public class ByteSourceTest extends IoTestCase {
         }
 
         int lenToRead = min(len, bytes.length - pos);
-        System.arraycopy(bytes, pos, b, off, lenToRead);
+        arraycopy(bytes, pos, b, off, lenToRead);
         pos += lenToRead;
         return lenToRead;
       }

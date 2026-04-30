@@ -115,10 +115,9 @@ public final class Uninterruptibles {
    * that more conveniently supports uninterruptible waits.
    *
    * <p>If the underlying {@code await} call is interrupted, then {@code awaitUninterruptibly}
-   * converts that into a <a
-   * href="https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/util/concurrent/locks/Condition.html#implementation-considerations-heading">spurious
-   * wakeup</a>. This means that resulting wait is not "uninterruptible" in the normal sense of
-   * {@link Uninterruptibles}. Still, this method allows callers to write <a
+   * converts that into a {@linkplain Condition##implementation-considerations-heading spurious
+   * wakeup}. This means that resulting wait is not "uninterruptible" in the normal sense of {@link
+   * Uninterruptibles}. Still, this method allows callers to write <a
    * href="https://errorprone.info/bugpattern/WaitNotInLoop">the standard, required loop for waiting on a {@code
    * Condition}</a> but without the need to handle interruption.
    *
@@ -137,10 +136,9 @@ public final class Uninterruptibles {
    * that more conveniently supports uninterruptible waits.
    *
    * <p>If the underlying {@code await} call is interrupted, then {@code awaitUninterruptibly}
-   * converts that into a <a
-   * href="https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/util/concurrent/locks/Condition.html#implementation-considerations-heading">spurious
-   * wakeup</a>. This means that resulting wait is not "uninterruptible" in the normal sense of
-   * {@link Uninterruptibles}. Still, this method allows callers to write <a
+   * converts that into a {@linkplain Condition##implementation-considerations-heading spurious
+   * wakeup}. This means that resulting wait is not "uninterruptible" in the normal sense of {@link
+   * Uninterruptibles}. Still, this method allows callers to write <a
    * href="https://errorprone.info/bugpattern/WaitNotInLoop">the standard, required loop for waiting on a {@code
    * Condition}</a> but without the need to handle interruption.
    *
@@ -412,7 +410,7 @@ public final class Uninterruptibles {
     }
   }
 
-  // TODO(user): Support Sleeper somehow (wrapper or interface method)?
+  // TODO: b/5042178 - Support Sleeper somehow (wrapper or interface method)?
   /**
    * Invokes {@code unit.}{@link TimeUnit#sleep(long) sleep(sleepFor)} uninterruptibly.
    *
@@ -425,7 +423,7 @@ public final class Uninterruptibles {
     sleepUninterruptibly(toNanosSaturated(sleepFor), NANOSECONDS);
   }
 
-  // TODO(user): Support Sleeper somehow (wrapper or interface method)?
+  // TODO: b/5042178 - Support Sleeper somehow (wrapper or interface method)?
   /** Invokes {@code unit.}{@link TimeUnit#sleep(long) sleep(sleepFor)} uninterruptibly. */
   @J2ktIncompatible
   @GwtIncompatible // concurrency
@@ -626,7 +624,7 @@ public final class Uninterruptibles {
     }
   }
 
-  // TODO(user): Add support for waitUninterruptibly.
+  // TODO: b/4370300 - Add support for waitUninterruptibly.
 
   private Uninterruptibles() {}
 }

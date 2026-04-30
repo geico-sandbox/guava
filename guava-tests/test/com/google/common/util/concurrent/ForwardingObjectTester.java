@@ -16,6 +16,8 @@
 
 package com.google.common.util.concurrent;
 
+import static com.google.common.collect.Iterables.getOnlyElement;
+import static java.util.Arrays.asList;
 import static org.mockito.Answers.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -23,11 +25,9 @@ import static org.mockito.Mockito.mock;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ForwardingObject;
-import com.google.common.collect.Iterables;
 import com.google.common.testing.ForwardingWrapperTester;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -59,11 +59,11 @@ final class ForwardingObjectTester {
    * ForwardingObject#delegate}. {@code forwarderClass} is assumed to only implement one interface.
    */
   static <T extends ForwardingObject> void testForwardingObject(Class<T> forwarderClass) {
-    List<Class<?>> interfaces = new ArrayList<>(Arrays.asList(forwarderClass.getInterfaces()));
+    List<Class<?>> interfaces = new ArrayList<>(asList(forwarderClass.getInterfaces()));
     // Desugaring may introduce AutoCloseable as an extra interface.
     interfaces.remove(AutoCloseable.class);
     @SuppressWarnings("unchecked") // super interface type of T
-    Class<? super T> interfaceType = (Class<? super T>) Iterables.getOnlyElement(interfaces);
+    Class<? super T> interfaceType = (Class<? super T>) getOnlyElement(interfaces);
     new ForwardingWrapperTester()
         .testForwarding(
             interfaceType,

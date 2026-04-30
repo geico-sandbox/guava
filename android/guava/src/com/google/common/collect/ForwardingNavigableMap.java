@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Iterators.pollNext;
 import static com.google.common.collect.Maps.keyOrNull;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -240,7 +241,7 @@ public abstract class ForwardingNavigableMap<K extends @Nullable Object, V exten
    * forward to this implementation.
    */
   protected @Nullable Entry<K, V> standardPollFirstEntry() {
-    return Iterators.pollNext(entrySet().iterator());
+    return pollNext(entrySet().iterator());
   }
 
   @Override
@@ -254,7 +255,7 @@ public abstract class ForwardingNavigableMap<K extends @Nullable Object, V exten
    * override {@code pollFirstEntry} to forward to this implementation.
    */
   protected @Nullable Entry<K, V> standardPollLastEntry() {
-    return Iterators.pollNext(descendingMap().entrySet().iterator());
+    return pollNext(descendingMap().entrySet().iterator());
   }
 
   @Override

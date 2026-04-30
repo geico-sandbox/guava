@@ -17,6 +17,7 @@
 package com.google.common.testing;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -529,7 +530,7 @@ public class ClassSanityTesterTest extends TestCase {
   }
 
   public void testInstantiate_oneConstantEnum() throws Exception {
-    assertEquals(OneConstantEnum.A, tester.instantiate(OneConstantEnum.class));
+    assertThat(tester.instantiate(OneConstantEnum.class)).isEqualTo(OneConstantEnum.A);
   }
 
   public void testInstantiate_interface() throws Exception {
@@ -591,7 +592,7 @@ public class ClassSanityTesterTest extends TestCase {
 
   @AndroidIncompatible // TODO(cpovirk): ClassNotFoundException... ClassSanityTesterTest$AnInterface
   public void testInterfaceProxySerializable() throws Exception {
-    SerializableTester.reserializeAndAssert(tester.instantiate(HasAnInterface.class));
+    reserializeAndAssert(tester.instantiate(HasAnInterface.class));
   }
 
   public void testReturnValuesFromAnotherPackageIgnoredForNullTests() throws Exception {

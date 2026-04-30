@@ -19,6 +19,8 @@ package com.google.common.cache;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.util.concurrent.ExecutionError;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.util.concurrent.ExecutionException;
@@ -32,6 +34,8 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Charles Fry
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class AbstractLoadingCacheTest extends TestCase {
 

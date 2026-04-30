@@ -21,6 +21,7 @@ import static com.google.common.collect.testing.features.CollectionFeature.SUPPO
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
@@ -29,7 +30,6 @@ import com.google.common.collect.testing.MinimalCollection;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import org.junit.Ignore;
 
@@ -89,7 +89,7 @@ public class CollectionRetainAllTester<E> extends AbstractCollectionTester<E> {
     containsDuplicates =
         new Target(MinimalCollection.of(e0(), e0(), e3(), e3()), "containsDuplicates");
     partialOverlap = new Target(MinimalCollection.of(e2(), e3()), "partialOverlap");
-    nullSingleton = new Target(Collections.singleton(null), "nullSingleton");
+    nullSingleton = new Target(singleton(null), "nullSingleton");
   }
 
   // retainAll(empty)

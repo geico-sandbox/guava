@@ -20,12 +20,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.io.TestOption.CLOSE_THROWS;
 import static com.google.common.io.TestOption.OPEN_THROWS;
 import static com.google.common.io.TestOption.WRITE_THROWS;
+import static java.util.Arrays.asList;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import org.jspecify.annotations.NullUnmarked;
 
 /**
@@ -38,7 +38,7 @@ public class TestOutputStream extends FilterOutputStream {
   private boolean closed;
 
   public TestOutputStream(OutputStream out, TestOption... options) throws IOException {
-    this(out, Arrays.asList(options));
+    this(out, asList(options));
   }
 
   public TestOutputStream(OutputStream out, Iterable<TestOption> options) throws IOException {

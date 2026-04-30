@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -23,7 +24,6 @@ import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -92,7 +92,7 @@ public class HashBasedTableTest extends AbstractTableTest<Character> {
   @GwtIncompatible // SerializableTester
   public void testSerialization() {
     table = create("foo", 1, 'a', "bar", 1, 'b', "foo", 3, 'c');
-    SerializableTester.reserializeAndAssert(table);
+    reserializeAndAssert(table);
   }
 
   @J2ktIncompatible

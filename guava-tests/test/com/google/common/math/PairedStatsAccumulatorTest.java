@@ -44,12 +44,12 @@ import static com.google.common.math.StatsTesting.createFilledPairedStatsAccumul
 import static com.google.common.math.StatsTesting.createPartitionedFilledPairedStatsAccumulator;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static java.util.Collections.nCopies;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.math.StatsTesting.ManyValues;
-import java.util.Collections;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -107,27 +107,24 @@ public class PairedStatsAccumulatorTest extends TestCase {
 
     horizontalValuesAccumulator =
         createFilledPairedStatsAccumulator(
-            MANY_VALUES, Collections.nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE));
+            MANY_VALUES, nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE));
     horizontalValuesAccumulatorByAddAllPartitionedPairedStats =
         createPartitionedFilledPairedStatsAccumulator(
-            MANY_VALUES, Collections.nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE), 2);
+            MANY_VALUES, nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE), 2);
 
     verticalValuesAccumulator =
         createFilledPairedStatsAccumulator(
-            Collections.nCopies(OTHER_MANY_VALUES_COUNT, ONE_VALUE), OTHER_MANY_VALUES);
+            nCopies(OTHER_MANY_VALUES_COUNT, ONE_VALUE), OTHER_MANY_VALUES);
     verticalValuesAccumulatorByAddAllPartitionedPairedStats =
         createPartitionedFilledPairedStatsAccumulator(
-            Collections.nCopies(OTHER_MANY_VALUES_COUNT, ONE_VALUE), OTHER_MANY_VALUES, 2);
+            nCopies(OTHER_MANY_VALUES_COUNT, ONE_VALUE), OTHER_MANY_VALUES, 2);
 
     constantValuesAccumulator =
         createFilledPairedStatsAccumulator(
-            Collections.nCopies(MANY_VALUES_COUNT, ONE_VALUE),
-            Collections.nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE));
+            nCopies(MANY_VALUES_COUNT, ONE_VALUE), nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE));
     constantValuesAccumulatorByAddAllPartitionedPairedStats =
         createPartitionedFilledPairedStatsAccumulator(
-            Collections.nCopies(MANY_VALUES_COUNT, ONE_VALUE),
-            Collections.nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE),
-            2);
+            nCopies(MANY_VALUES_COUNT, ONE_VALUE), nCopies(MANY_VALUES_COUNT, OTHER_ONE_VALUE), 2);
   }
 
   public void testCount() {

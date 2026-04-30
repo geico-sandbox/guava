@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Sets.newIdentityHashSet;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
@@ -31,7 +33,6 @@ import com.google.common.collect.testing.google.MultisetTestSuiteBuilder;
 import com.google.common.collect.testing.google.TestEnumMultisetGenerator;
 import com.google.common.testing.ClassSanityTester;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import com.google.errorprone.annotations.Keep;
 import java.util.Collection;
 import java.util.EnumSet;
@@ -119,7 +120,7 @@ public class EnumMultisetTest extends TestCase {
   }
 
   public void testCreateEmptyWithClass() {
-    Multiset<Color> ms = EnumMultiset.create(ImmutableList.<Color>of(), Color.class);
+    Multiset<Color> ms = EnumMultiset.create(ImmutableList.of(), Color.class);
     ms.add(Color.RED);
   }
 
@@ -139,7 +140,7 @@ public class EnumMultisetTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testSerializable() {
     Multiset<Color> ms = EnumMultiset.create(asList(Color.RED, Color.YELLOW, Color.RED));
-    assertEquals(ms, SerializableTester.reserialize(ms));
+    assertEquals(ms, reserialize(ms));
   }
 
   public void testEntrySet() {
@@ -148,7 +149,7 @@ public class EnumMultisetTest extends TestCase {
     ms.add(Color.YELLOW, 1);
     ms.add(Color.RED, 2);
 
-    Set<Object> uniqueEntries = Sets.newIdentityHashSet();
+    Set<Object> uniqueEntries = newIdentityHashSet();
     uniqueEntries.addAll(ms.entrySet());
     assertEquals(3, uniqueEntries.size());
   }

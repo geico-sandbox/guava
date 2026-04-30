@@ -16,10 +16,10 @@
 
 package com.google.common.eventbus;
 
+import static com.google.common.collect.Iterators.size;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
 import java.util.Iterator;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
@@ -75,23 +75,23 @@ public class SubscriberRegistryTest extends TestCase {
   }
 
   public void testGetSubscribers() {
-    assertEquals(0, Iterators.size(registry.getSubscribers("")));
+    assertEquals(0, size(registry.getSubscribers("")));
 
     registry.register(new StringSubscriber());
-    assertEquals(1, Iterators.size(registry.getSubscribers("")));
+    assertEquals(1, size(registry.getSubscribers("")));
 
     registry.register(new StringSubscriber());
-    assertEquals(2, Iterators.size(registry.getSubscribers("")));
+    assertEquals(2, size(registry.getSubscribers("")));
 
     registry.register(new ObjectSubscriber());
-    assertEquals(3, Iterators.size(registry.getSubscribers("")));
-    assertEquals(1, Iterators.size(registry.getSubscribers(new Object())));
-    assertEquals(1, Iterators.size(registry.getSubscribers(1)));
+    assertEquals(3, size(registry.getSubscribers("")));
+    assertEquals(1, size(registry.getSubscribers(new Object())));
+    assertEquals(1, size(registry.getSubscribers(1)));
 
     registry.register(new IntegerSubscriber());
-    assertEquals(3, Iterators.size(registry.getSubscribers("")));
-    assertEquals(1, Iterators.size(registry.getSubscribers(new Object())));
-    assertEquals(2, Iterators.size(registry.getSubscribers(1)));
+    assertEquals(3, size(registry.getSubscribers("")));
+    assertEquals(1, size(registry.getSubscribers(new Object())));
+    assertEquals(2, size(registry.getSubscribers(1)));
   }
 
   public void testGetSubscribers_returnsImmutableSnapshot() {

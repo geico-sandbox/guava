@@ -41,7 +41,6 @@ import com.google.common.base.TestExceptions.SomeError;
 import com.google.common.base.TestExceptions.SomeOtherCheckedException;
 import com.google.common.base.TestExceptions.SomeUncheckedException;
 import com.google.common.base.TestExceptions.YetAnotherCheckedException;
-import com.google.common.collect.Iterables;
 import com.google.common.primitives.Ints;
 import com.google.common.testing.NullPointerTester;
 import java.util.List;
@@ -267,19 +266,19 @@ public class ThrowablesTest extends TestCase {
 
   public void testGetRootCause_noCause() {
     SomeCheckedException exception = new SomeCheckedException();
-    assertThat(getRootCause(exception)).isSameInstanceAs(exception);
+    assertThat(getRootCause(exception)).isEqualTo(exception);
   }
 
   public void testGetRootCause_singleWrapped() {
     SomeCheckedException cause = new SomeCheckedException();
     SomeChainingException exception = new SomeChainingException(cause);
-    assertThat(getRootCause(exception)).isSameInstanceAs(cause);
+    assertThat(getRootCause(exception)).isEqualTo(cause);
   }
 
   public void testGetRootCause_doubleWrapped() {
     SomeCheckedException cause = new SomeCheckedException();
     SomeChainingException exception = new SomeChainingException(new SomeChainingException(cause));
-    assertThat(getRootCause(exception)).isSameInstanceAs(cause);
+    assertThat(getRootCause(exception)).isEqualTo(cause);
   }
 
   public void testGetRootCause_loop() {
@@ -288,7 +287,7 @@ public class ThrowablesTest extends TestCase {
     cause.initCause(exception);
     IllegalArgumentException expected =
         assertThrows(IllegalArgumentException.class, () -> getRootCause(cause));
-    assertThat(expected).hasCauseThat().isSameInstanceAs(cause);
+    assertThat(expected).hasCauseThat().isEqualTo(cause);
   }
 
   @J2ktIncompatible // Format does not match
@@ -317,7 +316,7 @@ public class ThrowablesTest extends TestCase {
     IllegalStateException ex = new IllegalStateException(re);
 
     assertThat(getCausalChain(ex)).containsExactly(ex, re, iae, sue).inOrder();
-    assertThat(Iterables.getOnlyElement(getCausalChain(sue))).isSameInstanceAs(sue);
+    assertThat(getCausalChain(sue)).containsExactly(sue);
 
     List<Throwable> causes = getCausalChain(ex);
     assertThrows(UnsupportedOperationException.class, () -> causes.add(new RuntimeException()));
@@ -333,7 +332,7 @@ public class ThrowablesTest extends TestCase {
     cause.initCause(exception);
     IllegalArgumentException expected =
         assertThrows(IllegalArgumentException.class, () -> getCausalChain(cause));
-    assertThat(expected).hasCauseThat().isSameInstanceAs(cause);
+    assertThat(expected).hasCauseThat().isEqualTo(cause);
   }
 
   @GwtIncompatible // getCauseAs(Throwable, Class)
@@ -341,14 +340,14 @@ public class ThrowablesTest extends TestCase {
     SomeCheckedException cause = new SomeCheckedException();
     SomeChainingException thrown = new SomeChainingException(cause);
 
-    assertThat(thrown).hasCauseThat().isSameInstanceAs(cause);
-    assertThat(getCauseAs(thrown, SomeCheckedException.class)).isSameInstanceAs(cause);
-    assertThat(getCauseAs(thrown, Exception.class)).isSameInstanceAs(cause);
+    assertThat(thrown).hasCauseThat().isEqualTo(cause);
+    assertThat(getCauseAs(thrown, SomeCheckedException.class)).isEqualTo(cause);
+    assertThat(getCauseAs(thrown, Exception.class)).isEqualTo(cause);
 
     ClassCastException expected =
         assertThrows(
             ClassCastException.class, () -> getCauseAs(thrown, IllegalStateException.class));
-    assertThat(expected).hasCauseThat().isSameInstanceAs(thrown);
+    assertThat(expected).hasCauseThat().isEqualTo(thrown);
   }
 
   @AndroidIncompatible // No getJavaLangAccess in Android (at least not in the version we use).

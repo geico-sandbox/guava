@@ -20,6 +20,8 @@ import static com.google.common.collect.Comparators.isInOrder;
 import static com.google.common.collect.ImmutableSortedSet.toImmutableSortedSet;
 import static com.google.common.collect.Iterables.elementsEqual;
 import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.lang.Math.min;
 import static java.util.Arrays.asList;
@@ -48,7 +50,6 @@ import com.google.common.collect.testing.testers.SetHashCodeTester;
 import com.google.common.testing.CollectorTester;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -290,7 +291,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
   @GwtIncompatible // SerializableTester
   public void testEmpty_serialization() {
     SortedSet<String> set = of();
-    SortedSet<String> copy = SerializableTester.reserialize(set);
+    SortedSet<String> copy = reserialize(set);
     assertThat(copy).isSameInstanceAs(set);
   }
 
@@ -339,7 +340,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
   @GwtIncompatible // SerializableTester
   public void testSingle_serialization() {
     SortedSet<String> set = of("e");
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertEquals(set.comparator(), copy.comparator());
   }
 
@@ -436,7 +437,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
   @GwtIncompatible // SerializableTester
   public void testOf_subSetSerialization() {
     SortedSet<String> set = of("e", "f", "b", "d", "c");
-    SerializableTester.reserializeAndAssert(set.subSet("c", "e"));
+    reserializeAndAssert(set.subSet("c", "e"));
   }
 
   public void testOf_first() {
@@ -453,7 +454,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
   @GwtIncompatible // SerializableTester
   public void testOf_serialization() {
     SortedSet<String> set = of("e", "f", "b", "d", "c");
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertTrue(elementsEqual(set, copy));
     assertEquals(set.comparator(), copy.comparator());
   }
@@ -571,7 +572,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
   @GwtIncompatible // SerializableTester
   public void testExplicitEmpty_serialization() {
     SortedSet<String> set = ImmutableSortedSet.orderedBy(LENGTH_COMPARATOR).build();
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertTrue(set.isEmpty());
     assertTrue(copy.isEmpty());
     assertThat(copy.comparator()).isEqualTo(set.comparator());
@@ -584,7 +585,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
         ImmutableSortedSet.orderedBy(LENGTH_COMPARATOR)
             .add("in", "the", "quick", "jumped", "over", "a")
             .build();
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertTrue(elementsEqual(set, copy));
     assertThat(copy.comparator()).isEqualTo(set.comparator());
   }
@@ -878,7 +879,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
     Comparator<Comparable<?>> comparator = Ordering.natural().reverse();
     SortedSet<String> set =
         new ImmutableSortedSet.Builder<String>(comparator).add("a", "b", "c").build();
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertTrue(elementsEqual(set, copy));
     assertEquals(set.comparator(), copy.comparator());
   }
@@ -947,8 +948,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
 
   public void testLegacyComparable_builder_natural() {
     // Note: IntelliJ wrongly reports an error for this statement
-    ImmutableSortedSet.Builder<LegacyComparable> builder =
-        ImmutableSortedSet.<LegacyComparable>naturalOrder();
+    ImmutableSortedSet.Builder<LegacyComparable> builder = ImmutableSortedSet.naturalOrder();
 
     builder.addAll(LegacyComparable.VALUES_BACKWARD);
     builder.add(LegacyComparable.X);
@@ -960,8 +960,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
 
   public void testLegacyComparable_builder_reverse() {
     // Note: IntelliJ wrongly reports an error for this statement
-    ImmutableSortedSet.Builder<LegacyComparable> builder =
-        ImmutableSortedSet.<LegacyComparable>reverseOrder();
+    ImmutableSortedSet.Builder<LegacyComparable> builder = ImmutableSortedSet.reverseOrder();
 
     builder.addAll(LegacyComparable.VALUES_FORWARD);
     builder.add(LegacyComparable.X);
@@ -989,7 +988,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
     ImmutableSet<String> set = ImmutableSortedSet.of("a", "e", "i", "o", "u");
     ImmutableList<String> list = set.asList();
     assertTrue(list instanceof ImmutableSortedAsList);
-    ImmutableList<String> copy = SerializableTester.reserializeAndAssert(list);
+    ImmutableList<String> copy = reserializeAndAssert(list);
     assertTrue(copy instanceof ImmutableSortedAsList);
   }
 
@@ -1006,7 +1005,7 @@ public class ImmutableSortedSetTest extends AbstractImmutableSetTest {
     ImmutableSet<String> set = ImmutableSortedSet.of("a", "e", "i", "o", "u").subSet("c", "r");
     ImmutableList<String> list = set.asList();
     assertTrue(list instanceof ImmutableSortedAsList);
-    ImmutableList<String> copy = SerializableTester.reserializeAndAssert(list);
+    ImmutableList<String> copy = reserializeAndAssert(list);
     assertTrue(copy instanceof ImmutableSortedAsList);
   }
 

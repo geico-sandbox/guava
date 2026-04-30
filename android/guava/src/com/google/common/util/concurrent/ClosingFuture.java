@@ -824,7 +824,7 @@ public final class ClosingFuture<V extends @Nullable Object> {
   public static <V extends @Nullable Object, U extends @Nullable Object>
       AsyncClosingFunction<V, U> withoutCloser(AsyncFunction<V, U> function) {
     checkNotNull(function);
-    return (closer, input) -> ClosingFuture.from(function.apply(input));
+    return (closer, input) -> from(function.apply(input));
   }
 
   /**

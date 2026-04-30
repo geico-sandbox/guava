@@ -17,9 +17,9 @@
 package com.google.common.graph;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Collections.shuffle;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.RandomAccess;
@@ -71,7 +71,7 @@ public final class GraphMutationTest {
       assertThat(graph.edges()).hasSize(NUM_EDGES);
       AbstractGraphTest.validateGraph(graph);
 
-      Collections.shuffle(edgeList, gen);
+      shuffle(edgeList, gen);
       int numEdgesToRemove = gen.nextInt(NUM_EDGES);
       for (int i = 0; i < numEdgesToRemove; ++i) {
         EndpointPair<Integer> edge = edgeList.get(i);
@@ -82,7 +82,7 @@ public final class GraphMutationTest {
       assertThat(graph.edges()).hasSize(NUM_EDGES - numEdgesToRemove);
       AbstractGraphTest.validateGraph(graph);
 
-      Collections.shuffle(nodeList, gen);
+      shuffle(nodeList, gen);
       int numNodesToRemove = gen.nextInt(NUM_NODES);
       for (int i = 0; i < numNodesToRemove; ++i) {
         assertThat(graph.removeNode(nodeList.get(i))).isTrue();
@@ -100,11 +100,11 @@ public final class GraphMutationTest {
       assertThat(graph.edges()).isEmpty(); // no edges can remain if there's no nodes
       AbstractGraphTest.validateGraph(graph);
 
-      Collections.shuffle(nodeList, gen);
+      shuffle(nodeList, gen);
       for (Integer node : nodeList) {
         assertThat(graph.addNode(node)).isTrue();
       }
-      Collections.shuffle(edgeList, gen);
+      shuffle(edgeList, gen);
       for (EndpointPair<Integer> edge : edgeList) {
         assertThat(graph.putEdge(edge.nodeU(), edge.nodeV())).isTrue();
       }

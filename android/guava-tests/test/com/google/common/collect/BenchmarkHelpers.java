@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Maps.newTreeMap;
 import static java.util.Collections.synchronizedSet;
 import static java.util.Collections.unmodifiableSet;
 
@@ -257,7 +258,7 @@ final class BenchmarkHelpers {
     TreeMapImpl {
       @Override
       public <K extends Comparable<K>, V> SortedMap<K, V> create(Map<K, V> map) {
-        SortedMap<K, V> result = Maps.newTreeMap();
+        SortedMap<K, V> result = newTreeMap();
         result.putAll(map);
         return result;
       }

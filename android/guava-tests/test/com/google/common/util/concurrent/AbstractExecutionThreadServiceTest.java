@@ -76,13 +76,13 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
 
     service.startAsync().awaitRunning();
     assertTrue(service.startUpCalled);
-    assertEquals(Service.State.RUNNING, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.RUNNING);
 
     enterRun.await(); // to avoid stopping the service until run() is invoked
 
     service.stopAsync().awaitTerminated();
     assertTrue(service.shutDownCalled);
-    assertEquals(Service.State.TERMINATED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.TERMINATED);
     executionThread.join();
   }
 
@@ -95,9 +95,9 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
     service.stopAsync();
     service.stopAsync();
     service.stopAsync().awaitTerminated();
-    assertEquals(Service.State.TERMINATED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.TERMINATED);
     service.stopAsync().awaitTerminated();
-    assertEquals(Service.State.TERMINATED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.TERMINATED);
 
     executionThread.join();
   }
@@ -108,16 +108,16 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
 
     service.startAsync().awaitRunning();
     assertTrue(service.startUpCalled);
-    assertEquals(Service.State.RUNNING, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.RUNNING);
 
     exitRun.countDown(); // the service will exit voluntarily
     executionThread.join();
 
     assertTrue(service.shutDownCalled);
-    assertEquals(Service.State.TERMINATED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.TERMINATED);
 
     service.stopAsync().awaitTerminated(); // no-op
-    assertEquals(Service.State.TERMINATED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.TERMINATED);
     assertTrue(service.shutDownCalled);
   }
 
@@ -133,7 +133,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
       assertFalse(runCalled);
       assertFalse(shutDownCalled);
       startUpCalled = true;
-      assertEquals(State.STARTING, state());
+      assertThat(state()).isEqualTo(State.STARTING);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
       assertFalse(runCalled);
       assertFalse(shutDownCalled);
       runCalled = true;
-      assertEquals(State.RUNNING, state());
+      assertThat(state()).isEqualTo(State.RUNNING);
 
       enterRun.countDown();
       try {
@@ -158,7 +158,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
       assertTrue(runCalled);
       assertFalse(shutDownCalled);
       shutDownCalled = true;
-      assertEquals(expectedShutdownState, state());
+      assertThat(state()).isEqualTo(expectedShutdownState);
     }
 
     @Override
@@ -183,7 +183,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
     executionThread.join();
 
     assertTrue(service.startUpCalled);
-    assertEquals(Service.State.FAILED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.FAILED);
     assertThat(service.failureCause()).hasMessageThat().isEqualTo("kaboom!");
   }
 
@@ -217,7 +217,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
     assertThat(expected).hasCauseThat().isEqualTo(service.failureCause());
     assertThat(expected).hasCauseThat().hasMessageThat().isEqualTo("kaboom!");
     assertTrue(service.shutDownCalled);
-    assertEquals(Service.State.FAILED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.FAILED);
   }
 
   public void testServiceThrowOnRunAndThenAgainOnShutDown() throws Exception {
@@ -231,7 +231,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
     assertThat(expected).hasCauseThat().isEqualTo(service.failureCause());
     assertThat(expected).hasCauseThat().hasMessageThat().isEqualTo("kaboom!");
     assertTrue(service.shutDownCalled);
-    assertEquals(Service.State.FAILED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.FAILED);
     assertThat(expected.getCause().getSuppressed()[0]).hasMessageThat().isEqualTo("double kaboom!");
   }
 
@@ -262,13 +262,13 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
     ThrowOnShutDown service = new ThrowOnShutDown();
 
     service.startAsync().awaitRunning();
-    assertEquals(Service.State.RUNNING, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.RUNNING);
 
     service.stopAsync();
     enterRun.countDown();
     executionThread.join();
 
-    assertEquals(Service.State.FAILED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.FAILED);
     assertThat(service.failureCause()).hasMessageThat().isEqualTo("kaboom!");
   }
 
@@ -329,7 +329,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
     service.stopAsync();
     started.countDown();
     service.awaitTerminated();
-    assertEquals(Service.State.TERMINATED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.TERMINATED);
     assertEquals(1, service.startupCalled);
     assertEquals(0, service.runCalled);
     assertEquals(1, service.shutdownCalled);
@@ -338,7 +338,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
   public void testStop_noStart() {
     FakeService service = new FakeService();
     service.stopAsync().awaitTerminated();
-    assertEquals(Service.State.TERMINATED, service.state());
+    assertThat(service.state()).isEqualTo(Service.State.TERMINATED);
     assertEquals(0, service.startupCalled);
     assertEquals(0, service.runCalled);
     assertEquals(0, service.shutdownCalled);
@@ -408,7 +408,7 @@ public class AbstractExecutionThreadServiceTest extends TestCase {
     protected void shutDown() throws Exception {
       assertEquals(1, startupCalled);
       assertEquals(0, shutdownCalled);
-      assertEquals(Service.State.STOPPING, state());
+      assertThat(state()).isEqualTo(Service.State.STOPPING);
       shutdownCalled++;
     }
 

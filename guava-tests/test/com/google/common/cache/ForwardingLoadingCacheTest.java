@@ -21,9 +21,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.errorprone.annotations.Keep;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
@@ -33,6 +36,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author Charles Fry
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class ForwardingLoadingCacheTest extends TestCase {
   private LoadingCache<String, Boolean> forward;
@@ -82,7 +87,7 @@ public class ForwardingLoadingCacheTest extends TestCase {
     verify(mock).invalidate("key");
   }
 
-  public void testRefresh() throws ExecutionException {
+  public void testRefresh() {
     forward.refresh("key");
     verify(mock).refresh("key");
   }
@@ -93,18 +98,19 @@ public class ForwardingLoadingCacheTest extends TestCase {
   }
 
   public void testSize() {
-    when(mock.size()).thenReturn(0L);
-    long unused = forward.size();
+    when(mock.size()).thenReturn(42L);
+    assertThat(forward.size()).isEqualTo(42);
   }
 
   public void testStats() {
-    when(mock.stats()).thenReturn(null);
-    assertThat(forward.stats()).isNull();
+    CacheStats stats = new CacheStats(0, 0, 0, 0, 0, 0);
+    when(mock.stats()).thenReturn(stats);
+    assertThat(forward.stats()).isEqualTo(stats);
   }
 
   public void testAsMap() {
-    when(mock.asMap()).thenReturn(null);
-    assertThat(forward.asMap()).isNull();
+    when(mock.asMap()).thenReturn(new ConcurrentHashMap<>(ImmutableMap.of("key", true)));
+    assertThat(forward.asMap()).containsExactly("key", true);
   }
 
   public void testCleanUp() {

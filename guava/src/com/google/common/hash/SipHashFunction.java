@@ -21,6 +21,7 @@ package com.google.common.hash;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.errorprone.annotations.Immutable;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
@@ -33,6 +34,7 @@ import org.jspecify.annotations.Nullable;
  * @author Jean-Philippe Aumasson
  * @author Daniel J. Bernstein
  */
+@J2ktIncompatible
 @Immutable
 final class SipHashFunction extends AbstractHashFunction implements Serializable {
   static final HashFunction SIP_HASH_24 =

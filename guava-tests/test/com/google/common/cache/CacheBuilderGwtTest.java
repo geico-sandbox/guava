@@ -34,7 +34,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import org.jspecify.annotations.NullUnmarked;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -48,13 +47,7 @@ import org.junit.runners.JUnit4;
 @NullUnmarked
 @RunWith(JUnit4.class)
 public class CacheBuilderGwtTest {
-
-  private FakeTicker fakeTicker;
-
-  @Before
-  public void setUp() {
-    fakeTicker = new FakeTicker();
-  }
+  private final FakeTicker fakeTicker = new FakeTicker();
 
   @Test
   public void loader() throws ExecutionException {

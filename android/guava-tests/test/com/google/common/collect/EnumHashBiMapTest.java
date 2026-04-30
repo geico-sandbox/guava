@@ -17,6 +17,8 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Sets.newIdentityHashSet;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -30,7 +32,6 @@ import com.google.common.collect.testing.features.MapFeature;
 import com.google.common.collect.testing.google.BiMapTestSuiteBuilder;
 import com.google.common.collect.testing.google.TestBiMapGenerator;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +139,7 @@ public class EnumHashBiMapTest extends TestCase {
     assertEquals(HashBiMap.create(), bimap);
     bimap.put(Currency.DOLLAR, "dollar");
     assertThat(bimap.get(Currency.DOLLAR)).isEqualTo("dollar");
-    assertEquals(Currency.DOLLAR, bimap.inverse().get("dollar"));
+    assertThat(bimap.inverse()).containsEntry("dollar", Currency.DOLLAR);
   }
 
   public void testCreateFromMap() {
@@ -150,7 +151,7 @@ public class EnumHashBiMapTest extends TestCase {
             Currency.FRANC, "franc");
     EnumHashBiMap<Currency, String> bimap = EnumHashBiMap.create(map);
     assertThat(bimap.get(Currency.DOLLAR)).isEqualTo("dollar");
-    assertEquals(Currency.DOLLAR, bimap.inverse().get("dollar"));
+    assertThat(bimap.inverse()).containsEntry("dollar", Currency.DOLLAR);
 
     /* Map must have at least one entry if not an EnumHashBiMap. */
     assertThrows(
@@ -191,7 +192,7 @@ public class EnumHashBiMapTest extends TestCase {
     EnumBiMap<Currency, Country> bimap1 = EnumBiMap.create(Currency.class, Country.class);
     bimap1.put(Currency.DOLLAR, Country.SWITZERLAND);
     EnumHashBiMap<Currency, Object> bimap2 = // use supertype
-        EnumHashBiMap.<Currency, Object>create(bimap1);
+        EnumHashBiMap.create(bimap1);
     assertEquals(Country.SWITZERLAND, bimap2.get(Currency.DOLLAR));
     assertEquals(bimap1, bimap2);
     bimap2.inverse().put("franc", Currency.FRANC);
@@ -221,7 +222,7 @@ public class EnumHashBiMapTest extends TestCase {
             Currency.FRANC, "franc");
     EnumHashBiMap<Currency, String> bimap = EnumHashBiMap.create(map);
 
-    Set<Object> uniqueEntries = Sets.newIdentityHashSet();
+    Set<Object> uniqueEntries = newIdentityHashSet();
     uniqueEntries.addAll(bimap.entrySet());
     assertEquals(3, uniqueEntries.size());
   }
@@ -229,7 +230,7 @@ public class EnumHashBiMapTest extends TestCase {
   @GwtIncompatible
   @J2ktIncompatible
     public void testSerializable() {
-    SerializableTester.reserializeAndAssert(EnumHashBiMap.create(Currency.class));
+    reserializeAndAssert(EnumHashBiMap.create(Currency.class));
   }
 
   @J2ktIncompatible

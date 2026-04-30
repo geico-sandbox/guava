@@ -16,6 +16,9 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Iterators.pollNext;
+import static com.google.common.collect.Maps.keyOrNull;
+
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.Maps.IteratorBasedAbstractMap;
 import java.util.Iterator;
@@ -50,12 +53,12 @@ abstract class AbstractNavigableMap<K extends @Nullable Object, V extends @Nulla
 
   @Override
   public @Nullable Entry<K, V> pollFirstEntry() {
-    return Iterators.pollNext(entryIterator());
+    return pollNext(entryIterator());
   }
 
   @Override
   public @Nullable Entry<K, V> pollLastEntry() {
-    return Iterators.pollNext(descendingEntryIterator());
+    return pollNext(descendingEntryIterator());
   }
 
   @Override
@@ -102,22 +105,22 @@ abstract class AbstractNavigableMap<K extends @Nullable Object, V extends @Nulla
 
   @Override
   public @Nullable K lowerKey(@ParametricNullness K key) {
-    return Maps.keyOrNull(lowerEntry(key));
+    return keyOrNull(lowerEntry(key));
   }
 
   @Override
   public @Nullable K floorKey(@ParametricNullness K key) {
-    return Maps.keyOrNull(floorEntry(key));
+    return keyOrNull(floorEntry(key));
   }
 
   @Override
   public @Nullable K ceilingKey(@ParametricNullness K key) {
-    return Maps.keyOrNull(ceilingEntry(key));
+    return keyOrNull(ceilingEntry(key));
   }
 
   @Override
   public @Nullable K higherKey(@ParametricNullness K key) {
-    return Maps.keyOrNull(higherEntry(key));
+    return keyOrNull(higherEntry(key));
   }
 
   abstract Iterator<Entry<K, V>> descendingEntryIterator();

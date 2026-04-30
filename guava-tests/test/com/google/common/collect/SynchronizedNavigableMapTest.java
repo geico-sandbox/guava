@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.collect.Synchronized.SynchronizedNavigableMap;
@@ -27,7 +28,6 @@ import com.google.common.collect.testing.TestStringSortedMapGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
-import com.google.common.testing.SerializableTester;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map.Entry;
@@ -421,6 +421,6 @@ public class SynchronizedNavigableMapTest extends SynchronizedMapTest {
 
   @Override
   public void testSerialization() {
-    SerializableTester.reserializeAndAssert(create());
+    reserializeAndAssert(create());
   }
 }

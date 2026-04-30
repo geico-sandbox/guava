@@ -14,6 +14,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.reverse;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -74,6 +75,6 @@ public abstract class AbstractRangeSetTest extends TestCase {
     }
 
     // test that asDescendingSetOfRanges is the reverse of asRanges
-    assertEquals(Lists.reverse(asRanges), ImmutableList.copyOf(rangeSet.asDescendingSetOfRanges()));
+    assertEquals(reverse(asRanges), ImmutableList.copyOf(rangeSet.asDescendingSetOfRanges()));
   }
 }

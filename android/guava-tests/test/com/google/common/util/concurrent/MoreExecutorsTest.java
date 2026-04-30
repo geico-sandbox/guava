@@ -36,6 +36,8 @@ import static com.google.common.util.concurrent.MoreExecutors.listeningDecorator
 import static com.google.common.util.concurrent.MoreExecutors.newDirectExecutorService;
 import static com.google.common.util.concurrent.MoreExecutors.renamingDecorator;
 import static com.google.common.util.concurrent.MoreExecutors.shutdownAndAwaitTermination;
+import static com.google.common.util.concurrent.Uninterruptibles.joinUninterruptibly;
+import static java.util.Collections.nCopies;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -57,7 +59,6 @@ import com.google.common.testing.ClassSanityTester;
 import com.google.common.util.concurrent.MoreExecutors.Application;
 import java.lang.Thread.State;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -138,7 +139,7 @@ public class MoreExecutorsTest extends JSR166TestCase {
           return i;
         };
 
-    List<Future<Integer>> futures = executor.invokeAll(Collections.nCopies(10, incrementTask));
+    List<Future<Integer>> futures = executor.invokeAll(nCopies(10, incrementTask));
 
     for (int i = 0; i < 10; i++) {
       Future<Integer> future = futures.get(i);
@@ -223,7 +224,7 @@ public class MoreExecutorsTest extends JSR166TestCase {
     waiter.start();
     awaitTimedWaiting(waiter);
     service.shutdown();
-    Uninterruptibles.joinUninterruptibly(waiter, 10, SECONDS);
+    joinUninterruptibly(waiter, 10, SECONDS);
     if (waiter.isAlive()) {
       waiter.interrupt();
       fail("awaitTermination failed to trigger after shutdown()");
@@ -401,7 +402,7 @@ public class MoreExecutorsTest extends JSR166TestCase {
       future.get();
       fail("Expected ExecutionException");
     } catch (ExecutionException e) {
-      assertThat(e).hasCauseThat().isSameInstanceAs(expectedCause);
+      assertThat(e).hasCauseThat().isEqualTo(expectedCause);
     }
   }
 

@@ -16,6 +16,7 @@
 
 package com.google.common.base;
 
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.annotations.GwtCompatible;
@@ -26,7 +27,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.EquivalenceTester;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -91,9 +91,9 @@ public class EquivalenceTest extends TestCase {
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testSerialization() {
-    SerializableTester.reserializeAndAssert(LENGTH_EQUIVALENCE.wrap("hello"));
-    SerializableTester.reserializeAndAssert(Equivalence.equals());
-    SerializableTester.reserializeAndAssert(Equivalence.identity());
+    reserializeAndAssert(LENGTH_EQUIVALENCE.wrap("hello"));
+    reserializeAndAssert(Equivalence.equals());
+    reserializeAndAssert(Equivalence.identity());
   }
 
   private static class IntValue {

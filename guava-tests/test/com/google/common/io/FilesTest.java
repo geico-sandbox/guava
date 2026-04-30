@@ -17,6 +17,7 @@
 package com.google.common.io;
 
 import static com.google.common.hash.Hashing.sha512;
+import static com.google.common.primitives.Bytes.asList;
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_16LE;
@@ -24,7 +25,6 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.primitives.Bytes;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -631,7 +631,7 @@ public class FilesTest extends IoTestCase {
 
     File asciiFile = getTestFile("ascii.txt");
     byte[] result = Files.readBytes(asciiFile, processor);
-    assertEquals(Bytes.asList(Files.toByteArray(asciiFile)), Bytes.asList(result));
+    assertEquals(asList(Files.toByteArray(asciiFile)), asList(result));
   }
 
   public void testReadBytes_returnFalse() throws IOException {

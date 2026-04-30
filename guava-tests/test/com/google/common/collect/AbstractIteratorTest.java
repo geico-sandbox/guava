@@ -204,7 +204,7 @@ public class AbstractIteratorTest extends TestCase {
 
     // It should pass through untouched
     SomeUncheckedException e = assertThrows(SomeUncheckedException.class, iter::hasNext);
-    assertThat(e).isSameInstanceAs(exception);
+    assertThat(e).isEqualTo(exception);
   }
 
   public void testExceptionAfterEndOfData() {

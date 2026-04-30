@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.hash.SneakyThrows.sneakyThrow;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.errorprone.annotations.Immutable;
 import com.google.j2objc.annotations.J2ObjCIncompatible;
 import java.io.Serializable;
@@ -33,6 +34,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Colin Decker
  */
+@J2ktIncompatible
 @Immutable
 final class ChecksumHashFunction extends AbstractHashFunction implements Serializable {
   private final ImmutableSupplier<? extends Checksum> checksumSupplier;

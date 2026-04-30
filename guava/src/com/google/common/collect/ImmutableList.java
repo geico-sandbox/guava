@@ -21,8 +21,12 @@ import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndexes;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.Lists.equalsImpl;
+import static com.google.common.collect.Lists.indexOfImpl;
+import static com.google.common.collect.Lists.lastIndexOfImpl;
 import static com.google.common.collect.ObjectArrays.checkElementsNotNull;
 import static com.google.common.collect.RegularImmutableList.EMPTY;
+import static java.lang.System.arraycopy;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -220,7 +224,7 @@ public abstract class ImmutableList<E> extends ImmutableCollection<E>
     array[9] = e10;
     array[10] = e11;
     array[11] = e12;
-    System.arraycopy(others, 0, array, 12, others.length);
+    arraycopy(others, 0, array, 12, others.length);
     return construct(array);
   }
 
@@ -407,7 +411,7 @@ public abstract class ImmutableList<E> extends ImmutableCollection<E>
   public UnmodifiableListIterator<E> listIterator(int index) {
     return new AbstractIndexedListIterator<E>(size(), index) {
       @Override
-      protected E get(int index) {
+      E get(int index) {
         return ImmutableList.this.get(index);
       }
     };
@@ -424,12 +428,12 @@ public abstract class ImmutableList<E> extends ImmutableCollection<E>
 
   @Override
   public int indexOf(@Nullable Object object) {
-    return (object == null) ? -1 : Lists.indexOfImpl(this, object);
+    return (object == null) ? -1 : indexOfImpl(this, object);
   }
 
   @Override
   public int lastIndexOf(@Nullable Object object) {
-    return (object == null) ? -1 : Lists.lastIndexOfImpl(this, object);
+    return (object == null) ? -1 : lastIndexOfImpl(this, object);
   }
 
   @Override
@@ -711,7 +715,7 @@ public abstract class ImmutableList<E> extends ImmutableCollection<E>
 
   @Override
   public boolean equals(@Nullable Object obj) {
-    return Lists.equalsImpl(this, obj);
+    return equalsImpl(this, obj);
   }
 
   @Override
@@ -873,7 +877,7 @@ public abstract class ImmutableList<E> extends ImmutableCollection<E>
        * We uphold that promise here because our callers promise that `elements` will not contain
        * nulls in its first `n` elements.
        */
-      System.arraycopy(elements, 0, contents, size, n);
+      arraycopy(elements, 0, contents, size, n);
       size += n;
     }
 

@@ -17,11 +17,14 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Predicates.equalTo;
+import static com.google.common.base.Predicates.in;
 import static com.google.common.base.Predicates.not;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.collect.Multimaps.filterKeys;
 import static com.google.common.collect.Multimaps.filterValues;
 import static com.google.common.collect.Multimaps.synchronizedListMultimap;
+import static com.google.common.collect.Sets.newLinkedHashSet;
 import static com.google.common.collect.testing.Helpers.mapEntry;
 import static com.google.common.collect.testing.features.CollectionFeature.ALLOWS_NULL_VALUES;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
@@ -36,7 +39,6 @@ import static com.google.common.reflect.Reflection.newProxy;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.base.Ascii;
 import com.google.common.base.Function;
-import com.google.common.base.Predicates;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Maps.EntryTransformer;
 import com.google.common.collect.testing.SampleElements;
@@ -229,7 +231,7 @@ public class MultimapsCollectionTest extends TestCase {
                   @Override
                   protected ListMultimap<String, String> create(Entry<String, String>[] entries) {
                     ListMultimap<String, String> multimap =
-                        synchronizedListMultimap(ArrayListMultimap.<String, String>create());
+                        synchronizedListMultimap(ArrayListMultimap.create());
                     for (Entry<String, String> entry : entries) {
                       multimap.put(entry.getKey(), entry.getValue());
                     }
@@ -330,7 +332,7 @@ public class MultimapsCollectionTest extends TestCase {
 
     @Override
     public Collection<String> createCollection(Iterable<? extends String> values) {
-      return Lists.newArrayList(values);
+      return newArrayList(values);
     }
 
     @Override
@@ -526,7 +528,7 @@ public class MultimapsCollectionTest extends TestCase {
 
     @Override
     public Collection<Integer> createCollection(Iterable<? extends Integer> values) {
-      return Sets.newLinkedHashSet(values);
+      return newLinkedHashSet(values);
     }
   }
 
@@ -549,7 +551,7 @@ public class MultimapsCollectionTest extends TestCase {
 
     @Override
     public Collection<Integer> createCollection(Iterable<? extends Integer> values) {
-      return Lists.newArrayList(values);
+      return newArrayList(values);
     }
   }
 
@@ -563,7 +565,7 @@ public class MultimapsCollectionTest extends TestCase {
                     multimap.put("foo", 17);
                     multimap.put("bar", 32);
                     multimap.put("foo", 16);
-                    return filterKeys(multimap, not(Predicates.in(ImmutableSet.of("foo", "bar"))));
+                    return filterKeys(multimap, not(in(ImmutableSet.of("foo", "bar"))));
                   }
                 })
             .named("Multimaps.filterKeys[SetMultimap, Predicate]")
@@ -584,7 +586,7 @@ public class MultimapsCollectionTest extends TestCase {
                     multimap.put("foo", 17);
                     multimap.put("bar", 32);
                     multimap.put("foo", 16);
-                    return filterKeys(multimap, not(Predicates.in(ImmutableSet.of("foo", "bar"))));
+                    return filterKeys(multimap, not(in(ImmutableSet.of("foo", "bar"))));
                   }
                 })
             .named("Multimaps.filterKeys[ListMultimap, Predicate]")
@@ -625,8 +627,7 @@ public class MultimapsCollectionTest extends TestCase {
                     multimap.put("one", 314);
                     multimap.put("two", 159);
                     multimap.put("one", 265);
-                    return filterValues(
-                        multimap, not(Predicates.in(ImmutableSet.of(314, 159, 265))));
+                    return filterValues(multimap, not(in(ImmutableSet.of(314, 159, 265))));
                   }
                 })
             .named("Multimaps.filterValues[SetMultimap, Predicate]")
@@ -645,8 +646,7 @@ public class MultimapsCollectionTest extends TestCase {
                     ImmutableSetMultimap<String, Integer> badEntries =
                         ImmutableSetMultimap.of("foo", 314, "one", 159, "two", 265, "bar", 358);
                     multimap.putAll(badEntries);
-                    return Multimaps.filterEntries(
-                        multimap, not(Predicates.in(badEntries.entries())));
+                    return Multimaps.filterEntries(multimap, not(in(badEntries.entries())));
                   }
                 })
             .named("Multimaps.filterEntries[SetMultimap, Predicate]")
@@ -665,10 +665,8 @@ public class MultimapsCollectionTest extends TestCase {
                     ImmutableSetMultimap<String, Integer> badEntries =
                         ImmutableSetMultimap.of("foo", 314, "one", 159, "two", 265, "bar", 358);
                     multimap.putAll(badEntries);
-                    multimap =
-                        filterKeys(multimap, not(Predicates.in(ImmutableSet.of("foo", "bar"))));
-                    return Multimaps.filterEntries(
-                        multimap, not(Predicates.in(badEntries.entries())));
+                    multimap = filterKeys(multimap, not(in(ImmutableSet.of("foo", "bar"))));
+                    return Multimaps.filterEntries(multimap, not(in(badEntries.entries())));
                   }
                 })
             .named("Multimaps.filterEntries[Multimaps.filterKeys[SetMultimap]]")
@@ -689,9 +687,8 @@ public class MultimapsCollectionTest extends TestCase {
                     multimap.putAll(badEntries);
                     multimap =
                         Multimaps.filterEntries(
-                            multimap,
-                            not(Predicates.in(ImmutableMap.of("one", 159, "two", 265).entrySet())));
-                    return filterKeys(multimap, not(Predicates.in(ImmutableSet.of("foo", "bar"))));
+                            multimap, not(in(ImmutableMap.of("one", 159, "two", 265).entrySet())));
+                    return filterKeys(multimap, not(in(ImmutableSet.of("foo", "bar"))));
                   }
                 })
             .named("Multimaps.filterKeys[Multimaps.filterEntries[SetMultimap]]")

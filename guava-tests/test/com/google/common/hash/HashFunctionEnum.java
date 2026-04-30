@@ -30,6 +30,7 @@ import static com.google.common.hash.Hashing.sha384;
 import static com.google.common.hash.Hashing.sha512;
 import static com.google.common.hash.Hashing.sipHash24;
 
+import com.google.common.annotations.J2ktIncompatible;
 import org.jspecify.annotations.NullUnmarked;
 
 /**
@@ -39,6 +40,7 @@ import org.jspecify.annotations.NullUnmarked;
  */
 @SuppressWarnings("deprecation") // We still need to test our deprecated APIs.
 @NullUnmarked
+@J2ktIncompatible
 enum HashFunctionEnum {
   ADLER32(adler32()),
   CRC32(crc32()),

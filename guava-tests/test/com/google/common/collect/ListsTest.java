@@ -21,10 +21,12 @@ import static com.google.common.collect.Iterables.elementsEqual;
 import static com.google.common.collect.Lists.cartesianProduct;
 import static com.google.common.collect.Lists.charactersOf;
 import static com.google.common.collect.Lists.computeArrayListCapacity;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
 import static com.google.common.collect.Lists.newArrayListWithExpectedSize;
 import static com.google.common.collect.Lists.partition;
 import static com.google.common.collect.Lists.transform;
 import static com.google.common.collect.testing.IteratorFeature.UNMODIFIABLE;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.lang.System.arraycopy;
 import static java.util.Arrays.asList;
@@ -47,7 +49,6 @@ import com.google.common.collect.testing.features.ListFeature;
 import com.google.common.collect.testing.google.ListGenerators.CharactersOfCharSequenceGenerator;
 import com.google.common.collect.testing.google.ListGenerators.CharactersOfStringGenerator;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -201,7 +202,7 @@ public class ListsTest extends TestCase {
                   @Override
                   protected List<String> create(String[] elements) {
                     List<String> fromList = Lists.newArrayList(elements);
-                    return transform(fromList, Functions.<String>identity());
+                    return transform(fromList, Functions.identity());
                   }
                 })
             .named("Lists.transform, random access, nulls")
@@ -218,7 +219,7 @@ public class ListsTest extends TestCase {
                   @Override
                   protected List<String> create(String[] elements) {
                     List<String> fromList = new LinkedList<>(asList(elements));
-                    return transform(fromList, Functions.<String>identity());
+                    return transform(fromList, Functions.identity());
                   }
                 })
             .named("Lists.transform, sequential access, nulls")
@@ -335,15 +336,15 @@ public class ListsTest extends TestCase {
   }
 
   public void testNewArrayListWithCapacity() {
-    ArrayList<Integer> list = Lists.newArrayListWithCapacity(0);
+    ArrayList<Integer> list = newArrayListWithCapacity(0);
     assertEquals(emptyList(), list);
 
-    ArrayList<Integer> bigger = Lists.newArrayListWithCapacity(256);
+    ArrayList<Integer> bigger = newArrayListWithCapacity(256);
     assertEquals(emptyList(), bigger);
   }
 
   public void testNewArrayListWithCapacity_negative() {
-    assertThrows(IllegalArgumentException.class, () -> Lists.newArrayListWithCapacity(-1));
+    assertThrows(IllegalArgumentException.class, () -> newArrayListWithCapacity(-1));
   }
 
   public void testNewArrayListWithExpectedSize() {
@@ -452,7 +453,7 @@ public class ListsTest extends TestCase {
   public void testAsList1() {
     List<String> list = Lists.asList("foo", new String[] {"bar", "baz"});
     checkFooBarBazList(list);
-    SerializableTester.reserializeAndAssert(list);
+    reserializeAndAssert(list);
     assertTrue(list instanceof RandomAccess);
 
     new IteratorTester<String>(
@@ -516,7 +517,7 @@ public class ListsTest extends TestCase {
     assertThat(list.get(0)).isEqualTo("foo");
     assertThat(list.get(1)).isEqualTo("bar");
     assertIndexIsOutOfBounds(list, 2);
-    SerializableTester.reserializeAndAssert(list);
+    reserializeAndAssert(list);
     assertTrue(list instanceof RandomAccess);
 
     new IteratorTester<String>(

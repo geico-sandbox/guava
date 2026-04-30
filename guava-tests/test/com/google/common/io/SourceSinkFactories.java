@@ -22,6 +22,7 @@ import static com.google.common.io.SourceSinkFactory.ByteSourceFactory;
 import static com.google.common.io.SourceSinkFactory.CharSinkFactory;
 import static com.google.common.io.SourceSinkFactory.CharSourceFactory;
 import static java.lang.Math.min;
+import static java.lang.System.arraycopy;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.ByteArrayOutputStream;
@@ -370,8 +371,8 @@ public class SourceSinkFactories {
         return checkNotNull(bytes);
       } else {
         byte[] result = new byte[initialBytes.length + bytes.length];
-        System.arraycopy(initialBytes, 0, result, 0, initialBytes.length);
-        System.arraycopy(bytes, 0, result, initialBytes.length, bytes.length);
+        arraycopy(initialBytes, 0, result, 0, initialBytes.length);
+        arraycopy(bytes, 0, result, initialBytes.length, bytes.length);
         return result;
       }
     }
@@ -547,8 +548,8 @@ public class SourceSinkFactories {
         return checkNotNull(bytes);
       } else {
         byte[] result = new byte[initialBytes.length + bytes.length];
-        System.arraycopy(initialBytes, 0, result, 0, initialBytes.length);
-        System.arraycopy(bytes, 0, result, initialBytes.length, bytes.length);
+        arraycopy(initialBytes, 0, result, 0, initialBytes.length);
+        arraycopy(bytes, 0, result, initialBytes.length, bytes.length);
         return result;
       }
     }

@@ -18,17 +18,28 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.and;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.Iterables.find;
+import static com.google.common.collect.Iterables.removeFirstMatching;
+import static com.google.common.collect.Iterators.addAll;
+import static com.google.common.collect.Iterators.find;
+import static com.google.common.collect.Iterators.removeAll;
+import static com.google.common.collect.Iterators.unmodifiableIterator;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.capacity;
+import static com.google.common.collect.Maps.indexMap;
+import static com.google.common.collect.Maps.newIdentityHashMap;
 import static com.google.common.math.IntMath.saturatedAdd;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSortedSet;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2.FilteredCollection;
 import com.google.common.math.IntMath;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -133,7 +144,7 @@ public final class Sets {
       Iterator<E> itr = elements.iterator();
       if (itr.hasNext()) {
         EnumSet<E> enumSet = EnumSet.of(itr.next());
-        Iterators.addAll(enumSet, itr);
+        addAll(enumSet, itr);
         return ImmutableEnumSet.asImmutable(enumSet);
       } else {
         return ImmutableSet.of();
@@ -244,7 +255,7 @@ public final class Sets {
   @SuppressWarnings("NonApiType") // acts as a direct substitute for a constructor call
   public static <E extends @Nullable Object> HashSet<E> newHashSet(Iterator<? extends E> elements) {
     HashSet<E> set = new HashSet<>();
-    Iterators.addAll(set, elements);
+    addAll(set, elements);
     return set;
   }
 
@@ -263,7 +274,7 @@ public final class Sets {
   @SuppressWarnings("NonApiType") // acts as a direct substitute for a constructor call
   public static <E extends @Nullable Object> HashSet<E> newHashSetWithExpectedSize(
       int expectedSize) {
-    return new HashSet<>(Maps.capacity(expectedSize));
+    return new HashSet<>(capacity(expectedSize));
   }
 
   /**
@@ -360,7 +371,7 @@ public final class Sets {
   @SuppressWarnings("NonApiType") // acts as a direct substitute for a constructor call
   public static <E extends @Nullable Object> LinkedHashSet<E> newLinkedHashSetWithExpectedSize(
       int expectedSize) {
-    return new LinkedHashSet<>(Maps.capacity(expectedSize));
+    return new LinkedHashSet<>(capacity(expectedSize));
   }
 
   // TreeSet
@@ -451,7 +462,7 @@ public final class Sets {
    * @since 8.0
    */
   public static <E extends @Nullable Object> Set<E> newIdentityHashSet() {
-    return Collections.newSetFromMap(Maps.newIdentityHashMap());
+    return Collections.newSetFromMap(newIdentityHashMap());
   }
 
   /**
@@ -485,7 +496,7 @@ public final class Sets {
     Collection<? extends E> elementsCollection =
         (elements instanceof Collection)
             ? (Collection<? extends E>) elements
-            : Lists.newArrayList(elements);
+            : newArrayList(elements);
     return new CopyOnWriteArraySet<>(elementsCollection);
   }
 
@@ -1193,7 +1204,7 @@ public final class Sets {
       // Support clear(), removeAll(), and retainAll() when filtering a filtered
       // collection.
       FilteredSet<E> filtered = (FilteredSet<E>) unfiltered;
-      Predicate<E> combinedPredicate = Predicates.and(filtered.predicate, predicate);
+      Predicate<E> combinedPredicate = and(filtered.predicate, predicate);
       return new FilteredSet<>((Set<E>) filtered.unfiltered, combinedPredicate);
     }
 
@@ -1230,7 +1241,7 @@ public final class Sets {
       // Support clear(), removeAll(), and retainAll() when filtering a filtered
       // collection.
       FilteredSet<E> filtered = (FilteredSet<E>) unfiltered;
-      Predicate<E> combinedPredicate = Predicates.and(filtered.predicate, predicate);
+      Predicate<E> combinedPredicate = and(filtered.predicate, predicate);
       return new FilteredSortedSet<>((SortedSet<E>) filtered.unfiltered, combinedPredicate);
     }
 
@@ -1268,7 +1279,7 @@ public final class Sets {
       // Support clear(), removeAll(), and retainAll() when filtering a filtered
       // collection.
       FilteredSet<E> filtered = (FilteredSet<E>) unfiltered;
-      Predicate<E> combinedPredicate = Predicates.and(filtered.predicate, predicate);
+      Predicate<E> combinedPredicate = and(filtered.predicate, predicate);
       return new FilteredNavigableSet<>((NavigableSet<E>) filtered.unfiltered, combinedPredicate);
     }
 
@@ -1323,7 +1334,7 @@ public final class Sets {
     @Override
     @ParametricNullness
     public E first() {
-      return Iterators.find(unfiltered.iterator(), predicate);
+      return find(unfiltered.iterator(), predicate);
     }
 
     @Override
@@ -1353,37 +1364,37 @@ public final class Sets {
 
     @Override
     public @Nullable E lower(@ParametricNullness E e) {
-      return Iterators.find(unfiltered().headSet(e, false).descendingIterator(), predicate, null);
+      return find(unfiltered().headSet(e, false).descendingIterator(), predicate, null);
     }
 
     @Override
     public @Nullable E floor(@ParametricNullness E e) {
-      return Iterators.find(unfiltered().headSet(e, true).descendingIterator(), predicate, null);
+      return find(unfiltered().headSet(e, true).descendingIterator(), predicate, null);
     }
 
     @Override
     public @Nullable E ceiling(@ParametricNullness E e) {
-      return Iterables.find(unfiltered().tailSet(e, true), predicate, null);
+      return find(unfiltered().tailSet(e, true), predicate, null);
     }
 
     @Override
     public @Nullable E higher(@ParametricNullness E e) {
-      return Iterables.find(unfiltered().tailSet(e, false), predicate, null);
+      return find(unfiltered().tailSet(e, false), predicate, null);
     }
 
     @Override
     public @Nullable E pollFirst() {
-      return Iterables.removeFirstMatching(unfiltered(), predicate);
+      return removeFirstMatching(unfiltered(), predicate);
     }
 
     @Override
     public @Nullable E pollLast() {
-      return Iterables.removeFirstMatching(unfiltered().descendingSet(), predicate);
+      return removeFirstMatching(unfiltered().descendingSet(), predicate);
     }
 
     @Override
     public NavigableSet<E> descendingSet() {
-      return Sets.filter(unfiltered().descendingSet(), predicate);
+      return filter(unfiltered().descendingSet(), predicate);
     }
 
     @Override
@@ -1394,7 +1405,7 @@ public final class Sets {
     @Override
     @ParametricNullness
     public E last() {
-      return Iterators.find(unfiltered().descendingIterator(), predicate);
+      return find(unfiltered().descendingIterator(), predicate);
     }
 
     @Override
@@ -1718,7 +1729,7 @@ public final class Sets {
     PowerSet(Set<E> input) {
       checkArgument(
           input.size() <= 30, "Too many elements to create power set: %s > 30", input.size());
-      this.inputSet = Maps.indexMap(input);
+      this.inputSet = indexMap(input);
     }
 
     @Override
@@ -1735,7 +1746,7 @@ public final class Sets {
     public Iterator<Set<E>> iterator() {
       return new AbstractIndexedListIterator<Set<E>>(size()) {
         @Override
-        protected Set<E> get(int setBits) {
+        Set<E> get(int setBits) {
           return new SubSet<>(inputSet, setBits);
         }
       };
@@ -1800,7 +1811,7 @@ public final class Sets {
    * @since 23.0
    */
   public static <E> Set<Set<E>> combinations(Set<E> set, int size) {
-    ImmutableMap<E, Integer> index = Maps.indexMap(set);
+    ImmutableMap<E, Integer> index = indexMap(set);
     checkNonnegative(size, "size");
     checkArgument(size <= index.size(), "size (%s) must be <= set.size() (%s)", size, index.size());
     if (size == 0) {
@@ -1956,7 +1967,7 @@ public final class Sets {
 
     UnmodifiableNavigableSet(NavigableSet<E> delegate) {
       this.delegate = checkNotNull(delegate);
-      this.unmodifiableDelegate = Collections.unmodifiableSortedSet(delegate);
+      this.unmodifiableDelegate = unmodifiableSortedSet(delegate);
     }
 
     @Override
@@ -2030,7 +2041,7 @@ public final class Sets {
 
     @Override
     public Iterator<E> descendingIterator() {
-      return Iterators.unmodifiableIterator(delegate.descendingIterator());
+      return unmodifiableIterator(delegate.descendingIterator());
     }
 
     @Override
@@ -2132,7 +2143,7 @@ public final class Sets {
      * https://github.com/google/guava/issues/1013
      */
     if (collection instanceof Set && collection.size() > set.size()) {
-      return Iterators.removeAll(set.iterator(), collection);
+      return removeAll(set.iterator(), collection);
     } else {
       return removeAllImpl(set, collection.iterator());
     }

@@ -16,13 +16,13 @@
 
 package com.google.common.eventbus;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -211,7 +211,7 @@ public class EventBusTest extends TestCase {
     assertEquals("Two correct events should be delivered.", expectedEvents, catcher1.getEvents());
 
     assertEquals(
-        "One correct event should be delivered.", Lists.newArrayList(EVENT), catcher2.getEvents());
+        "One correct event should be delivered.", newArrayList(EVENT), catcher2.getEvents());
 
     bus.unregister(catcher1);
     bus.post(EVENT);

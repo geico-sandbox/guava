@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.collect.Maps.synchronizedBiMap;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.collect.Synchronized.SynchronizedBiMap;
@@ -76,7 +77,7 @@ public class SynchronizedBiMapTest extends SynchronizedMapTest {
 
   @Override
   protected <K, V> BiMap<K, V> create() {
-    TestBiMap<K, V> inner = new TestBiMap<>(HashBiMap.<K, V>create(), mutex);
+    TestBiMap<K, V> inner = new TestBiMap<>(HashBiMap.create(), mutex);
     BiMap<K, V> outer = Synchronized.biMap(inner, mutex);
     return outer;
   }
@@ -90,7 +91,7 @@ public class SynchronizedBiMapTest extends SynchronizedMapTest {
         checkArgument(!result.containsKey(entry.getKey()));
         result.put(entry.getKey(), entry.getValue());
       }
-      return Maps.synchronizedBiMap(result);
+      return synchronizedBiMap(result);
     }
   }
 
@@ -99,7 +100,7 @@ public class SynchronizedBiMapTest extends SynchronizedMapTest {
     @Override
     protected BiMap<String, String> create(Entry<String, String>[] entries) {
       Object mutex = new Object();
-      BiMap<String, String> backing = new TestBiMap<>(HashBiMap.<String, String>create(), mutex);
+      BiMap<String, String> backing = new TestBiMap<>(HashBiMap.create(), mutex);
       BiMap<String, String> result = Synchronized.biMap(backing, mutex);
       for (Entry<String, String> entry : entries) {
         checkArgument(!result.containsKey(entry.getKey()));

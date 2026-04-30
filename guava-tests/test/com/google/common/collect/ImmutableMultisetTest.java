@@ -20,6 +20,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.ImmutableMultiset.toImmutableMultiset;
 import static com.google.common.collect.Iterators.emptyIterator;
 import static com.google.common.collect.Iterators.singletonIterator;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
@@ -40,7 +42,6 @@ import com.google.common.collect.testing.google.UnmodifiableCollectionTests;
 import com.google.common.testing.CollectorTester;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -228,7 +229,7 @@ public class ImmutableMultisetTest extends TestCase {
   @SuppressWarnings("ArrayAsKeyOfSetOrMap")
   public void testCreation_arrayOfArray() {
     String[] array = new String[] {"a"};
-    Multiset<String[]> multiset = ImmutableMultiset.<String[]>of(array);
+    Multiset<String[]> multiset = ImmutableMultiset.of(array);
     Multiset<String[]> expected = HashMultiset.create();
     expected.add(array);
     assertEquals(expected, multiset);
@@ -562,14 +563,14 @@ public class ImmutableMultisetTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testSerialization_empty() {
     Collection<String> c = ImmutableMultiset.of();
-    assertThat(SerializableTester.reserialize(c)).isSameInstanceAs(c);
+    assertThat(reserialize(c)).isSameInstanceAs(c);
   }
 
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testSerialization_multiple() {
     Collection<String> c = ImmutableMultiset.of("a", "b", "a");
-    Collection<String> copy = SerializableTester.reserializeAndAssert(c);
+    Collection<String> copy = reserializeAndAssert(c);
     assertThat(copy).containsExactly("a", "a", "b").inOrder();
   }
 
@@ -585,7 +586,7 @@ public class ImmutableMultisetTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testSerialization_entrySet() {
     Multiset<String> c = ImmutableMultiset.of("a", "b", "c");
-    SerializableTester.reserializeAndAssert(c.entrySet());
+    reserializeAndAssert(c.entrySet());
   }
 
   public void testEquals_immutableMultiset() {
@@ -624,7 +625,7 @@ public class ImmutableMultisetTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testSerialization_asList() {
     ImmutableMultiset<String> multiset = ImmutableMultiset.of("a", "a", "b", "b", "b");
-    SerializableTester.reserializeAndAssert(multiset.asList());
+    reserializeAndAssert(multiset.asList());
   }
 
   public void testEquals() {

@@ -15,11 +15,14 @@
 package com.google.common.cache;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Sets.newIdentityHashSet;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.lang.Math.max;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Preconditions;
 import com.google.common.cache.LocalCache.LocalLoadingCache;
 import com.google.common.cache.LocalCache.Segment;
@@ -27,7 +30,6 @@ import com.google.common.cache.LocalCache.ValueReference;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.FakeTicker;
 import java.lang.ref.Reference;
@@ -47,6 +49,8 @@ import org.jspecify.annotations.Nullable;
  *
  * @author mike nonemacher
  */
+@GwtIncompatible
+@J2ktIncompatible
 @SuppressWarnings("GuardedBy") // TODO(b/35466881): Fix or suppress.
 @NullUnmarked
 final class CacheTesting {
@@ -218,7 +222,7 @@ final class CacheTesting {
   static void checkExpiration(LocalCache<?, ?> cchm) {
     for (Segment<?, ?> segment : cchm.segments) {
       if (cchm.usesWriteQueue()) {
-        Set<ReferenceEntry<?, ?>> entries = Sets.newIdentityHashSet();
+        Set<ReferenceEntry<?, ?>> entries = newIdentityHashSet();
 
         ReferenceEntry<?, ?> prev = null;
         for (ReferenceEntry<?, ?> current : segment.writeQueue) {
@@ -240,7 +244,7 @@ final class CacheTesting {
       }
 
       if (cchm.usesAccessQueue()) {
-        Set<ReferenceEntry<?, ?>> entries = Sets.newIdentityHashSet();
+        Set<ReferenceEntry<?, ?>> entries = newIdentityHashSet();
 
         ReferenceEntry<?, ?> prev = null;
         for (ReferenceEntry<?, ?> current : segment.accessQueue) {

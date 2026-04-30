@@ -18,6 +18,8 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Iterables.getOnlyElement;
+import static com.google.common.collect.Iterators.unmodifiableIterator;
+import static com.google.common.collect.Maps.unmodifiableEntryIterator;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -58,7 +60,7 @@ final class ImmutableEnumMap<K extends Enum<K>, V> extends IteratorBasedImmutabl
 
   @Override
   UnmodifiableIterator<K> keyIterator() {
-    return Iterators.unmodifiableIterator(delegate.keySet().iterator());
+    return unmodifiableIterator(delegate.keySet().iterator());
   }
 
   @Override
@@ -89,7 +91,7 @@ final class ImmutableEnumMap<K extends Enum<K>, V> extends IteratorBasedImmutabl
 
   @Override
   UnmodifiableIterator<Entry<K, V>> entryIterator() {
-    return Maps.unmodifiableEntryIterator(delegate.entrySet().iterator());
+    return unmodifiableEntryIterator(delegate.entrySet().iterator());
   }
 
   @Override

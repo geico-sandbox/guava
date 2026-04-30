@@ -17,6 +17,8 @@ package com.google.common.reflect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.reflect.Types.newArrayType;
+import static com.google.common.reflect.Types.newArtificialTypeVariable;
 import static java.util.Arrays.asList;
 
 import com.google.common.base.Joiner;
@@ -251,7 +253,7 @@ public final class TypeResolver {
   private Type resolveGenericArrayType(GenericArrayType type) {
     Type componentType = type.getGenericComponentType();
     Type resolvedComponentType = resolveType(componentType);
-    return Types.newArrayType(resolvedComponentType);
+    return newArrayType(resolvedComponentType);
   }
 
   private ParameterizedType resolveParameterizedType(ParameterizedType type) {
@@ -380,7 +382,7 @@ public final class TypeResolver {
             && Arrays.equals(bounds, resolvedBounds)) {
           return var;
         }
-        return Types.newArtificialTypeVariable(
+        return newArtificialTypeVariable(
             var.getGenericDeclaration(), var.getName(), resolvedBounds);
       }
       // in case the type is yet another type variable.
@@ -487,8 +489,7 @@ public final class TypeResolver {
       }
       if (type instanceof GenericArrayType) {
         GenericArrayType arrayType = (GenericArrayType) type;
-        return Types.newArrayType(
-            notForTypeVariable().capture(arrayType.getGenericComponentType()));
+        return newArrayType(notForTypeVariable().capture(arrayType.getGenericComponentType()));
       }
       if (type instanceof ParameterizedType) {
         ParameterizedType parameterizedType = (ParameterizedType) type;
@@ -519,7 +520,7 @@ public final class TypeResolver {
     TypeVariable<?> captureAsTypeVariable(Type[] upperBounds) {
       String name =
           "capture#" + id.incrementAndGet() + "-of ? extends " + Joiner.on('&').join(upperBounds);
-      return Types.newArtificialTypeVariable(WildcardCapturer.class, name, upperBounds);
+      return newArtificialTypeVariable(WildcardCapturer.class, name, upperBounds);
     }
 
     private WildcardCapturer forTypeVariable(TypeVariable<?> typeParam) {

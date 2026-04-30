@@ -16,6 +16,7 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.CollectPreconditions.checkRemove;
 import static com.google.common.collect.Hashing.smearedHash;
 import static com.google.common.collect.NullnessCasts.uncheckedCastNullableTToT;
 import static com.google.common.collect.NullnessCasts.unsafeNull;
@@ -730,7 +731,7 @@ public final class HashBiMap<K extends @Nullable Object, V extends @Nullable Obj
         @Override
         public void remove() {
           checkForComodification();
-          CollectPreconditions.checkRemove(indexToRemove != ABSENT);
+          checkRemove(indexToRemove != ABSENT);
           biMap.removeEntry(indexToRemove);
           if (index == biMap.size) {
             index = indexToRemove;

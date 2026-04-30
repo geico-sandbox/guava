@@ -16,6 +16,7 @@
 
 package com.google.common.base;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -26,7 +27,6 @@ import static org.junit.Assert.assertThrows;
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import com.google.common.collect.Lists;
 import com.google.common.testing.ClassSanityTester;
 import com.google.common.testing.EqualsTester;
 import java.io.NotSerializableException;
@@ -183,7 +183,7 @@ public class SuppliersTest extends TestCase {
   }
 
   public void testComposeWithLists() {
-    Supplier<ArrayList<Integer>> listSupplier = () -> Lists.newArrayList(0);
+    Supplier<ArrayList<Integer>> listSupplier = () -> newArrayList(0);
 
     Function<List<Integer>, List<Integer>> addElementFunction =
         list -> {

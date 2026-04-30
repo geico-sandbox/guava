@@ -116,13 +116,14 @@ final class TestingCacheLoaders {
   }
 
   static final class ConstantLoader<K, V> extends CacheLoader<K, V> {
-    private final V constant;
+    private final @Nullable V constant;
 
-    ConstantLoader(V constant) {
+    ConstantLoader(@Nullable V constant) {
       this.constant = constant;
     }
 
     @Override
+    @SuppressWarnings("nullness") // used to test what happens if a loader wrongly returns null
     public V load(K key) {
       return constant;
     }

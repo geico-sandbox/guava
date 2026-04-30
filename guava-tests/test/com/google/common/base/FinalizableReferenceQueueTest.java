@@ -16,12 +16,12 @@
 
 package com.google.common.base;
 
+import static com.google.common.collect.Sets.newConcurrentHashSet;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.internal.Finalizer;
-import com.google.common.collect.Sets;
 import com.google.common.testing.GcFinalization;
 import java.io.Closeable;
 import java.io.IOException;
@@ -174,7 +174,7 @@ public class FinalizableReferenceQueueTest {
   static class MyServerExampleWithFrq implements Closeable {
     private static final FinalizableReferenceQueue frq = new FinalizableReferenceQueue();
 
-    private static final Set<Reference<?>> references = Sets.newConcurrentHashSet();
+    private static final Set<Reference<?>> references = newConcurrentHashSet();
 
     private final ServerSocket serverSocket;
 

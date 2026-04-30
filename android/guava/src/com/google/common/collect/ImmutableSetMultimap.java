@@ -160,7 +160,7 @@ public class ImmutableSetMultimap<K, V> extends ImmutableMultimap<K, V>
 
   /** Returns an immutable multimap containing a single entry. */
   public static <K, V> ImmutableSetMultimap<K, V> of(K k1, V v1) {
-    ImmutableSetMultimap.Builder<K, V> builder = ImmutableSetMultimap.builder();
+    ImmutableSetMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     return builder.build();
   }
@@ -170,7 +170,7 @@ public class ImmutableSetMultimap<K, V> extends ImmutableMultimap<K, V>
    * an entry (according to {@link Object#equals}) after the first are ignored.
    */
   public static <K, V> ImmutableSetMultimap<K, V> of(K k1, V v1, K k2, V v2) {
-    ImmutableSetMultimap.Builder<K, V> builder = ImmutableSetMultimap.builder();
+    ImmutableSetMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     return builder.build();
@@ -181,7 +181,7 @@ public class ImmutableSetMultimap<K, V> extends ImmutableMultimap<K, V>
    * an entry (according to {@link Object#equals}) after the first are ignored.
    */
   public static <K, V> ImmutableSetMultimap<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
-    ImmutableSetMultimap.Builder<K, V> builder = ImmutableSetMultimap.builder();
+    ImmutableSetMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     builder.put(k3, v3);
@@ -194,7 +194,7 @@ public class ImmutableSetMultimap<K, V> extends ImmutableMultimap<K, V>
    */
   public static <K, V> ImmutableSetMultimap<K, V> of(
       K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-    ImmutableSetMultimap.Builder<K, V> builder = ImmutableSetMultimap.builder();
+    ImmutableSetMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     builder.put(k3, v3);
@@ -208,7 +208,7 @@ public class ImmutableSetMultimap<K, V> extends ImmutableMultimap<K, V>
    */
   public static <K, V> ImmutableSetMultimap<K, V> of(
       K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-    ImmutableSetMultimap.Builder<K, V> builder = ImmutableSetMultimap.builder();
+    ImmutableSetMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     builder.put(k3, v3);
@@ -396,7 +396,7 @@ public class ImmutableSetMultimap<K, V> extends ImmutableMultimap<K, V>
     @Override
     public ImmutableSetMultimap<K, V> build() {
       if (builderMap == null) {
-        return ImmutableSetMultimap.of();
+        return of();
       }
       Collection<Map.Entry<K, ImmutableCollection.Builder<V>>> mapEntries = builderMap.entrySet();
       if (keyComparator != null) {

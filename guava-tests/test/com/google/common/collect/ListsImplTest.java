@@ -16,6 +16,11 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.addAllImpl;
+import static com.google.common.collect.Lists.equalsImpl;
+import static com.google.common.collect.Lists.hashCodeImpl;
+import static com.google.common.collect.Lists.indexOfImpl;
+import static com.google.common.collect.Lists.lastIndexOfImpl;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.Arrays.asList;
@@ -127,12 +132,12 @@ public class ListsImplTest extends TestCase {
     List<Integer> diffLength = createList(Integer.class, 1, 2);
     List<Integer> empty = createList(Integer.class);
 
-    assertThat(Lists.hashCodeImpl(base)).isEqualTo(Lists.hashCodeImpl(copy));
+    assertThat(hashCodeImpl(base)).isEqualTo(hashCodeImpl(copy));
 
-    assertThat(Lists.hashCodeImpl(base)).isNotEqualTo(Lists.hashCodeImpl(outOfOrder));
-    assertThat(Lists.hashCodeImpl(base)).isNotEqualTo(Lists.hashCodeImpl(diffValue));
-    assertThat(Lists.hashCodeImpl(base)).isNotEqualTo(Lists.hashCodeImpl(diffLength));
-    assertThat(Lists.hashCodeImpl(base)).isNotEqualTo(Lists.hashCodeImpl(empty));
+    assertThat(hashCodeImpl(base)).isNotEqualTo(hashCodeImpl(outOfOrder));
+    assertThat(hashCodeImpl(base)).isNotEqualTo(hashCodeImpl(diffValue));
+    assertThat(hashCodeImpl(base)).isNotEqualTo(hashCodeImpl(diffLength));
+    assertThat(hashCodeImpl(base)).isNotEqualTo(hashCodeImpl(empty));
   }
 
   public void testEqualsImpl() {
@@ -144,13 +149,13 @@ public class ListsImplTest extends TestCase {
     List<Integer> diffLength = createList(Integer.class, 1, 2);
     List<Integer> empty = createList(Integer.class);
 
-    assertThat(Lists.equalsImpl(base, copy)).isTrue();
-    assertThat(Lists.equalsImpl(base, otherType)).isTrue();
+    assertThat(equalsImpl(base, copy)).isTrue();
+    assertThat(equalsImpl(base, otherType)).isTrue();
 
     List<@Nullable Object> unEqualItems =
         asList(outOfOrder, diffValue, diffLength, empty, null, new Object());
     for (Object other : unEqualItems) {
-      assertWithMessage("%s", other).that(Lists.equalsImpl(base, other)).isFalse();
+      assertWithMessage("%s", other).that(equalsImpl(base, other)).isFalse();
     }
   }
 
@@ -180,7 +185,7 @@ public class ListsImplTest extends TestCase {
       Iterable<String> iterableToAdd = toAdd.get(i);
       boolean expectedChanged = iterableToAdd.iterator().hasNext();
       assertWithMessage(format, iterableToAdd, index)
-          .that(Lists.addAllImpl(toTest, index, iterableToAdd))
+          .that(addAllImpl(toTest, index, iterableToAdd))
           .isEqualTo(expectedChanged);
       assertWithMessage(format, iterableToAdd, index)
           .that(toTest)
@@ -228,7 +233,7 @@ public class ListsImplTest extends TestCase {
     int index = 0;
     for (Object obj : toTest) {
       String name = "toTest[" + index + "] (" + obj + ")";
-      assertWithMessage(name).that(Lists.indexOfImpl(toTest, obj)).isEqualTo(expected[index]);
+      assertWithMessage(name).that(indexOfImpl(toTest, obj)).isEqualTo(expected[index]);
       index++;
     }
   }
@@ -237,7 +242,7 @@ public class ListsImplTest extends TestCase {
     int index = 0;
     for (Object obj : toTest) {
       String name = "toTest[" + index + "] (" + obj + ")";
-      assertWithMessage(name).that(Lists.lastIndexOfImpl(toTest, obj)).isEqualTo(expected[index]);
+      assertWithMessage(name).that(lastIndexOfImpl(toTest, obj)).isEqualTo(expected[index]);
       index++;
     }
   }

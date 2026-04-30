@@ -16,6 +16,10 @@
 
 package com.google.common.reflect;
 
+import static com.google.common.reflect.Types.newArrayType;
+import static com.google.common.reflect.Types.newParameterizedType;
+import static com.google.common.reflect.Types.subtypeOf;
+import static com.google.common.reflect.Types.supertypeOf;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -107,7 +111,7 @@ public class TypeTokenTest extends TestCase {
   public void testNonStaticLocalClass() {
     class Local<T> {}
     TypeToken<Local<String>> type = new TypeToken<Local<String>>() {};
-    assertEquals(Types.newParameterizedType(Local.class, String.class), type.getType());
+    assertEquals(newParameterizedType(Local.class, String.class), type.getType());
     assertEquals(new Local<String>() {}.getClass().getGenericSuperclass(), type.getType());
   }
 
@@ -118,7 +122,7 @@ public class TypeTokenTest extends TestCase {
   private static void doTestStaticLocalClass() {
     class Local<T> {}
     TypeToken<Local<String>> type = new TypeToken<Local<String>>() {};
-    assertEquals(Types.newParameterizedType(Local.class, String.class), type.getType());
+    assertEquals(newParameterizedType(Local.class, String.class), type.getType());
     assertEquals(new Local<String>() {}.getClass().getGenericSuperclass(), type.getType());
   }
 
@@ -326,7 +330,7 @@ public class TypeTokenTest extends TestCase {
   // Tests to make sure assertSubtypeBeforeSupertype() works.
 
   public void testAssertSubtypeTokenBeforeSupertypeToken_empty() {
-    assertSubtypeTokenBeforeSupertypeToken(ImmutableList.<TypeToken<?>>of());
+    assertSubtypeTokenBeforeSupertypeToken(ImmutableList.of());
   }
 
   public void testAssertSubtypeTokenBeforeSupertypeToken_oneType() {
@@ -359,7 +363,7 @@ public class TypeTokenTest extends TestCase {
   }
 
   public void testAssertSubtypeBeforeSupertype_empty() {
-    assertSubtypeBeforeSupertype(ImmutableList.<Class<?>>of());
+    assertSubtypeBeforeSupertype(ImmutableList.of());
   }
 
   public void testAssertSubtypeBeforeSupertype_oneType() {
@@ -451,30 +455,28 @@ public class TypeTokenTest extends TestCase {
 
   public void testGetGenericSuperclass_wildcard_lowerBounded() {
     assertEquals(
-        TypeToken.of(Object.class),
-        TypeToken.of(Types.supertypeOf(String.class)).getGenericSuperclass());
+        TypeToken.of(Object.class), TypeToken.of(supertypeOf(String.class)).getGenericSuperclass());
     assertEquals(
         new TypeToken<Object>() {},
-        TypeToken.of(Types.supertypeOf(String[].class)).getGenericSuperclass());
+        TypeToken.of(supertypeOf(String[].class)).getGenericSuperclass());
     assertEquals(
         new TypeToken<Object>() {},
-        TypeToken.of(Types.supertypeOf(CharSequence.class)).getGenericSuperclass());
+        TypeToken.of(supertypeOf(CharSequence.class)).getGenericSuperclass());
   }
 
   public void testGetGenericSuperclass_wildcard_boundIsClass() {
     assertEquals(
-        TypeToken.of(Object.class),
-        TypeToken.of(Types.subtypeOf(Object.class)).getGenericSuperclass());
+        TypeToken.of(Object.class), TypeToken.of(subtypeOf(Object.class)).getGenericSuperclass());
     assertEquals(
         new TypeToken<Object[]>() {},
-        TypeToken.of(Types.subtypeOf(Object[].class)).getGenericSuperclass());
+        TypeToken.of(subtypeOf(Object[].class)).getGenericSuperclass());
   }
 
   public void testGetGenericSuperclass_wildcard_boundIsInterface() {
-    assertThat(TypeToken.of(Types.subtypeOf(CharSequence.class)).getGenericSuperclass()).isNull();
+    assertThat(TypeToken.of(subtypeOf(CharSequence.class)).getGenericSuperclass()).isNull();
     assertEquals(
         new TypeToken<CharSequence[]>() {},
-        TypeToken.of(Types.subtypeOf(CharSequence[].class)).getGenericSuperclass());
+        TypeToken.of(subtypeOf(CharSequence[].class)).getGenericSuperclass());
   }
 
   public <T> void testGetGenericInterfaces_typeVariable_unbounded() {
@@ -529,18 +531,18 @@ public class TypeTokenTest extends TestCase {
   }
 
   public void testGetGenericInterfaces_wildcard_lowerBounded() {
-    assertThat(TypeToken.of(Types.supertypeOf(String.class)).getGenericInterfaces()).isEmpty();
-    assertThat(TypeToken.of(Types.supertypeOf(String[].class)).getGenericInterfaces()).isEmpty();
+    assertThat(TypeToken.of(supertypeOf(String.class)).getGenericInterfaces()).isEmpty();
+    assertThat(TypeToken.of(supertypeOf(String[].class)).getGenericInterfaces()).isEmpty();
   }
 
   public void testGetGenericInterfaces_wildcard_boundIsClass() {
-    assertThat(TypeToken.of(Types.subtypeOf(Object.class)).getGenericInterfaces()).isEmpty();
-    assertThat(TypeToken.of(Types.subtypeOf(Object[].class)).getGenericInterfaces()).isEmpty();
+    assertThat(TypeToken.of(subtypeOf(Object.class)).getGenericInterfaces()).isEmpty();
+    assertThat(TypeToken.of(subtypeOf(Object[].class)).getGenericInterfaces()).isEmpty();
   }
 
   public void testGetGenericInterfaces_wildcard_boundIsInterface() {
     TypeToken<Iterable<String>> interfaceType = new TypeToken<Iterable<String>>() {};
-    makeUnmodifiable(TypeToken.of(Types.subtypeOf(interfaceType.getType())).getGenericInterfaces())
+    makeUnmodifiable(TypeToken.of(subtypeOf(interfaceType.getType())).getGenericInterfaces())
         .containsExactly(interfaceType);
     assertHasArrayInterfaces(new TypeToken<Iterable<String>[]>() {});
   }
@@ -624,7 +626,7 @@ public class TypeTokenTest extends TestCase {
   }
 
   public void testAssignableWildcardBoundedByArrayToArrayClass() {
-    Type wildcardType = Types.subtypeOf(Object[].class);
+    Type wildcardType = subtypeOf(Object[].class);
     assertTrue(TypeToken.of(Object[].class).isSupertypeOf(wildcardType));
     assertTrue(TypeToken.of(Object.class).isSupertypeOf(wildcardType));
     assertFalse(TypeToken.of(wildcardType).isSupertypeOf(wildcardType));
@@ -640,8 +642,8 @@ public class TypeTokenTest extends TestCase {
   }
 
   public void testAssignableArrayClassToBoundedWildcard() {
-    TypeToken<?> subtypeOfArray = TypeToken.of(Types.subtypeOf(Object[].class));
-    TypeToken<?> supertypeOfArray = TypeToken.of(Types.supertypeOf(Object[].class));
+    TypeToken<?> subtypeOfArray = TypeToken.of(subtypeOf(Object[].class));
+    TypeToken<?> supertypeOfArray = TypeToken.of(supertypeOf(Object[].class));
     assertFalse(subtypeOfArray.isSupertypeOf(Object[].class));
     assertFalse(subtypeOfArray.isSupertypeOf(Object[][].class));
     assertFalse(subtypeOfArray.isSupertypeOf(String[].class));
@@ -664,16 +666,16 @@ public class TypeTokenTest extends TestCase {
   }
 
   public void testAssignableNonParameterizedClassToWildcard() {
-    TypeToken<?> supertypeOfString = TypeToken.of(Types.supertypeOf(String.class));
+    TypeToken<?> supertypeOfString = TypeToken.of(supertypeOf(String.class));
     assertFalse(supertypeOfString.isSupertypeOf(supertypeOfString));
     assertFalse(supertypeOfString.isSupertypeOf(Object.class));
     assertFalse(supertypeOfString.isSupertypeOf(CharSequence.class));
     assertTrue(supertypeOfString.isSupertypeOf(String.class));
-    assertTrue(supertypeOfString.isSupertypeOf(Types.subtypeOf(String.class)));
+    assertTrue(supertypeOfString.isSupertypeOf(subtypeOf(String.class)));
   }
 
   public void testAssignableWildcardBoundedByIntArrayToArrayClass() {
-    Type wildcardType = Types.subtypeOf(int[].class);
+    Type wildcardType = subtypeOf(int[].class);
     assertTrue(TypeToken.of(int[].class).isSupertypeOf(wildcardType));
     assertTrue(TypeToken.of(Object.class).isSupertypeOf(wildcardType));
     assertFalse(TypeToken.of(wildcardType).isSupertypeOf(wildcardType));
@@ -689,8 +691,8 @@ public class TypeTokenTest extends TestCase {
   }
 
   public void testAssignableWildcardToWildcard() {
-    TypeToken<?> subtypeOfArray = TypeToken.of(Types.subtypeOf(Object[].class));
-    TypeToken<?> supertypeOfArray = TypeToken.of(Types.supertypeOf(Object[].class));
+    TypeToken<?> subtypeOfArray = TypeToken.of(subtypeOf(Object[].class));
+    TypeToken<?> supertypeOfArray = TypeToken.of(supertypeOf(Object[].class));
     assertTrue(supertypeOfArray.isSupertypeOf(subtypeOfArray));
     assertFalse(supertypeOfArray.isSupertypeOf(supertypeOfArray));
     assertFalse(subtypeOfArray.isSupertypeOf(subtypeOfArray));
@@ -976,10 +978,10 @@ public class TypeTokenTest extends TestCase {
   }
 
   public void testIsArray_wildcardType() {
-    assertTrue(TypeToken.of(Types.subtypeOf(Object[].class)).isArray());
-    assertTrue(TypeToken.of(Types.subtypeOf(int[].class)).isArray());
-    assertFalse(TypeToken.of(Types.subtypeOf(Object.class)).isArray());
-    assertFalse(TypeToken.of(Types.supertypeOf(Object[].class)).isArray());
+    assertTrue(TypeToken.of(subtypeOf(Object[].class)).isArray());
+    assertTrue(TypeToken.of(subtypeOf(int[].class)).isArray());
+    assertFalse(TypeToken.of(subtypeOf(Object.class)).isArray());
+    assertFalse(TypeToken.of(supertypeOf(Object[].class)).isArray());
   }
 
   public <T extends Integer> void testPrimitiveWrappingAndUnwrapping() {
@@ -991,7 +993,7 @@ public class TypeTokenTest extends TestCase {
     }
     assertNotPrimitiveNorWrapper(TypeToken.of(String.class));
     assertNotPrimitiveNorWrapper(TypeToken.of(Object[].class));
-    assertNotPrimitiveNorWrapper(TypeToken.of(Types.subtypeOf(Object.class)));
+    assertNotPrimitiveNorWrapper(TypeToken.of(subtypeOf(Object.class)));
     assertNotPrimitiveNorWrapper(new TypeToken<List<String>>() {});
     assertNotPrimitiveNorWrapper(TypeToken.of(new TypeCapture<T>() {}.capture()));
   }
@@ -1021,16 +1023,14 @@ public class TypeTokenTest extends TestCase {
 
   public void testGetComponentType_wildcardType() {
     assertEquals(
-        Types.subtypeOf(Object.class),
-        TypeToken.of(Types.subtypeOf(Object[].class)).getComponentType().getType());
+        subtypeOf(Object.class),
+        TypeToken.of(subtypeOf(Object[].class)).getComponentType().getType());
     assertEquals(
-        Types.subtypeOf(Object[].class),
-        Types.newArrayType(
-            TypeToken.of(Types.subtypeOf(Object[].class)).getComponentType().getType()));
-    assertEquals(
-        int.class, TypeToken.of(Types.subtypeOf(int[].class)).getComponentType().getType());
-    assertThat(TypeToken.of(Types.subtypeOf(Object.class)).getComponentType()).isNull();
-    assertThat(TypeToken.of(Types.supertypeOf(Object[].class)).getComponentType()).isNull();
+        subtypeOf(Object[].class),
+        newArrayType(TypeToken.of(subtypeOf(Object[].class)).getComponentType().getType()));
+    assertEquals(int.class, TypeToken.of(subtypeOf(int[].class)).getComponentType().getType());
+    assertThat(TypeToken.of(subtypeOf(Object.class)).getComponentType()).isNull();
+    assertThat(TypeToken.of(supertypeOf(Object[].class)).getComponentType()).isNull();
   }
 
   private interface NumberList<T extends Number> {}
@@ -1054,7 +1054,7 @@ public class TypeTokenTest extends TestCase {
     TypeToken<? extends Iterable> genericType = TypeToken.toGenericType(Iterable.class);
     assertThat(genericType.getRawType()).isEqualTo(Iterable.class);
     assertEquals(
-        Types.newParameterizedType(Iterable.class, Iterable.class.getTypeParameters()[0]),
+        newParameterizedType(Iterable.class, Iterable.class.getTypeParameters()[0]),
         genericType.getType());
   }
 
@@ -1085,9 +1085,9 @@ public class TypeTokenTest extends TestCase {
 
   public void testGetSupertype_withTypeVariable() {
     ParameterizedType expectedType =
-        Types.newParameterizedType(
+        newParameterizedType(
             Iterable.class,
-            Types.newParameterizedType(List.class, ListIterable.class.getTypeParameters()[0]));
+            newParameterizedType(List.class, ListIterable.class.getTypeParameters()[0]));
     assertEquals(
         expectedType, TypeToken.of(ListIterable.class).getSupertype(Iterable.class).getType());
   }
@@ -1103,8 +1103,7 @@ public class TypeTokenTest extends TestCase {
 
   public void testGetSupertype_withoutTypeVariable() {
     ParameterizedType expectedType =
-        Types.newParameterizedType(
-            Iterable.class, Types.newParameterizedType(List.class, String.class));
+        newParameterizedType(Iterable.class, newParameterizedType(List.class, String.class));
     assertEquals(
         expectedType,
         TypeToken.of(StringListIterable.class).getSupertype(Iterable.class).getType());
@@ -1116,8 +1115,7 @@ public class TypeTokenTest extends TestCase {
         (TypeToken<ListIterable<String>>)
             TypeToken.of(StringListIterable.class).getSupertype(ListIterable.class);
     ParameterizedType expectedType =
-        Types.newParameterizedType(
-            Iterable.class, Types.newParameterizedType(List.class, String.class));
+        newParameterizedType(Iterable.class, newParameterizedType(List.class, String.class));
     assertEquals(expectedType, listIterableType.getSupertype(Iterable.class).getType());
   }
 
@@ -1137,7 +1135,7 @@ public class TypeTokenTest extends TestCase {
     @SuppressWarnings("unchecked") // can't do new TypeToken<? extends ...>() {}
     TypeToken<? extends List<String>> type =
         (TypeToken<? extends List<String>>)
-            TypeToken.of(Types.subtypeOf(new TypeToken<List<String>>() {}.getType()));
+            TypeToken.of(subtypeOf(new TypeToken<List<String>>() {}.getType()));
     assertEquals(new TypeToken<Iterable<String>>() {}, type.getSupertype(Iterable.class));
   }
 
@@ -1151,7 +1149,7 @@ public class TypeTokenTest extends TestCase {
   @SuppressWarnings("rawtypes") // purpose is to test raw type
   public void testGetSupertype_fromRawClass() {
     assertEquals(
-        Types.newParameterizedType(Iterable.class, List.class.getTypeParameters()[0]),
+        newParameterizedType(Iterable.class, List.class.getTypeParameters()[0]),
         new TypeToken<List>() {}.getSupertype(Iterable.class).getType());
   }
 
@@ -1172,10 +1170,10 @@ public class TypeTokenTest extends TestCase {
 
   public void testGetSupertype_fullyGenericType() {
     ParameterizedType expectedType =
-        Types.newParameterizedType(
+        newParameterizedType(
             Map.class,
             ListMap.class.getTypeParameters()[0],
-            Types.newParameterizedType(List.class, ListMap.class.getTypeParameters()[1]));
+            newParameterizedType(List.class, ListMap.class.getTypeParameters()[1]));
     assertEquals(expectedType, TypeToken.of(ListMap.class).getSupertype(Map.class).getType());
   }
 
@@ -1234,7 +1232,7 @@ public class TypeTokenTest extends TestCase {
     @SuppressWarnings("unchecked") // can't do new TypeToken<? extends ...>() {}
     TypeToken<? super Iterable<String>> type =
         (TypeToken<? super Iterable<String>>)
-            TypeToken.of(Types.supertypeOf(new TypeToken<Iterable<String>>() {}.getType()));
+            TypeToken.of(supertypeOf(new TypeToken<Iterable<String>>() {}.getType()));
     assertEquals(new TypeToken<List<String>>() {}, type.getSubtype(List.class));
   }
 
@@ -1242,7 +1240,7 @@ public class TypeTokenTest extends TestCase {
     @SuppressWarnings("unchecked") // can't do new TypeToken<? extends ...>() {}
     TypeToken<? super Iterable<String>> type =
         (TypeToken<? super Iterable<String>>)
-            TypeToken.of(Types.supertypeOf(new TypeToken<ImmutableList<String>>() {}.getType()));
+            TypeToken.of(supertypeOf(new TypeToken<ImmutableList<String>>() {}.getType()));
     assertThrows(IllegalArgumentException.class, () -> type.getSubtype(List.class));
   }
 
@@ -1250,7 +1248,7 @@ public class TypeTokenTest extends TestCase {
     @SuppressWarnings("unchecked") // can't do new TypeToken<? extends ...>() {}
     TypeToken<? extends Iterable<String>> type =
         (TypeToken<? extends Iterable<String>>)
-            TypeToken.of(Types.subtypeOf(new TypeToken<Iterable<String>>() {}.getType()));
+            TypeToken.of(subtypeOf(new TypeToken<Iterable<String>>() {}.getType()));
     assertThrows(IllegalArgumentException.class, () -> type.getSubtype(Iterable.class));
   }
 
@@ -1808,11 +1806,10 @@ public class TypeTokenTest extends TestCase {
 
   public void testRawTypes() {
     RawTypeConsistencyTester.verifyConsistentRawType();
-    assertThat(TypeToken.of(Types.subtypeOf(Object.class)).getRawType()).isEqualTo(Object.class);
-    assertThat(TypeToken.of(Types.subtypeOf(CharSequence.class)).getRawType())
+    assertThat(TypeToken.of(subtypeOf(Object.class)).getRawType()).isEqualTo(Object.class);
+    assertThat(TypeToken.of(subtypeOf(CharSequence.class)).getRawType())
         .isEqualTo(CharSequence.class);
-    assertThat(TypeToken.of(Types.supertypeOf(CharSequence.class)).getRawType())
-        .isEqualTo(Object.class);
+    assertThat(TypeToken.of(supertypeOf(CharSequence.class)).getRawType()).isEqualTo(Object.class);
   }
 
   private abstract static class IKnowMyType<T> {

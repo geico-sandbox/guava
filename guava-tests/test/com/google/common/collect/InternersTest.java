@@ -55,7 +55,7 @@ public class InternersTest extends TestCase {
     Interner<Object> interner =
         Interners.newBuilder().strong().concurrencyLevel(concurrencyLevel).build();
     InternerImpl<Object> internerImpl = (InternerImpl<Object>) interner;
-    assertEquals(Strength.STRONG, internerImpl.map.keyStrength());
+    assertThat(internerImpl.map.keyStrength()).isEqualTo(Strength.STRONG);
   }
 
   public void testWeak_simplistic() {
@@ -77,7 +77,7 @@ public class InternersTest extends TestCase {
     Interner<Object> interner =
         Interners.newBuilder().weak().concurrencyLevel(concurrencyLevel).build();
     InternerImpl<Object> internerImpl = (InternerImpl<Object>) interner;
-    assertEquals(Strength.WEAK, internerImpl.map.keyStrength());
+    assertThat(internerImpl.map.keyStrength()).isEqualTo(Strength.WEAK);
     assertEquals(concurrencyLevel, internerImpl.map.concurrencyLevel);
   }
 
@@ -100,8 +100,7 @@ public class InternersTest extends TestCase {
     String canonical = "a";
     String not = new String("a");
 
-    Function<String, String> internerFunction =
-        Interners.asFunction(Interners.<String>newStrongInterner());
+    Function<String, String> internerFunction = Interners.asFunction(Interners.newStrongInterner());
 
     assertThat(internerFunction.apply(canonical)).isSameInstanceAs(canonical);
     assertThat(internerFunction.apply(not)).isSameInstanceAs(canonical);

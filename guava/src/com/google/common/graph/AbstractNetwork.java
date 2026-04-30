@@ -18,6 +18,11 @@ package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterators.transform;
+import static com.google.common.collect.Maps.asMap;
+import static com.google.common.collect.Sets.difference;
+import static com.google.common.collect.Sets.filter;
+import static com.google.common.collect.Sets.union;
 import static com.google.common.graph.GraphConstants.EDGE_REMOVED_FROM_GRAPH;
 import static com.google.common.graph.GraphConstants.ENDPOINTS_MISMATCH;
 import static com.google.common.graph.GraphConstants.MULTIPLE_EDGES_CONNECTING;
@@ -27,9 +32,6 @@ import static java.util.Collections.unmodifiableSet;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.math.IntMath;
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -72,8 +74,7 @@ public abstract class AbstractNetwork<N, E> implements Network<N, E> {
         return new AbstractSet<EndpointPair<N>>() {
           @Override
           public Iterator<EndpointPair<N>> iterator() {
-            return Iterators.transform(
-                AbstractNetwork.this.edges().iterator(), edge -> incidentNodes(edge));
+            return transform(AbstractNetwork.this.edges().iterator(), edge -> incidentNodes(edge));
           }
 
           @Override
@@ -162,9 +163,8 @@ public abstract class AbstractNetwork<N, E> implements Network<N, E> {
   public Set<E> adjacentEdges(E edge) {
     EndpointPair<N> endpointPair = incidentNodes(edge); // Verifies that edge is in this network.
     Set<E> endpointPairIncidentEdges =
-        Sets.union(incidentEdges(endpointPair.nodeU()), incidentEdges(endpointPair.nodeV()));
-    return edgeInvalidatableSet(
-        Sets.difference(endpointPairIncidentEdges, ImmutableSet.of(edge)), edge);
+        union(incidentEdges(endpointPair.nodeU()), incidentEdges(endpointPair.nodeV()));
+    return edgeInvalidatableSet(difference(endpointPairIncidentEdges, ImmutableSet.of(edge)), edge);
   }
 
   @Override
@@ -173,8 +173,8 @@ public abstract class AbstractNetwork<N, E> implements Network<N, E> {
     Set<E> inEdgesV = inEdges(nodeV);
     return nodePairInvalidatableSet(
         outEdgesU.size() <= inEdgesV.size()
-            ? unmodifiableSet(Sets.filter(outEdgesU, connectedPredicate(nodeU, nodeV)))
-            : unmodifiableSet(Sets.filter(inEdgesV, connectedPredicate(nodeV, nodeU))),
+            ? unmodifiableSet(filter(outEdgesU, connectedPredicate(nodeU, nodeV)))
+            : unmodifiableSet(filter(inEdgesV, connectedPredicate(nodeV, nodeU))),
         nodeU,
         nodeV);
   }
@@ -319,6 +319,6 @@ public abstract class AbstractNetwork<N, E> implements Network<N, E> {
   }
 
   private static <N, E> Map<E, EndpointPair<N>> edgeIncidentNodesMap(Network<N, E> network) {
-    return Maps.asMap(network.edges(), network::incidentNodes);
+    return asMap(network.edges(), network::incidentNodes);
   }
 }

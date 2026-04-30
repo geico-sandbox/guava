@@ -27,6 +27,7 @@ import static java.lang.Double.POSITIVE_INFINITY;
 import static java.math.RoundingMode.CEILING;
 import static java.math.RoundingMode.FLOOR;
 import static java.math.RoundingMode.UNNECESSARY;
+import static java.util.Collections.shuffle;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -41,7 +42,6 @@ import com.google.common.primitives.Longs;
 import com.google.common.truth.Correspondence;
 import com.google.common.truth.Correspondence.BinaryPredicate;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import junit.framework.TestCase;
@@ -577,7 +577,7 @@ public class QuantilesTest extends TestCase {
       expectedBuilder.put(index, expectedLargeDatasetPercentile(index));
     }
     Random random = new Random(770683168895677741L);
-    Collections.shuffle(indexes, random);
+    shuffle(indexes, random);
     assertThat(percentiles().indexes(Ints.toArray(indexes)).compute(PSEUDORANDOM_DATASET))
         .comparingValuesUsing(QUANTILE_CORRESPONDENCE)
         .containsExactlyEntriesIn(expectedBuilder.buildOrThrow());
@@ -593,7 +593,7 @@ public class QuantilesTest extends TestCase {
       expectedBuilder.put(index, expectedLargeDatasetPercentile(index));
     }
     Random random = new Random(770683168895677741L);
-    Collections.shuffle(indexes, random);
+    shuffle(indexes, random);
     assertThat(percentiles().indexes(Ints.toArray(indexes)).computeInPlace(dataset))
         .comparingValuesUsing(QUANTILE_CORRESPONDENCE)
         .containsExactlyEntriesIn(expectedBuilder.buildOrThrow());

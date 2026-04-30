@@ -51,7 +51,7 @@ interface BaseGraph<N> extends ArchetypeGraph<N> {
    * href="https://github.com/google/guava/wiki/GraphsExplained#graph-types-for-algorithms">edge-oriented
    * code</a>.
    *
-   * @since NEXT
+   * @since 33.6.0
    */
   Network<N, EndpointPair<N>> asNetwork();
 

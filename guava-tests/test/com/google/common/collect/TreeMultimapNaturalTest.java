@@ -19,6 +19,7 @@ package com.google.common.collect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.collect.testing.Helpers.mapEntry;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 
@@ -37,7 +38,6 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import com.google.common.collect.testing.google.SortedSetMultimapTestSuiteBuilder;
 import com.google.common.collect.testing.google.TestStringSetMultimapGenerator;
-import com.google.common.testing.SerializableTester;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Comparator;
@@ -410,7 +410,7 @@ public class TreeMultimapNaturalTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testExplicitComparatorSerialization() {
     TreeMultimap<String, Integer> multimap = createPopulate();
-    TreeMultimap<String, Integer> copy = SerializableTester.reserializeAndAssert(multimap);
+    TreeMultimap<String, Integer> copy = reserializeAndAssert(multimap);
     assertThat(copy.values()).containsExactly(1, 3, 7, 2, 6, 0, 4).inOrder();
     assertThat(copy.keySet()).containsExactly("foo", "google", "tree").inOrder();
     assertEquals(multimap.keyComparator(), copy.keyComparator());
@@ -441,7 +441,7 @@ public class TreeMultimapNaturalTest extends TestCase {
         .inOrder();
     assertEquals(Ordering.natural(), multimap.keyComparator());
     assertEquals(Ordering.natural(), multimap.valueComparator());
-    SerializableTester.reserializeAndAssert(multimap);
+    reserializeAndAssert(multimap);
   }
 
   @J2ktIncompatible
@@ -468,7 +468,7 @@ public class TreeMultimapNaturalTest extends TestCase {
         .inOrder();
     assertEquals(Ordering.natural(), multimap.keyComparator());
     assertEquals(Ordering.natural(), multimap.valueComparator());
-    SerializableTester.reserializeAndAssert(multimap);
+    reserializeAndAssert(multimap);
   }
 
   public void testTreeMultimapAsMapSorted() {

@@ -18,6 +18,7 @@ package com.google.common.collect;
 
 import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
@@ -34,7 +35,6 @@ import com.google.common.collect.testing.google.BiMapGenerators.ImmutableBiMapCo
 import com.google.common.collect.testing.google.BiMapGenerators.ImmutableBiMapGenerator;
 import com.google.common.collect.testing.google.BiMapInverseTester;
 import com.google.common.collect.testing.google.BiMapTestSuiteBuilder;
-import com.google.common.testing.SerializableTester;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -183,7 +183,7 @@ public class ImmutableBiMapTest extends TestCase {
 
   public void testBuilderPutAllWithEmptyMap() {
     ImmutableBiMap<String, Integer> map =
-        new Builder<String, Integer>().putAll(Collections.<String, Integer>emptyMap()).build();
+        new Builder<String, Integer>().putAll(Collections.emptyMap()).build();
     assertEquals(Collections.<String, Integer>emptyMap(), map);
   }
 
@@ -226,15 +226,13 @@ public class ImmutableBiMapTest extends TestCase {
   public void testBuilderPutNullKeyViaPutAll() {
     Builder<String, Integer> builder = new Builder<>();
     assertThrows(
-        NullPointerException.class,
-        () -> builder.putAll(Collections.<String, Integer>singletonMap(null, 1)));
+        NullPointerException.class, () -> builder.putAll(Collections.singletonMap(null, 1)));
   }
 
   public void testBuilderPutNullValueViaPutAll() {
     Builder<String, Integer> builder = new Builder<>();
     assertThrows(
-        NullPointerException.class,
-        () -> builder.putAll(Collections.<String, Integer>singletonMap("one", null)));
+        NullPointerException.class, () -> builder.putAll(Collections.singletonMap("one", null)));
   }
 
   @SuppressWarnings("AlwaysThrows")
@@ -480,8 +478,7 @@ public class ImmutableBiMapTest extends TestCase {
   }
 
   public void testCopyOfEmptyMap() {
-    ImmutableBiMap<String, Integer> copy =
-        ImmutableBiMap.copyOf(Collections.<String, Integer>emptyMap());
+    ImmutableBiMap<String, Integer> copy = ImmutableBiMap.copyOf(Collections.emptyMap());
     assertEquals(Collections.<String, Integer>emptyMap(), copy);
     assertThat(ImmutableBiMap.copyOf(copy)).isSameInstanceAs(copy);
     assertThat(copy).isSameInstanceAs(ImmutableBiMap.of());
@@ -600,7 +597,7 @@ public class ImmutableBiMapTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testEmptySerialization() {
     ImmutableBiMap<String, Integer> bimap = ImmutableBiMap.of();
-    assertThat(SerializableTester.reserializeAndAssert(bimap)).isSameInstanceAs(bimap);
+    assertThat(reserializeAndAssert(bimap)).isSameInstanceAs(bimap);
   }
 
   @J2ktIncompatible
@@ -608,7 +605,7 @@ public class ImmutableBiMapTest extends TestCase {
   public void testSerialization() {
     ImmutableBiMap<String, Integer> bimap =
         ImmutableBiMap.copyOf(ImmutableMap.of("one", 1, "two", 2));
-    ImmutableBiMap<String, Integer> copy = SerializableTester.reserializeAndAssert(bimap);
+    ImmutableBiMap<String, Integer> copy = reserializeAndAssert(bimap);
     assertEquals(Integer.valueOf(1), copy.get("one"));
     assertThat(copy.inverse().get(1)).isEqualTo("one");
     assertThat(copy.inverse().inverse()).isSameInstanceAs(copy);
@@ -619,7 +616,7 @@ public class ImmutableBiMapTest extends TestCase {
   public void testInverseSerialization() {
     ImmutableBiMap<String, Integer> bimap =
         ImmutableBiMap.copyOf(ImmutableMap.of(1, "one", 2, "two")).inverse();
-    ImmutableBiMap<String, Integer> copy = SerializableTester.reserializeAndAssert(bimap);
+    ImmutableBiMap<String, Integer> copy = reserializeAndAssert(bimap);
     assertEquals(Integer.valueOf(1), copy.get("one"));
     assertThat(copy.inverse().get(1)).isEqualTo("one");
     assertThat(copy.inverse().inverse()).isSameInstanceAs(copy);

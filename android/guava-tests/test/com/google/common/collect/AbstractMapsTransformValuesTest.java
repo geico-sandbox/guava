@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.newTreeMap;
 import static com.google.common.collect.Maps.transformValues;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -88,7 +89,7 @@ abstract class AbstractMapsTransformValuesTest extends MapInterfaceTest<String, 
 
   public void testTransformIdentityFunctionEquality() {
     Map<String, Integer> underlying = ImmutableMap.of("a", 1);
-    Map<String, Integer> map = transformValues(underlying, Functions.<Integer>identity());
+    Map<String, Integer> map = transformValues(underlying, Functions.identity());
     assertMapsEqual(underlying, map);
   }
 
@@ -117,23 +118,14 @@ abstract class AbstractMapsTransformValuesTest extends MapInterfaceTest<String, 
     underlying.put("a", null);
     underlying.put("b", "");
 
-    Map<String, Boolean> map =
-        transformValues(
-            underlying,
-            new Function<@Nullable String, Boolean>() {
-              @Override
-              public Boolean apply(@Nullable String from) {
-                return from == null;
-              }
-            });
-    Map<String, Boolean> expected = ImmutableMap.of("a", true, "b", false);
-    assertMapsEqual(expected, map);
-    assertEquals(expected.get("a"), map.get("a"));
-    assertEquals(expected.containsKey("a"), map.containsKey("a"));
-    assertEquals(expected.get("b"), map.get("b"));
-    assertEquals(expected.containsKey("b"), map.containsKey("b"));
-    assertEquals(expected.get("c"), map.get("c"));
-    assertEquals(expected.containsKey("c"), map.containsKey("c"));
+    Map<String, Boolean> map = transformValues(underlying, from -> from == null);
+    assertMapsEqual(ImmutableMap.of("a", true, "b", false), map);
+    assertThat(map.get("a")).isEqualTo(true);
+    assertThat(map.containsKey("a")).isEqualTo(true);
+    assertThat(map.get("b")).isEqualTo(false);
+    assertThat(map.containsKey("b")).isEqualTo(true);
+    assertThat(map.get("c")).isNull();
+    assertThat(map.containsKey("c")).isEqualTo(false);
   }
 
   public void testTransformReflectsUnderlyingMap() {
@@ -207,13 +199,13 @@ abstract class AbstractMapsTransformValuesTest extends MapInterfaceTest<String, 
 
   public void testTransformEquals() {
     Map<String, Integer> underlying = ImmutableMap.of("a", 0, "b", 1, "c", 2);
-    Map<String, Integer> expected = transformValues(underlying, Functions.<Integer>identity());
+    Map<String, Integer> expected = transformValues(underlying, Functions.identity());
 
     assertMapsEqual(expected, expected);
 
-    Map<String, Integer> equalToUnderlying = Maps.newTreeMap();
+    Map<String, Integer> equalToUnderlying = newTreeMap();
     equalToUnderlying.putAll(underlying);
-    Map<String, Integer> map = transformValues(equalToUnderlying, Functions.<Integer>identity());
+    Map<String, Integer> map = transformValues(equalToUnderlying, Functions.identity());
     assertMapsEqual(expected, map);
 
     map =

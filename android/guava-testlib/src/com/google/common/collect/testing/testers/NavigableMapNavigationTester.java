@@ -17,6 +17,7 @@
 package com.google.common.collect.testing.testers;
 
 import static com.google.common.collect.testing.Helpers.copyToList;
+import static com.google.common.collect.testing.Helpers.entryComparator;
 import static com.google.common.collect.testing.features.CollectionSize.ONE;
 import static com.google.common.collect.testing.features.CollectionSize.SEVERAL;
 import static com.google.common.collect.testing.features.CollectionSize.ZERO;
@@ -26,7 +27,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.testing.AbstractMapTester;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import java.util.ArrayList;
@@ -63,7 +63,7 @@ public class NavigableMapNavigationTester<K, V> extends AbstractMapTester<K, V> 
         copyToList(
             getSubjectGenerator()
                 .getSampleElements(getSubjectGenerator().getCollectionSize().getNumElements()));
-    sort(entries, Helpers.entryComparator(navigableMap.comparator()));
+    sort(entries, entryComparator(navigableMap.comparator()));
 
     // some tests assume SEVERAL == 3
     if (entries.size() >= 1) {

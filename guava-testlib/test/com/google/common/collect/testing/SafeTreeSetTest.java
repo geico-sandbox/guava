@@ -16,15 +16,16 @@
 
 package com.google.common.collect.testing;
 
+import static com.google.common.collect.Sets.newTreeSet;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static java.util.Arrays.asList;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +52,7 @@ public class SafeTreeSetTest extends TestCase {
 
                   @Override
                   public List<String> order(List<String> insertionOrder) {
-                    return new ArrayList<>(Sets.newTreeSet(insertionOrder));
+                    return new ArrayList<>(newTreeSet(insertionOrder));
                   }
                 })
             .withFeatures(
@@ -72,7 +73,7 @@ public class SafeTreeSetTest extends TestCase {
 
                   @Override
                   public List<String> order(List<String> insertionOrder) {
-                    return new ArrayList<>(Sets.newTreeSet(insertionOrder));
+                    return new ArrayList<>(newTreeSet(insertionOrder));
                   }
                 })
             .withFeatures(
@@ -88,17 +89,15 @@ public class SafeTreeSetTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testViewSerialization() {
     Map<String, Integer> map = ImmutableSortedMap.of("one", 1, "two", 2, "three", 3);
-    SerializableTester.reserializeAndAssert(map.entrySet());
-    SerializableTester.reserializeAndAssert(map.keySet());
-    assertEquals(
-        new ArrayList<>(map.values()),
-        new ArrayList<>(SerializableTester.reserialize(map.values())));
+    reserializeAndAssert(map.entrySet());
+    reserializeAndAssert(map.keySet());
+    assertEquals(new ArrayList<>(map.values()), new ArrayList<>(reserialize(map.values())));
   }
 
   @GwtIncompatible // SerializableTester
   public void testEmpty_serialization() {
     SortedSet<String> set = new SafeTreeSet<>();
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertEquals(set.comparator(), copy.comparator());
   }
 
@@ -106,7 +105,7 @@ public class SafeTreeSetTest extends TestCase {
   public void testSingle_serialization() {
     SortedSet<String> set = new SafeTreeSet<>();
     set.add("e");
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertEquals(set.comparator(), copy.comparator());
   }
 
@@ -116,7 +115,7 @@ public class SafeTreeSetTest extends TestCase {
     set.add("a");
     set.add("b");
     set.add("c");
-    SortedSet<String> copy = SerializableTester.reserializeAndAssert(set);
+    SortedSet<String> copy = reserializeAndAssert(set);
     assertEquals(set.comparator(), copy.comparator());
   }
 }

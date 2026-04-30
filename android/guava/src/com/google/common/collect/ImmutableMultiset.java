@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Sets.hashCodeImpl;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -188,7 +189,7 @@ public abstract class ImmutableMultiset<E> extends ImmutableCollection<E> implem
       }
     }
     ImmutableMultiset.Builder<E> builder =
-        new ImmutableMultiset.Builder<E>(Multisets.inferDistinctElements(elements));
+        new ImmutableMultiset.Builder<>(Multisets.inferDistinctElements(elements));
     builder.addAll(elements);
     return builder.build();
   }
@@ -209,7 +210,7 @@ public abstract class ImmutableMultiset<E> extends ImmutableCollection<E> implem
 
   static <E> ImmutableMultiset<E> copyFromEntries(
       Collection<? extends Entry<? extends E>> entries) {
-    ImmutableMultiset.Builder<E> builder = new ImmutableMultiset.Builder<E>(entries.size());
+    ImmutableMultiset.Builder<E> builder = new ImmutableMultiset.Builder<>(entries.size());
     for (Entry<? extends E> entry : entries) {
       builder.addCopies(entry.getElement(), entry.getCount());
     }
@@ -333,7 +334,7 @@ public abstract class ImmutableMultiset<E> extends ImmutableCollection<E> implem
 
   @Override
   public int hashCode() {
-    return Sets.hashCodeImpl(entrySet());
+    return hashCodeImpl(entrySet());
   }
 
   @Override
@@ -400,7 +401,7 @@ public abstract class ImmutableMultiset<E> extends ImmutableCollection<E> implem
     @J2ktIncompatible
     @Override
         Object writeReplace() {
-      return new EntrySetSerializedForm<E>(ImmutableMultiset.this);
+      return new EntrySetSerializedForm<>(ImmutableMultiset.this);
     }
 
     @GwtIncompatible
@@ -547,7 +548,7 @@ public abstract class ImmutableMultiset<E> extends ImmutableCollection<E> implem
         return this;
       }
       if (buildInvoked) {
-        contents = new ObjectCountHashMap<E>(contents);
+        contents = new ObjectCountHashMap<>(contents);
         isLinkedHash = false;
       }
       buildInvoked = false;
@@ -570,12 +571,12 @@ public abstract class ImmutableMultiset<E> extends ImmutableCollection<E> implem
     public Builder<E> setCount(E element, int count) {
       requireNonNull(contents); // see the comment on the field
       if (count == 0 && !isLinkedHash) {
-        contents = new ObjectCountLinkedHashMap<E>(contents);
+        contents = new ObjectCountLinkedHashMap<>(contents);
         isLinkedHash = true;
         // to preserve insertion order through deletions, we have to switch to an actual linked
         // implementation at least for now, but this should be a super rare case
       } else if (buildInvoked) {
-        contents = new ObjectCountHashMap<E>(contents);
+        contents = new ObjectCountHashMap<>(contents);
         isLinkedHash = false;
       }
       buildInvoked = false;
@@ -662,12 +663,12 @@ public abstract class ImmutableMultiset<E> extends ImmutableCollection<E> implem
       if (isLinkedHash) {
         // we need ObjectCountHashMap-backed contents, with its keys and values array in direct
         // insertion order
-        contents = new ObjectCountHashMap<E>(contents);
+        contents = new ObjectCountHashMap<>(contents);
         isLinkedHash = false;
       }
       buildInvoked = true;
       // contents is now ObjectCountHashMap, but still guaranteed to be in insertion order!
-      return new RegularImmutableMultiset<E>(contents);
+      return new RegularImmutableMultiset<>(contents);
     }
   }
 

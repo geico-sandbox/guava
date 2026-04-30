@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Collections2.permutations;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.nCopies;
 import static org.junit.Assert.assertThrows;
@@ -68,7 +69,7 @@ public class TopKSelectorTest extends TestCase {
   }
 
   public void testOfferedKPlusOne() {
-    for (List<Integer> list : Collections2.permutations(Ints.asList(1, 2, 3, 4, 5))) {
+    for (List<Integer> list : permutations(Ints.asList(1, 2, 3, 4, 5))) {
       TopKSelector<Integer> top = TopKSelector.least(4);
       top.offerAll(list);
       assertThat(top.topK()).containsExactly(1, 2, 3, 4).inOrder();
@@ -76,7 +77,7 @@ public class TopKSelectorTest extends TestCase {
   }
 
   public void testOfferedThreeK() {
-    for (List<Integer> list : Collections2.permutations(Ints.asList(1, 2, 3, 4, 5, 6))) {
+    for (List<Integer> list : permutations(Ints.asList(1, 2, 3, 4, 5, 6))) {
       TopKSelector<Integer> top = TopKSelector.least(2);
       top.offerAll(list);
       assertThat(top.topK()).containsExactly(1, 2).inOrder();

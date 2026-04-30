@@ -16,17 +16,19 @@ package com.google.common.cache;
 
 import static com.google.common.cache.CacheTesting.checkEmpty;
 import static com.google.common.cache.TestingCacheLoaders.identityLoader;
+import static com.google.common.collect.Iterables.transform;
+import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertThrows;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.cache.CacheBuilderFactory.DurationSpec;
 import com.google.common.cache.LocalCache.Strength;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 import com.google.common.testing.EqualsTester;
 import java.util.Collection;
 import java.util.Map.Entry;
@@ -41,6 +43,8 @@ import org.jspecify.annotations.NullUnmarked;
  * @author mike nonemacher
  */
 
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class EmptyCachesTest extends TestCase {
 
@@ -305,8 +309,7 @@ public class EmptyCachesTest extends TestCase {
   private Iterable<LoadingCache<Object, Object>> caches() {
     // lots of different ways to configure a LoadingCache
     CacheBuilderFactory factory = cacheFactory();
-    return Iterables.transform(
-        factory.buildAllPermutations(), builder -> builder.build(identityLoader()));
+    return transform(factory.buildAllPermutations(), builder -> builder.build(identityLoader()));
   }
 
   private CacheBuilderFactory cacheFactory() {
@@ -332,6 +335,6 @@ public class EmptyCachesTest extends TestCase {
   }
 
   private Entry<Object, Object> entryOf(Object key, Object value) {
-    return Maps.immutableEntry(key, value);
+    return immutableEntry(key, value);
   }
 }

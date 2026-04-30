@@ -16,6 +16,7 @@ package com.google.common.collect.testing.google;
 
 import static com.google.common.collect.BoundType.CLOSED;
 import static com.google.common.collect.BoundType.OPEN;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.testing.Helpers.copyToList;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_REMOVE;
@@ -30,7 +31,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.collect.BoundType;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Multiset.Entry;
 import com.google.common.collect.Multisets;
 import com.google.common.collect.SortedMultiset;
@@ -224,10 +224,9 @@ public class MultisetNavigationTester<E> extends AbstractMultisetTester<E> {
 
   @CollectionSize.Require(SEVERAL)
   public void testDescendingNavigation() {
-    List<Entry<E>> ascending = new ArrayList<>();
-    Iterators.addAll(ascending, sortedMultiset.entrySet().iterator());
-    List<Entry<E>> descending = new ArrayList<>();
-    Iterators.addAll(descending, sortedMultiset.descendingMultiset().entrySet().iterator());
+    List<Entry<E>> ascending = newArrayList(sortedMultiset.entrySet().iterator());
+    List<Entry<E>> descending =
+        newArrayList(sortedMultiset.descendingMultiset().entrySet().iterator());
     Collections.reverse(descending);
     assertEquals(ascending, descending);
   }

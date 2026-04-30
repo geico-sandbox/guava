@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Maps.newLinkedHashMapWithExpectedSize;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -78,7 +80,7 @@ public final class LinkedHashMultiset<E extends @Nullable Object>
   }
 
   private LinkedHashMultiset(int distinctElements) {
-    super(Maps.newLinkedHashMapWithExpectedSize(distinctElements));
+    super(newLinkedHashMapWithExpectedSize(distinctElements));
   }
 
   /**

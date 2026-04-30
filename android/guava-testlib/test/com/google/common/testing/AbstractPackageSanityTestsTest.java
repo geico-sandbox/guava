@@ -17,10 +17,10 @@
 package com.google.common.testing;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
-import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
@@ -131,6 +131,6 @@ public class AbstractPackageSanityTestsTest extends TestCase {
 
   private List<Class<?>> findClassesToTest(
       Iterable<? extends Class<?>> classes, String... explicitTestNames) {
-    return sanityTests.findClassesToTest(classes, Arrays.asList(explicitTestNames));
+    return sanityTests.findClassesToTest(classes, asList(explicitTestNames));
   }
 }

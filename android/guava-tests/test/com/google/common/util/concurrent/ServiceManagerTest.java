@@ -18,8 +18,13 @@ package com.google.common.util.concurrent;
 
 import static com.google.common.base.StandardSystemProperty.JAVA_SPECIFICATION_VERSION;
 import static com.google.common.base.StandardSystemProperty.OS_NAME;
+import static com.google.common.collect.Iterables.getOnlyElement;
+import static com.google.common.collect.Sets.newConcurrentHashSet;
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.truth.Truth.assertWithMessage;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
+import static com.google.common.util.concurrent.Uninterruptibles.awaitUninterruptibly;
+import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
 import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -29,8 +34,6 @@ import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import com.google.common.testing.NullPointerTester;
 import com.google.common.testing.TestLogHandler;
 import com.google.common.util.concurrent.Service.State;
@@ -91,7 +94,7 @@ public class ServiceManagerTest extends TestCase {
       new Thread() {
         @Override
         public void run() {
-          Uninterruptibles.sleepUninterruptibly(delay, MILLISECONDS);
+          sleepUninterruptibly(delay, MILLISECONDS);
           notifyStarted();
         }
       }.start();
@@ -102,7 +105,7 @@ public class ServiceManagerTest extends TestCase {
       new Thread() {
         @Override
         public void run() {
-          Uninterruptibles.sleepUninterruptibly(delay, MILLISECONDS);
+          sleepUninterruptibly(delay, MILLISECONDS);
           notifyStopped();
         }
       }.start();
@@ -172,7 +175,7 @@ public class ServiceManagerTest extends TestCase {
           protected void doStart() {
             super.doStart();
             // This will delay service listener execution at least 150 milliseconds
-            Uninterruptibles.sleepUninterruptibly(150, MILLISECONDS);
+            sleepUninterruptibly(150, MILLISECONDS);
           }
         };
     Service a =
@@ -396,7 +399,7 @@ public class ServiceManagerTest extends TestCase {
       ServiceManager manager, Service.State state, Service... services) {
     Collection<Service> managerServices = manager.servicesByState().get(state);
     for (Service service : services) {
-      assertEquals(service.toString(), state, service.state());
+      assertWithMessage(service.toString()).that(service.state()).isEqualTo(state);
       assertEquals(service.toString(), service.isRunning(), state == Service.State.RUNNING);
       assertTrue(managerServices + " should contain " + service, managerServices.contains(service));
     }
@@ -412,7 +415,7 @@ public class ServiceManagerTest extends TestCase {
     logger.setLevel(Level.FINEST);
     TestLogHandler logHandler = new TestLogHandler();
     logger.addHandler(logHandler);
-    ServiceManager manager = new ServiceManager(Arrays.asList());
+    ServiceManager manager = new ServiceManager(asList());
     RecordingListener listener = new RecordingListener();
     manager.addListener(listener, directExecutor());
     manager.startAsync().awaitHealthy();
@@ -464,7 +467,7 @@ public class ServiceManagerTest extends TestCase {
 
     assertThat(suppressed[1]).hasCauseThat().isInstanceOf(IllegalStateException.class);
     assertThat(suppressed[1]).hasCauseThat().hasMessageThat().isEqualTo("start failure");
-    LogRecord record = Iterables.getOnlyElement(logHandler.getStoredLogRecords());
+    LogRecord record = getOnlyElement(logHandler.getStoredLogRecords());
     // We log failures that occur after startup
     assertThat(record.getMessage())
         .contains("Service FailRunService [FAILED] has failed in the RUNNING state");
@@ -489,7 +492,7 @@ public class ServiceManagerTest extends TestCase {
                 // We need to wait for the main thread to leave the ServiceManager.startAsync call
                 // to
                 // ensure that the thread running the failure callbacks is not the main thread.
-                Uninterruptibles.awaitUninterruptibly(afterStarted);
+                awaitUninterruptibly(afterStarted);
                 notifyFailed(new Exception("boom"));
               }
             }.start();
@@ -500,14 +503,14 @@ public class ServiceManagerTest extends TestCase {
             notifyStopped();
           }
         };
-    ServiceManager manager = new ServiceManager(Arrays.asList(failRunService, new NoOpService()));
+    ServiceManager manager = new ServiceManager(asList(failRunService, new NoOpService()));
     manager.addListener(
         new ServiceManager.Listener() {
           @Override
           public void failure(Service service) {
             failEnter.countDown();
             // block until after the service manager is shutdown
-            Uninterruptibles.awaitUninterruptibly(failLeave);
+            awaitUninterruptibly(failLeave);
           }
         },
         directExecutor());
@@ -546,7 +549,7 @@ public class ServiceManagerTest extends TestCase {
     logger.addHandler(logHandler);
     NoOpService service = new NoOpService();
     service.startAsync();
-    assertThrows(IllegalArgumentException.class, () -> new ServiceManager(Arrays.asList(service)));
+    assertThrows(IllegalArgumentException.class, () -> new ServiceManager(asList(service)));
     service.stopAsync();
     // Nothing was logged!
     assertEquals(0, logHandler.getStoredLogRecords().size());
@@ -616,8 +619,7 @@ public class ServiceManagerTest extends TestCase {
         };
     IllegalArgumentException expected =
         assertThrows(
-            IllegalArgumentException.class,
-            () -> new ServiceManager(Arrays.asList(service1, service2)));
+            IllegalArgumentException.class, () -> new ServiceManager(asList(service1, service2)));
     assertThat(expected).hasMessageThat().contains("started transitioning asynchronously");
   }
 
@@ -671,7 +673,7 @@ public class ServiceManagerTest extends TestCase {
   }
 
   public void testNulls() {
-    ServiceManager manager = new ServiceManager(Arrays.asList());
+    ServiceManager manager = new ServiceManager(asList());
     new NullPointerTester()
         .setDefault(ServiceManager.Listener.class, new RecordingListener())
         .testAllPublicInstanceMethods(manager);
@@ -680,7 +682,7 @@ public class ServiceManagerTest extends TestCase {
   private static final class RecordingListener extends ServiceManager.Listener {
     volatile boolean healthyCalled;
     volatile boolean stoppedCalled;
-    final Set<Service> failedServices = Sets.newConcurrentHashSet();
+    final Set<Service> failedServices = newConcurrentHashSet();
 
     @Override
     public void healthy() {

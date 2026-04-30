@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkPositionIndexes;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
 import static com.google.common.collect.CollectPreconditions.checkRemove;
+import static com.google.common.collect.Iterators.addAll;
 import static com.google.common.collect.Iterators.elementsEqual;
 import static java.lang.Math.min;
 
@@ -148,7 +149,7 @@ public final class Lists {
   public static <E extends @Nullable Object> ArrayList<E> newArrayList(
       Iterator<? extends E> elements) {
     ArrayList<E> list = new ArrayList<>();
-    Iterators.addAll(list, elements);
+    addAll(list, elements);
     return list;
   }
 

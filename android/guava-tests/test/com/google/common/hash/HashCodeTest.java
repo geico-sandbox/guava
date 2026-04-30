@@ -16,12 +16,13 @@
 
 package com.google.common.hash;
 
-import static com.google.common.hash.Hashing.sha1;
+import static com.google.common.hash.Hashing.farmHashFingerprint64;
 import static com.google.common.io.BaseEncoding.base16;
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static org.junit.Assert.assertThrows;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableList;
 import com.google.common.io.BaseEncoding;
 import com.google.common.testing.ClassSanityTester;
@@ -178,16 +179,18 @@ public class HashCodeTest extends TestCase {
     assertThat(base16().lowerCase().encode(data)).isEqualTo("7f8005ff0e");
   }
 
+  @J2ktIncompatible // ClassSanityTester
   public void testHashCode_nulls() throws Exception {
     sanityTester().testNulls();
   }
 
+  @J2ktIncompatible // ClassSanityTester
   public void testHashCode_equalsAndSerializable() throws Exception {
     sanityTester().testEqualsAndSerializable();
   }
 
   public void testRoundTripHashCodeUsingBaseEncoding() {
-    HashCode hash1 = sha1().hashString("foo", US_ASCII);
+    HashCode hash1 = farmHashFingerprint64().hashString("foo", US_ASCII);
     HashCode hash2 = HashCode.fromBytes(BaseEncoding.base16().lowerCase().decode(hash1.toString()));
     assertEquals(hash1, hash2);
   }
@@ -219,7 +222,7 @@ public class HashCodeTest extends TestCase {
   }
 
   public void testRoundTripHashCodeUsingFromString() {
-    HashCode hash1 = sha1().hashString("foo", US_ASCII);
+    HashCode hash1 = farmHashFingerprint64().hashString("foo", US_ASCII);
     HashCode hash2 = HashCode.fromString(hash1.toString());
     assertEquals(hash1, hash2);
   }
@@ -238,7 +241,7 @@ public class HashCodeTest extends TestCase {
   }
 
   public void testFromStringFailsWithUpperCaseString() {
-    String string = sha1().hashString("foo", US_ASCII).toString().toUpperCase();
+    String string = farmHashFingerprint64().hashString("foo", US_ASCII).toString().toUpperCase();
     assertThrows(IllegalArgumentException.class, () -> HashCode.fromString(string));
   }
 
@@ -310,6 +313,7 @@ public class HashCodeTest extends TestCase {
     assertThat(dest).isEqualTo(new byte[] {(byte) 0xaa, (byte) 0xbb, (byte) 0x00});
   }
 
+  @J2ktIncompatible // ClassSanityTester
   private static ClassSanityTester.FactoryMethodReturnValueTester sanityTester() {
     return new ClassSanityTester()
         .setDefault(byte[].class, new byte[] {1, 2, 3, 4})
@@ -357,7 +361,7 @@ public class HashCodeTest extends TestCase {
   private static class ExpectedHashCode {
     final byte[] bytes;
     final int asInt;
-    final Long asLong; // null means that asLong should throw an exception
+    final @Nullable Long asLong; // null means that asLong should throw an exception
     final String toString;
 
     ExpectedHashCode(byte[] bytes, int asInt, @Nullable Long asLong, String toString) {

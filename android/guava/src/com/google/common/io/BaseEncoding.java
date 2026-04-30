@@ -22,6 +22,7 @@ import static com.google.common.math.IntMath.divide;
 import static com.google.common.math.IntMath.log2;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.lang.System.arraycopy;
 import static java.math.RoundingMode.CEILING;
 import static java.math.RoundingMode.FLOOR;
 import static java.math.RoundingMode.UNNECESSARY;
@@ -193,7 +194,7 @@ public abstract class BaseEncoding {
       return result;
     }
     byte[] trunc = new byte[length];
-    System.arraycopy(result, 0, trunc, 0, length);
+    arraycopy(result, 0, trunc, 0, length);
     return trunc;
   }
 

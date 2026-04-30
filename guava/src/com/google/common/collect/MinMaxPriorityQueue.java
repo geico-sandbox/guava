@@ -24,6 +24,7 @@ import static com.google.common.collect.CollectPreconditions.checkRemove;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.System.arraycopy;
+import static java.util.Collections.emptySet;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -36,7 +37,6 @@ import java.util.AbstractQueue;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -207,7 +207,7 @@ public final class MinMaxPriorityQueue<E> extends AbstractQueue<E> {
      * initial contents.
      */
     public <T extends B> MinMaxPriorityQueue<T> create() {
-      return create(Collections.emptySet());
+      return create(emptySet());
     }
 
     /**

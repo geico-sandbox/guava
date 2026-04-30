@@ -18,6 +18,8 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.Lists.asList;
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.sort;
 import static java.util.Collections.emptyList;
@@ -254,7 +256,7 @@ public abstract class Ordering<T extends @Nullable Object> implements Comparator
    */
   // TODO(kevinb): provide replacement
   public static <T> Ordering<T> explicit(T leastValue, T... remainingValuesInOrder) {
-    return explicit(Lists.asList(leastValue, remainingValuesInOrder));
+    return explicit(asList(leastValue, remainingValuesInOrder));
   }
 
   // Ordering<Object> singletons
@@ -785,7 +787,7 @@ public abstract class Ordering<T extends @Nullable Object> implements Comparator
       return emptyList();
     } else if (k >= Integer.MAX_VALUE / 2) {
       // k is really large; just do a straightforward sorted-copy-and-sublist
-      ArrayList<E> list = Lists.newArrayList(iterator);
+      ArrayList<E> list = newArrayList(iterator);
       sort(list, this);
       if (list.size() > k) {
         list.subList(k, list.size()).clear();

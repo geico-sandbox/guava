@@ -19,7 +19,11 @@ package com.google.common.testing;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Throwables.throwIfUnchecked;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
+import static com.google.common.collect.Lists.reverse;
 import static com.google.common.testing.NullPointerTester.isNullable;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -28,7 +32,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
 import com.google.common.collect.MutableClassToInstanceMap;
 import com.google.common.collect.Ordering;
 import com.google.common.reflect.Invokable;
@@ -304,7 +307,7 @@ public final class ClassSanityTester {
     if (cls.isEnum()) {
       return;
     }
-    List<? extends Invokable<?, ?>> factories = Lists.reverse(getFactories(TypeToken.of(cls)));
+    List<? extends Invokable<?, ?>> factories = reverse(getFactories(TypeToken.of(cls)));
     if (factories.isEmpty()) {
       return;
     }
@@ -505,7 +508,7 @@ public final class ClassSanityTester {
         Object instance = instantiate(factory);
         if (instance != null) {
           try {
-            SerializableTester.reserialize(instance);
+            reserialize(instance);
           } catch (Exception e) { // sneaky checked exception
             throw new AssertionError(
                 "Serialization failed on return value of " + factory, e.getCause());
@@ -535,7 +538,7 @@ public final class ClassSanityTester {
         Object instance = instantiate(factory);
         if (instance != null) {
           try {
-            SerializableTester.reserializeAndAssert(instance);
+            reserializeAndAssert(instance);
           } catch (Exception e) { // sneaky checked exception
             throw new AssertionError(
                 "Serialization failed on return value of " + factory, e.getCause());
@@ -576,8 +579,8 @@ public final class ClassSanityTester {
           InvocationTargetException,
           FactoryMethodReturnsNullException {
     List<Parameter> params = factory.getParameters();
-    List<FreshValueGenerator> argGenerators = Lists.newArrayListWithCapacity(params.size());
-    List<@Nullable Object> args = Lists.newArrayListWithCapacity(params.size());
+    List<FreshValueGenerator> argGenerators = newArrayListWithCapacity(params.size());
+    List<@Nullable Object> args = newArrayListWithCapacity(params.size());
     for (Parameter param : params) {
       FreshValueGenerator generator = newFreshValueGenerator();
       argGenerators.add(generator);

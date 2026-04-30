@@ -17,6 +17,7 @@ package com.google.common.hash;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.errorprone.annotations.Immutable;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
@@ -29,6 +30,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Dimitris Andreou
  */
+@J2ktIncompatible
 @Immutable
 abstract class AbstractCompositeHashFunction extends AbstractHashFunction {
 

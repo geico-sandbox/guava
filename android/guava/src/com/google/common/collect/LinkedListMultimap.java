@@ -18,6 +18,8 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkPositionIndex;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
@@ -409,7 +411,7 @@ public class LinkedListMultimap<K extends @Nullable Object, V extends @Nullable 
 
   /** An {@code Iterator} over distinct keys in key head order. */
   private final class DistinctKeyIterator implements Iterator<K> {
-    final Set<K> seenKeys = Sets.newHashSetWithExpectedSize(keySet().size());
+    final Set<K> seenKeys = newHashSetWithExpectedSize(keySet().size());
     @Nullable Node<K, V> next = head;
     @Nullable Node<K, V> current;
     int expectedModCount = modCount;
@@ -643,7 +645,7 @@ public class LinkedListMultimap<K extends @Nullable Object, V extends @Nullable 
   }
 
   private List<V> getCopy(@ParametricNullness K key) {
-    return unmodifiableList(Lists.newArrayList(new ValueForKeyIterator(key)));
+    return unmodifiableList(newArrayList(new ValueForKeyIterator(key)));
   }
 
   /**

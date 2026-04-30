@@ -15,12 +15,13 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.BoundType.OPEN;
+import static com.google.common.collect.Maps.newTreeMap;
 import static com.google.common.collect.Range.range;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 
 import com.google.common.annotations.GwtIncompatible;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableMap;
@@ -45,7 +46,7 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
   static {
     ImmutableList.Builder<Range<Integer>> queryBuilder = ImmutableList.builder();
 
-    queryBuilder.add(Range.<Integer>all());
+    queryBuilder.add(Range.all());
 
     for (int i = MIN_BOUND; i <= MAX_BOUND; i++) {
       for (BoundType boundType : BoundType.values()) {
@@ -94,14 +95,14 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
       cutsToTest.add(Cut.belowValue(i));
       cutsToTest.add(Cut.aboveValue(i));
     }
-    cutsToTest.add(Cut.<Integer>aboveAll());
-    cutsToTest.add(Cut.<Integer>belowAll());
+    cutsToTest.add(Cut.aboveAll());
+    cutsToTest.add(Cut.belowAll());
     CUTS_TO_TEST = ImmutableList.copyOf(cutsToTest);
   }
 
   private void testRangesByLowerBounds(
       TreeRangeSet<Integer> rangeSet, Iterable<Range<Integer>> expectedRanges) {
-    NavigableMap<Cut<Integer>, Range<Integer>> expectedRangesByLowerBound = Maps.newTreeMap();
+    NavigableMap<Cut<Integer>, Range<Integer>> expectedRangesByLowerBound = newTreeMap();
     for (Range<Integer> range : expectedRanges) {
       expectedRangesByLowerBound.put(range.lowerBound, range);
     }
@@ -151,7 +152,7 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
   }
 
   public void testEnclosing(RangeSet<Integer> rangeSet) {
-    assertTrue(rangeSet.enclosesAll(ImmutableList.<Range<Integer>>of()));
+    assertTrue(rangeSet.enclosesAll(ImmutableList.of()));
     for (Range<Integer> query : QUERY_RANGES) {
       boolean expectEnclose = false;
       for (Range<Integer> expectedRange : rangeSet.asRanges()) {
@@ -178,7 +179,7 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
       rangeSet.add(range);
 
       TreeRangeSet<Integer> complement = TreeRangeSet.create();
-      complement.add(Range.<Integer>all());
+      complement.add(Range.all());
       complement.remove(range);
 
       assertEquals(complement, rangeSet.complement());
@@ -193,7 +194,7 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
   }
 
   public void testEmptyIntersecting() {
-    testIntersects(TreeRangeSet.<Integer>create());
+    testIntersects(TreeRangeSet.create());
     testIntersects(TreeRangeSet.<Integer>create().complement());
   }
 
@@ -219,7 +220,7 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
   }
 
   public void testEmptyEnclosing() {
-    testEnclosing(TreeRangeSet.<Integer>create());
+    testEnclosing(TreeRangeSet.create());
     testEnclosing(TreeRangeSet.<Integer>create().complement());
   }
 
@@ -269,7 +270,7 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
 
   private RangeSet<Integer> expectedComplement(RangeSet<Integer> rangeSet) {
     RangeSet<Integer> expected = TreeRangeSet.create();
-    expected.add(Range.<Integer>all());
+    expected.add(Range.all());
     expected.removeAll(rangeSet);
     return expected;
   }
@@ -352,7 +353,7 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
         rangeSet.add(range1);
         rangeSet.add(range2);
 
-        NavigableMap<Cut<Integer>, Range<Integer>> expectedRangesByUpperBound = Maps.newTreeMap();
+        NavigableMap<Cut<Integer>, Range<Integer>> expectedRangesByUpperBound = newTreeMap();
         for (Range<Integer> range : rangeSet.asRanges()) {
           expectedRangesByUpperBound.put(range.upperBound, range);
         }
@@ -688,6 +689,6 @@ public class TreeRangeSetTest extends AbstractRangeSetTest {
     RangeSet<Integer> rangeSet = TreeRangeSet.create();
     rangeSet.add(Range.closed(3, 10));
     rangeSet.remove(Range.open(5, 7));
-    SerializableTester.reserializeAndAssert(rangeSet);
+    reserializeAndAssert(rangeSet);
   }
 }

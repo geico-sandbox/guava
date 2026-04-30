@@ -16,10 +16,10 @@
 
 package com.google.common.io;
 
+import static com.google.common.primitives.Bytes.asList;
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
 
-import com.google.common.primitives.Bytes;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
@@ -145,6 +145,6 @@ public class LittleEndianDataOutputStreamTest extends TestCase {
   }
 
   private static void assertEquals(byte[] expected, byte[] actual) {
-    assertEquals(Bytes.asList(expected), Bytes.asList(actual));
+    assertEquals(asList(expected), asList(actual));
   }
 }

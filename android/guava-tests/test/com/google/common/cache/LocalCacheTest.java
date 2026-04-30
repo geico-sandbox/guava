@@ -26,6 +26,7 @@ import static com.google.common.cache.TestingRemovalListeners.countingRemovalLis
 import static com.google.common.cache.TestingRemovalListeners.queuingRemovalListener;
 import static com.google.common.cache.TestingWeighers.constantWeigher;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static com.google.common.util.concurrent.MoreExecutors.listeningDecorator;
@@ -37,6 +38,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Equivalence;
 import com.google.common.base.Ticker;
 import com.google.common.cache.LocalCache.EntryFactory;
@@ -60,7 +63,6 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import com.google.common.testing.FakeTicker;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import com.google.common.testing.TestLogHandler;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
@@ -92,6 +94,8 @@ import org.jspecify.annotations.Nullable;
 /**
  * @author Charles Fry
  */
+@GwtIncompatible
+@J2ktIncompatible
 @SuppressWarnings("GuardedBy") // TODO(b/35466881): Fix or suppress.
 @NullUnmarked
 public class LocalCacheTest extends TestCase {
@@ -259,7 +263,7 @@ public class LocalCacheTest extends TestCase {
   }
 
   private void checkLogged(Throwable t) {
-    assertThat(popLoggedThrowable()).isSameInstanceAs(t);
+    assertThat(popLoggedThrowable()).isEqualTo(t);
   }
 
   /*
@@ -2630,7 +2634,7 @@ public class LocalCacheTest extends TestCase {
     one.getUnchecked(new Object());
     assertThat(one.size()).isEqualTo(1);
     assertThat(one.asMap().isEmpty()).isFalse();
-    LocalLoadingCache<Object, Object> two = SerializableTester.reserialize(one);
+    LocalLoadingCache<Object, Object> two = reserialize(one);
     assertThat(two.size()).isEqualTo(0);
     assertThat(two.asMap().isEmpty()).isTrue();
 
@@ -2649,7 +2653,7 @@ public class LocalCacheTest extends TestCase {
     assertThat(localCacheTwo.ticker).isEqualTo(localCacheOne.ticker);
 
     // serialize the reconstituted version to be sure we haven't lost the ability to reserialize
-    LocalLoadingCache<Object, Object> three = SerializableTester.reserialize(two);
+    LocalLoadingCache<Object, Object> three = reserialize(two);
     LocalCache<Object, Object> localCacheThree = three.localCache;
 
     assertThat(localCacheThree.defaultLoader).isEqualTo(localCacheTwo.defaultLoader);
@@ -2686,7 +2690,7 @@ public class LocalCacheTest extends TestCase {
     one.put(new Object(), new Object());
     assertThat(one.size()).isEqualTo(1);
     assertThat(one.asMap().isEmpty()).isFalse();
-    LocalManualCache<Object, Object> two = SerializableTester.reserialize(one);
+    LocalManualCache<Object, Object> two = reserialize(one);
     assertThat(two.size()).isEqualTo(0);
     assertThat(two.asMap().isEmpty()).isTrue();
 
@@ -2704,7 +2708,7 @@ public class LocalCacheTest extends TestCase {
     assertThat(localCacheTwo.ticker).isEqualTo(localCacheOne.ticker);
 
     // serialize the reconstituted version to be sure we haven't lost the ability to reserialize
-    LocalManualCache<Object, Object> three = SerializableTester.reserialize(two);
+    LocalManualCache<Object, Object> three = reserialize(two);
     LocalCache<Object, Object> localCacheThree = three.localCache;
 
     assertThat(localCacheThree.keyStrength).isEqualTo(localCacheTwo.keyStrength);

@@ -47,7 +47,6 @@ import com.google.common.testing.NullPointerTester;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.util.Arrays;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -284,7 +283,7 @@ public class MediaTypeTest extends TestCase {
   public void testWithParametersIterable() {
     assertEquals(
         MediaType.parse("text/plain"),
-        MediaType.parse("text/plain; a=1; a=2").withParameters("a", ImmutableSet.<String>of()));
+        MediaType.parse("text/plain; a=1; a=2").withParameters("a", ImmutableSet.of()));
     assertEquals(
         MediaType.parse("text/plain; a=1"),
         MediaType.parse("text/plain").withParameters("a", ImmutableSet.of("1")));
@@ -321,8 +320,7 @@ public class MediaTypeTest extends TestCase {
   public void testWithParametersIterable_nullValue() {
     MediaType mediaType = MediaType.parse("text/plain");
     assertThrows(
-        NullPointerException.class,
-        () -> mediaType.withParameters("a", Arrays.asList((String) null)));
+        NullPointerException.class, () -> mediaType.withParameters("a", asList((String) null)));
   }
 
   public void testWithCharset() {

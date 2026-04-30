@@ -24,6 +24,7 @@ import static com.google.common.collect.testing.features.CollectionSize.ZERO;
 import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_ADD_WITH_INDEX;
 import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_REMOVE_WITH_INDEX;
 import static com.google.common.collect.testing.features.ListFeature.SUPPORTS_SET;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -35,7 +36,6 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
-import com.google.common.testing.SerializableTester;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -289,18 +289,18 @@ public class ListSubListTester<E> extends AbstractListTester<E> {
 
   @CollectionFeature.Require(SERIALIZABLE_INCLUDING_VIEWS)
   public void testReserializeWholeSubList() {
-    SerializableTester.reserializeAndAssert(getList().subList(0, getNumElements()));
+    reserializeAndAssert(getList().subList(0, getNumElements()));
   }
 
   @CollectionFeature.Require(SERIALIZABLE_INCLUDING_VIEWS)
   public void testReserializeEmptySubList() {
-    SerializableTester.reserializeAndAssert(getList().subList(0, 0));
+    reserializeAndAssert(getList().subList(0, 0));
   }
 
   @CollectionFeature.Require(SERIALIZABLE_INCLUDING_VIEWS)
   @CollectionSize.Require(absent = {ZERO, ONE})
   public void testReserializeSubList() {
-    SerializableTester.reserializeAndAssert(getList().subList(0, 2));
+    reserializeAndAssert(getList().subList(0, 2));
   }
 
   /**

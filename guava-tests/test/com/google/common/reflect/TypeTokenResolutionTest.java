@@ -16,6 +16,8 @@
 
 package com.google.common.reflect;
 
+import static com.google.common.reflect.Types.newArrayType;
+import static com.google.common.reflect.Types.newParameterizedType;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -281,7 +283,7 @@ public class TypeTokenResolutionTest extends TestCase {
   public void testGenericArrayType() {
     GenericArray<?> genericArray = new GenericArray<>();
     assertEquals(GenericArray.class.getTypeParameters()[0], genericArray.t);
-    assertEquals(Types.newArrayType(genericArray.t), genericArray.array);
+    assertEquals(newArrayType(genericArray.t), genericArray.array);
   }
 
   public void testClassWrapper() {
@@ -413,7 +415,7 @@ public class TypeTokenResolutionTest extends TestCase {
         (GenericArrayType) new Holder<List<int[][]>[]>() {}.getContentType();
     ParameterizedType listType = (ParameterizedType) arrayType.getGenericComponentType();
     assertEquals(List.class, listType.getRawType());
-    assertEquals(Types.newArrayType(int[].class), listType.getActualTypeArguments()[0]);
+    assertEquals(newArrayType(int[].class), listType.getActualTypeArguments()[0]);
   }
 
   private abstract class WithGenericBound<A> {
@@ -454,7 +456,7 @@ public class TypeTokenResolutionTest extends TestCase {
   public void testWithRecursiveBoundInTypeVariable() throws Exception {
     TypeVariable<?> typeVariable =
         (TypeVariable<?>) new WithGenericBound<String>() {}.getTargetType("withRecursiveBound");
-    assertEquals(Types.newParameterizedType(Enum.class, typeVariable), typeVariable.getBounds()[0]);
+    assertEquals(newParameterizedType(Enum.class, typeVariable), typeVariable.getBounds()[0]);
   }
 
   public void testWithMutualRecursiveBoundInTypeVariable() throws Exception {
@@ -463,8 +465,8 @@ public class TypeTokenResolutionTest extends TestCase {
             new WithGenericBound<String>() {}.getTargetType("withMutualRecursiveBound");
     TypeVariable<?> k = (TypeVariable<?>) paramType.getActualTypeArguments()[0];
     TypeVariable<?> v = (TypeVariable<?>) paramType.getActualTypeArguments()[1];
-    assertEquals(Types.newParameterizedType(List.class, v), k.getBounds()[0]);
-    assertEquals(Types.newParameterizedType(List.class, k), v.getBounds()[0]);
+    assertEquals(newParameterizedType(List.class, v), k.getBounds()[0]);
+    assertEquals(newParameterizedType(List.class, k), v.getBounds()[0]);
   }
 
   public void testWithGenericLowerBoundInWildcard() throws Exception {

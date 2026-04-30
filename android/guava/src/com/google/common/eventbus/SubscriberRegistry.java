@@ -16,6 +16,10 @@ package com.google.common.eventbus;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterators.concat;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
+import static com.google.common.collect.Maps.newConcurrentMap;
+import static java.util.Arrays.asList;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
@@ -25,16 +29,12 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.primitives.Primitives;
 import com.google.common.reflect.TypeToken;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import com.google.j2objc.annotations.Weak;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -61,7 +61,7 @@ final class SubscriberRegistry {
    * immutable snapshot of all current subscribers to an event without any locking.
    */
   private final ConcurrentMap<Class<?>, CopyOnWriteArraySet<Subscriber>> subscribers =
-      Maps.newConcurrentMap();
+      newConcurrentMap();
 
   /** The event bus this registry belongs to. */
   @Weak private final EventBus bus;
@@ -125,8 +125,7 @@ final class SubscriberRegistry {
   Iterator<Subscriber> getSubscribers(Object event) {
     ImmutableSet<Class<?>> eventTypes = flattenHierarchy(event.getClass());
 
-    List<Iterator<Subscriber>> subscriberIterators =
-        Lists.newArrayListWithCapacity(eventTypes.size());
+    List<Iterator<Subscriber>> subscriberIterators = newArrayListWithCapacity(eventTypes.size());
 
     for (Class<?> eventType : eventTypes) {
       CopyOnWriteArraySet<Subscriber> eventSubscribers = subscribers.get(eventType);
@@ -136,7 +135,7 @@ final class SubscriberRegistry {
       }
     }
 
-    return Iterators.concat(subscriberIterators.iterator());
+    return concat(subscriberIterators.iterator());
   }
 
   /**
@@ -249,7 +248,7 @@ final class SubscriberRegistry {
 
     MethodIdentifier(Method method) {
       this.name = method.getName();
-      this.parameterTypes = Arrays.asList(method.getParameterTypes());
+      this.parameterTypes = asList(method.getParameterTypes());
     }
 
     @Override

@@ -21,6 +21,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
 import static com.google.common.collect.CollectPreconditions.checkPositive;
+import static com.google.common.collect.Collections2.safeContains;
+import static com.google.common.collect.Collections2.safeRemove;
 import static com.google.common.collect.Lists.newArrayListWithExpectedSize;
 import static com.google.common.collect.Maps.safeGet;
 import static java.lang.Math.max;
@@ -480,7 +482,7 @@ public final class ConcurrentHashMultiset<E> extends AbstractMultiset<E> impleme
 
       @Override
       public boolean contains(@Nullable Object object) {
-        return object != null && Collections2.safeContains(delegate, object);
+        return object != null && safeContains(delegate, object);
       }
 
       @Override
@@ -490,7 +492,7 @@ public final class ConcurrentHashMultiset<E> extends AbstractMultiset<E> impleme
 
       @Override
       public boolean remove(@Nullable Object object) {
-        return object != null && Collections2.safeRemove(delegate, object);
+        return object != null && safeRemove(delegate, object);
       }
 
       @Override

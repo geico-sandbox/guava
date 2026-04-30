@@ -17,11 +17,11 @@
 package com.google.common.collect.testing.testers;
 
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE;
+import static com.google.common.testing.SerializableTester.reserialize;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.collect.testing.AbstractCollectionTester;
 import com.google.common.collect.testing.features.CollectionFeature;
-import com.google.common.testing.SerializableTester;
 import org.junit.Ignore;
 
 /**
@@ -43,6 +43,6 @@ public class CollectionSerializationEqualTester<E> extends AbstractCollectionTes
    */
   @SuppressWarnings("UndefinedEquals")
   public void testReserialize() {
-    assertEquals(SerializableTester.reserialize(actualContents()), actualContents());
+    assertEquals(reserialize(actualContents()), actualContents());
   }
 }

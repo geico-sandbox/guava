@@ -19,6 +19,7 @@ package com.google.common.collect;
 import static com.google.common.collect.BoundType.CLOSED;
 import static com.google.common.collect.BoundType.OPEN;
 import static com.google.common.collect.DiscreteDomain.integers;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.testing.Helpers.testCompareToAndEquals;
 import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
@@ -49,10 +50,10 @@ public class RangeTest extends TestCase {
     checkContains(range);
     assertTrue(range.hasLowerBound());
     assertEquals(4, (int) range.lowerEndpoint());
-    assertEquals(OPEN, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(OPEN);
     assertTrue(range.hasUpperBound());
     assertEquals(8, (int) range.upperEndpoint());
-    assertEquals(OPEN, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(OPEN);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("(4..8)");
     reserializeAndAssert(range);
@@ -68,10 +69,10 @@ public class RangeTest extends TestCase {
     checkContains(range);
     assertTrue(range.hasLowerBound());
     assertEquals(5, (int) range.lowerEndpoint());
-    assertEquals(CLOSED, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(CLOSED);
     assertTrue(range.hasUpperBound());
     assertEquals(7, (int) range.upperEndpoint());
-    assertEquals(CLOSED, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(CLOSED);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("[5..7]");
     reserializeAndAssert(range);
@@ -86,10 +87,10 @@ public class RangeTest extends TestCase {
     checkContains(range);
     assertTrue(range.hasLowerBound());
     assertEquals(4, (int) range.lowerEndpoint());
-    assertEquals(OPEN, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(OPEN);
     assertTrue(range.hasUpperBound());
     assertEquals(7, (int) range.upperEndpoint());
-    assertEquals(CLOSED, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(CLOSED);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("(4..7]");
     reserializeAndAssert(range);
@@ -100,10 +101,10 @@ public class RangeTest extends TestCase {
     checkContains(range);
     assertTrue(range.hasLowerBound());
     assertEquals(5, (int) range.lowerEndpoint());
-    assertEquals(CLOSED, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(CLOSED);
     assertTrue(range.hasUpperBound());
     assertEquals(8, (int) range.upperEndpoint());
-    assertEquals(OPEN, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(OPEN);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("[5..8)");
     reserializeAndAssert(range);
@@ -135,10 +136,10 @@ public class RangeTest extends TestCase {
     assertFalse(range.contains(5));
     assertTrue(range.hasLowerBound());
     assertEquals(4, (int) range.lowerEndpoint());
-    assertEquals(CLOSED, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(CLOSED);
     assertTrue(range.hasUpperBound());
     assertEquals(4, (int) range.upperEndpoint());
-    assertEquals(CLOSED, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(CLOSED);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("[4..4]");
     reserializeAndAssert(range);
@@ -151,10 +152,10 @@ public class RangeTest extends TestCase {
     assertFalse(range.contains(5));
     assertTrue(range.hasLowerBound());
     assertEquals(4, (int) range.lowerEndpoint());
-    assertEquals(CLOSED, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(CLOSED);
     assertTrue(range.hasUpperBound());
     assertEquals(4, (int) range.upperEndpoint());
-    assertEquals(OPEN, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(OPEN);
     assertTrue(range.isEmpty());
     assertThat(range.toString()).isEqualTo("[4..4)");
     reserializeAndAssert(range);
@@ -167,10 +168,10 @@ public class RangeTest extends TestCase {
     assertFalse(range.contains(5));
     assertTrue(range.hasLowerBound());
     assertEquals(4, (int) range.lowerEndpoint());
-    assertEquals(OPEN, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(OPEN);
     assertTrue(range.hasUpperBound());
     assertEquals(4, (int) range.upperEndpoint());
-    assertEquals(CLOSED, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(CLOSED);
     assertTrue(range.isEmpty());
     assertThat(range.toString()).isEqualTo("(4..4]");
     reserializeAndAssert(range);
@@ -184,7 +185,7 @@ public class RangeTest extends TestCase {
     assertUnboundedBelow(range);
     assertTrue(range.hasUpperBound());
     assertEquals(5, (int) range.upperEndpoint());
-    assertEquals(OPEN, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(OPEN);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("(-\u221e..5)");
     reserializeAndAssert(range);
@@ -197,7 +198,7 @@ public class RangeTest extends TestCase {
     assertTrue(range.contains(Integer.MAX_VALUE));
     assertTrue(range.hasLowerBound());
     assertEquals(5, (int) range.lowerEndpoint());
-    assertEquals(OPEN, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(OPEN);
     assertUnboundedAbove(range);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("(5..+\u221e)");
@@ -211,7 +212,7 @@ public class RangeTest extends TestCase {
     assertTrue(range.contains(Integer.MAX_VALUE));
     assertTrue(range.hasLowerBound());
     assertEquals(6, (int) range.lowerEndpoint());
-    assertEquals(CLOSED, range.lowerBoundType());
+    assertThat(range.lowerBoundType()).isEqualTo(CLOSED);
     assertUnboundedAbove(range);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("[6..+\u221e)");
@@ -226,7 +227,7 @@ public class RangeTest extends TestCase {
     assertUnboundedBelow(range);
     assertTrue(range.hasUpperBound());
     assertEquals(4, (int) range.upperEndpoint());
-    assertEquals(CLOSED, range.upperBoundType());
+    assertThat(range.upperBoundType()).isEqualTo(CLOSED);
     assertFalse(range.isEmpty());
     assertThat(range.toString()).isEqualTo("(-\u221e..4]");
     reserializeAndAssert(range);
@@ -277,10 +278,10 @@ public class RangeTest extends TestCase {
     // path, so we test that separately
     assertTrue(range.containsAll(ImmutableSortedSet.of(3, 3, 4, 5)));
     assertTrue(range.containsAll(ImmutableSortedSet.of(3)));
-    assertTrue(range.containsAll(ImmutableSortedSet.<Integer>of()));
+    assertTrue(range.containsAll(ImmutableSortedSet.of()));
     assertFalse(range.containsAll(ImmutableSortedSet.of(3, 3, 4, 5, 6)));
 
-    assertTrue(Range.openClosed(3, 3).containsAll(Collections.<Integer>emptySet()));
+    assertTrue(Range.openClosed(3, 3).containsAll(Collections.emptySet()));
   }
 
   public void testEncloses_open() {
@@ -298,7 +299,7 @@ public class RangeTest extends TestCase {
     assertFalse(range.encloses(Range.lessThan(3)));
     assertFalse(range.encloses(Range.atLeast(3)));
     assertFalse(range.encloses(Range.atMost(3)));
-    assertFalse(range.encloses(Range.<Integer>all()));
+    assertFalse(range.encloses(Range.all()));
   }
 
   public void testEncloses_closed() {
@@ -315,7 +316,7 @@ public class RangeTest extends TestCase {
     assertFalse(range.encloses(Range.lessThan(3)));
     assertFalse(range.encloses(Range.atLeast(3)));
     assertFalse(range.encloses(Range.atMost(3)));
-    assertFalse(range.encloses(Range.<Integer>all()));
+    assertFalse(range.encloses(Range.all()));
   }
 
   public void testIntersection_empty() {
@@ -506,7 +507,7 @@ public class RangeTest extends TestCase {
 
     // enclosing, exterior
     assertEquals(Range.closed(2, 10), range.span(Range.closed(2, 10)));
-    assertEquals(Range.<Integer>all(), range.span(Range.<Integer>all()));
+    assertEquals(Range.<Integer>all(), range.span(Range.all()));
 
     // overlap above
     assertEquals(Range.closed(4, 10), range.span(Range.closed(6, 10)));
@@ -602,9 +603,9 @@ public class RangeTest extends TestCase {
   }
 
   public void testEncloseAll_nullValue() {
-    List<@Nullable Integer> nullFirst = Lists.newArrayList(null, 0);
+    List<@Nullable Integer> nullFirst = newArrayList(null, 0);
     assertThrows(NullPointerException.class, () -> Range.encloseAll((List<Integer>) nullFirst));
-    List<@Nullable Integer> nullNotFirst = Lists.newArrayList(0, null);
+    List<@Nullable Integer> nullNotFirst = newArrayList(0, null);
     assertThrows(NullPointerException.class, () -> Range.encloseAll((List<Integer>) nullNotFirst));
   }
 

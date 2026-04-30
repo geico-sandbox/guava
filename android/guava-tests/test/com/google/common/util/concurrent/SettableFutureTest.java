@@ -108,7 +108,7 @@ public class SettableFutureTest extends TestCase {
     assertTrue(future.isDone());
     assertFalse(future.isCancelled());
     ExecutionException ee = assertThrows(ExecutionException.class, future::get);
-    assertThat(ee).hasCauseThat().isSameInstanceAs(e);
+    assertThat(ee).hasCauseThat().isEqualTo(e);
   }
 
   public void testSetFuture() throws Exception {

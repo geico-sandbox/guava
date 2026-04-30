@@ -18,6 +18,7 @@ package com.google.common.collect.testing.google;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.testing.Helpers.copyToList;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static java.util.Collections.emptySet;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -34,7 +35,6 @@ import com.google.common.collect.testing.TestSetGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.Feature;
 import com.google.common.collect.testing.testers.CollectionSerializationEqualTester;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -138,8 +138,7 @@ public class MultisetTestSuiteBuilder<E>
 
     if (parentBuilder.getFeatures().contains(CollectionFeature.SERIALIZABLE)) {
       derivedSuites.add(
-          MultisetTestSuiteBuilder.using(
-                  new ReserializedMultisetGenerator<E>(parentBuilder.getSubjectGenerator()))
+          using(new ReserializedMultisetGenerator<E>(parentBuilder.getSubjectGenerator()))
               .named(getName() + " reserialized")
               .withFeatures(computeReserializedMultisetFeatures(parentBuilder.getFeatures()))
               .suppressing(parentBuilder.getSuppressedTests())
@@ -269,7 +268,7 @@ public class MultisetTestSuiteBuilder<E>
 
     @Override
     public Multiset<E> create(Object... elements) {
-      return (Multiset<E>) SerializableTester.reserialize(gen.create(elements));
+      return (Multiset<E>) reserialize(gen.create(elements));
     }
 
     @Override

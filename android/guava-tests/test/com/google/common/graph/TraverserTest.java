@@ -20,6 +20,7 @@ package com.google.common.graph;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.charactersOf;
+import static com.google.common.primitives.Chars.asList;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -28,7 +29,6 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Ordering;
-import com.google.common.primitives.Chars;
 import org.jspecify.annotations.NullUnmarked;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -1213,7 +1213,7 @@ public class TraverserTest {
 
   private static void assertEqualCharNodes(Iterable<Character> result, String expectedCharacters) {
     assertThat(result)
-        .containsExactlyElementsIn(Chars.asList(expectedCharacters.toCharArray()))
+        .containsExactlyElementsIn(asList(expectedCharacters.toCharArray()))
         .inOrder();
   }
 

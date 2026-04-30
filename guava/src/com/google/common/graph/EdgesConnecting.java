@@ -17,9 +17,9 @@
 package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterators.singletonIterator;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
 import java.util.AbstractSet;
 import java.util.Map;
@@ -49,7 +49,7 @@ final class EdgesConnecting<E> extends AbstractSet<E> {
     E connectingEdge = getConnectingEdge();
     return (connectingEdge == null)
         ? ImmutableSet.<E>of().iterator()
-        : Iterators.singletonIterator(connectingEdge);
+        : singletonIterator(connectingEdge);
   }
 
   @Override

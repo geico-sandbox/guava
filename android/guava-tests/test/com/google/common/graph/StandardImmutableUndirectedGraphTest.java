@@ -16,7 +16,8 @@
 
 package com.google.common.graph;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 import java.util.Collection;
 import org.jspecify.annotations.NullUnmarked;
 import org.junit.runner.RunWith;
@@ -32,7 +33,7 @@ public final class StandardImmutableUndirectedGraphTest
 
   @Parameters(name = "allowsSelfLoops={0}")
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(new Object[][] {{false}, {true}});
+    return asList(new Object[][] {{false}, {true}});
   }
 
   private final boolean allowsSelfLoops;

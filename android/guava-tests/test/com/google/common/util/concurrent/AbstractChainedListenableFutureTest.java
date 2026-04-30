@@ -17,6 +17,7 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.util.concurrent.AbstractChainedListenableFutureTest.Input.VALID_INPUT_DATA;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.junit.Assert.assertThrows;
 
@@ -37,11 +38,16 @@ import org.jspecify.annotations.NullUnmarked;
 @GwtIncompatible
 @J2ktIncompatible
 public abstract class AbstractChainedListenableFutureTest<T> extends TestCase {
-  protected static final int EXCEPTION_DATA = -1;
-  protected static final int VALID_INPUT_DATA = 1;
+  enum Input {
+    EXCEPTION_DATA,
+    VALID_INPUT_DATA,
+    SLOW_OUTPUT_VALID_INPUT_DATA,
+    SLOW_FUNC_VALID_INPUT_DATA,
+  }
+
   protected static final Exception EXCEPTION = new Exception("Test exception");
 
-  protected SettableFuture<Integer> inputFuture;
+  protected SettableFuture<Input> inputFuture;
   protected ListenableFuture<T> resultFuture;
   protected MockFutureListener listener;
 
@@ -93,7 +99,7 @@ public abstract class AbstractChainedListenableFutureTest<T> extends TestCase {
    * when inputFuture returns VALID_INPUT_DATA, and sets the exception to EXCEPTION in all other
    * cases.
    */
-  protected abstract ListenableFuture<T> buildChainingFuture(ListenableFuture<Integer> inputFuture);
+  protected abstract ListenableFuture<T> buildChainingFuture(ListenableFuture<Input> inputFuture);
 
   /**
    * Override to return the result when VALID_INPUT_DATA is passed in to the chaining

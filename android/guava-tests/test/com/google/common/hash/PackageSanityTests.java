@@ -16,6 +16,7 @@
 
 package com.google.common.hash;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.hash.BloomFilterStrategies.LockFreeBitArray;
 import com.google.common.testing.AbstractPackageSanityTests;
 import org.jspecify.annotations.NullUnmarked;
@@ -27,6 +28,7 @@ import org.jspecify.annotations.NullUnmarked;
  */
 
 @NullUnmarked
+@J2ktIncompatible
 public class PackageSanityTests extends AbstractPackageSanityTests {
   public PackageSanityTests() {
     setDefault(LockFreeBitArray.class, new LockFreeBitArray(1));

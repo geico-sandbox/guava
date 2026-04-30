@@ -16,6 +16,7 @@
 
 package com.google.common.testing;
 
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 
 import java.io.Serializable;
@@ -33,7 +34,7 @@ import org.jspecify.annotations.Nullable;
 public class SerializableTesterTest extends TestCase {
   public void testStringAssertions() {
     String original = "hello world";
-    String copy = SerializableTester.reserializeAndAssert(original);
+    String copy = reserializeAndAssert(original);
     assertThat(copy).isNotSameInstanceAs(original);
   }
 
@@ -41,7 +42,7 @@ public class SerializableTesterTest extends TestCase {
     ClassWhichDoesNotImplementEquals orig = new ClassWhichDoesNotImplementEquals();
     boolean errorNotThrown = false;
     try {
-      SerializableTester.reserializeAndAssert(orig);
+      reserializeAndAssert(orig);
       errorNotThrown = true;
     } catch (AssertionFailedError error) {
       // expected
@@ -55,7 +56,7 @@ public class SerializableTesterTest extends TestCase {
         new ClassWhichIsAlwaysEqualButHasDifferentHashcodes();
     boolean errorNotThrown = false;
     try {
-      SerializableTester.reserializeAndAssert(orig);
+      reserializeAndAssert(orig);
       errorNotThrown = true;
     } catch (AssertionFailedError error) {
       // expected
@@ -68,7 +69,7 @@ public class SerializableTesterTest extends TestCase {
     ObjectWhichIsEqualButChangesClass orig = new ObjectWhichIsEqualButChangesClass();
     boolean errorNotThrown = false;
     try {
-      SerializableTester.reserializeAndAssert(orig);
+      reserializeAndAssert(orig);
       errorNotThrown = true;
     } catch (AssertionFailedError error) {
       // expected

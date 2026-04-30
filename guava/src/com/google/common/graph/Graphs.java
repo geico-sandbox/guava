@@ -17,13 +17,13 @@
 package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.collect.Iterators.transform;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static com.google.common.graph.GraphConstants.NODE_NOT_IN_GRAPH;
 import static com.google.common.graph.Graphs.TransitiveClosureSelfLoopStrategy.ADD_SELF_LOOPS_ALWAYS;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Maps;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -65,8 +65,7 @@ public final class Graphs extends GraphsBridgeMethods {
       return true; // Optimization for the undirected case: at least one cycle must exist.
     }
 
-    Map<Object, NodeVisitState> visitedNodes =
-        Maps.newHashMapWithExpectedSize(graph.nodes().size());
+    Map<Object, NodeVisitState> visitedNodes = newHashMapWithExpectedSize(graph.nodes().size());
     for (N node : graph.nodes()) {
       if (subgraphHasCycle(graph, visitedNodes, node)) {
         return true;
@@ -184,13 +183,13 @@ public final class Graphs extends GraphsBridgeMethods {
    * of the transitive closure of {@code graph}. In other words, the returned {@link Graph} will not
    * be updated after modifications to {@code graph}.
    *
-   * @since NEXT
+   * @since 33.6.0
    */
   // TODO(b/31438252): Consider optimizing for undirected graphs.
   public static <N> ImmutableGraph<N> transitiveClosure(
       Graph<N> graph, TransitiveClosureSelfLoopStrategy strategy) {
     ImmutableGraph.Builder<N> transitiveClosure =
-        GraphBuilder.from(graph).allowsSelfLoops(true).<N>immutable();
+        GraphBuilder.from(graph).allowsSelfLoops(true).immutable();
 
     for (N node : graph.nodes()) {
       // add each node explicitly to include isolated nodes
@@ -241,7 +240,7 @@ public final class Graphs extends GraphsBridgeMethods {
    *
    * <p>The strategies differ based on how they define "cycle incident to a node".
    *
-   * @since NEXT
+   * @since 33.6.0
    */
   public enum TransitiveClosureSelfLoopStrategy {
     /**
@@ -368,7 +367,7 @@ public final class Graphs extends GraphsBridgeMethods {
       return new IncidentEdgeSet<N>(this, node, IncidentEdgeSet.EdgeType.BOTH) {
         @Override
         public Iterator<EndpointPair<N>> iterator() {
-          return Iterators.transform(
+          return transform(
               delegate().incidentEdges(node).iterator(),
               edge -> EndpointPair.of(delegate(), edge.nodeV(), edge.nodeU()));
         }

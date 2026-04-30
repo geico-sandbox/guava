@@ -15,11 +15,11 @@
 package com.google.common.base;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Collections.singleton;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import java.util.Collections;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 
@@ -67,7 +67,7 @@ final class Present<T> extends Optional<T> {
 
   @Override
   public Set<T> asSet() {
-    return Collections.singleton(reference);
+    return singleton(reference);
   }
 
   @Override

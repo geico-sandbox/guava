@@ -44,7 +44,7 @@
   <build>
     <resources>
       <resource>
-        <directory>..</directory>
+        <directory>../..</directory>
         <includes>
           <include>LICENSE</include> <!-- copied from the parent pom because I couldn't figure out a way to make combine.children="append" work -->
           <include>proguard/*</include>

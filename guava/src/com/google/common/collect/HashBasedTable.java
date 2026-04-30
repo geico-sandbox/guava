@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.Maps.newLinkedHashMapWithExpectedSize;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -59,7 +60,7 @@ public class HashBasedTable<R, C, V> extends StandardTable<R, C, V> {
 
     @Override
     public Map<C, V> get() {
-      return Maps.newLinkedHashMapWithExpectedSize(expectedSize);
+      return newLinkedHashMapWithExpectedSize(expectedSize);
     }
 
     @GwtIncompatible @J2ktIncompatible private static final long serialVersionUID = 0;
@@ -81,8 +82,8 @@ public class HashBasedTable<R, C, V> extends StandardTable<R, C, V> {
   public static <R, C, V> HashBasedTable<R, C, V> create(
       int expectedRows, int expectedCellsPerRow) {
     checkNonnegative(expectedCellsPerRow, "expectedCellsPerRow");
-    Map<R, Map<C, V>> backingMap = Maps.newLinkedHashMapWithExpectedSize(expectedRows);
-    return new HashBasedTable<>(backingMap, new Factory<C, V>(expectedCellsPerRow));
+    Map<R, Map<C, V>> backingMap = newLinkedHashMapWithExpectedSize(expectedRows);
+    return new HashBasedTable<>(backingMap, new Factory<>(expectedCellsPerRow));
   }
 
   /**

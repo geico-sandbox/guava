@@ -141,14 +141,14 @@ public class ImmutableListMultimap<K, V> extends ImmutableMultimap<K, V>
 
   /** Returns an immutable multimap containing a single entry. */
   public static <K, V> ImmutableListMultimap<K, V> of(K k1, V v1) {
-    ImmutableListMultimap.Builder<K, V> builder = ImmutableListMultimap.builder();
+    ImmutableListMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     return builder.build();
   }
 
   /** Returns an immutable multimap containing the given entries, in order. */
   public static <K, V> ImmutableListMultimap<K, V> of(K k1, V v1, K k2, V v2) {
-    ImmutableListMultimap.Builder<K, V> builder = ImmutableListMultimap.builder();
+    ImmutableListMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     return builder.build();
@@ -156,7 +156,7 @@ public class ImmutableListMultimap<K, V> extends ImmutableMultimap<K, V>
 
   /** Returns an immutable multimap containing the given entries, in order. */
   public static <K, V> ImmutableListMultimap<K, V> of(K k1, V v1, K k2, V v2, K k3, V v3) {
-    ImmutableListMultimap.Builder<K, V> builder = ImmutableListMultimap.builder();
+    ImmutableListMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     builder.put(k3, v3);
@@ -166,7 +166,7 @@ public class ImmutableListMultimap<K, V> extends ImmutableMultimap<K, V>
   /** Returns an immutable multimap containing the given entries, in order. */
   public static <K, V> ImmutableListMultimap<K, V> of(
       K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-    ImmutableListMultimap.Builder<K, V> builder = ImmutableListMultimap.builder();
+    ImmutableListMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     builder.put(k3, v3);
@@ -177,7 +177,7 @@ public class ImmutableListMultimap<K, V> extends ImmutableMultimap<K, V>
   /** Returns an immutable multimap containing the given entries, in order. */
   public static <K, V> ImmutableListMultimap<K, V> of(
       K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-    ImmutableListMultimap.Builder<K, V> builder = ImmutableListMultimap.builder();
+    ImmutableListMultimap.Builder<K, V> builder = builder();
     builder.put(k1, v1);
     builder.put(k2, v2);
     builder.put(k3, v3);

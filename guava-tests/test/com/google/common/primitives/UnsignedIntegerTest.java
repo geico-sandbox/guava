@@ -14,6 +14,7 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.assertThrows;
@@ -24,7 +25,6 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.math.BigInteger;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
@@ -278,7 +278,7 @@ public class UnsignedIntegerTest extends TestCase {
   @J2ktIncompatible
     public void testSerialization() {
     for (int a : TEST_INTS) {
-      SerializableTester.reserializeAndAssert(UnsignedInteger.fromIntBits(a));
+      reserializeAndAssert(UnsignedInteger.fromIntBits(a));
     }
   }
 

@@ -16,6 +16,7 @@
 
 package com.google.common.math;
 
+import static com.google.common.math.BigIntegerMath.sqrt;
 import static com.google.common.math.MathTesting.ALL_BIGINTEGER_CANDIDATES;
 import static com.google.common.math.MathTesting.ALL_ROUNDING_MODES;
 import static com.google.common.math.MathTesting.ALL_SAFE_ROUNDING_MODES;
@@ -106,8 +107,7 @@ public class BigIntegerMathTest extends TestCase {
   @GwtIncompatible // TODO
   public void testConstantSqrt2PrecomputedBits() {
     assertEquals(
-        BigIntegerMath.sqrt(
-            BigInteger.ZERO.setBit(2 * BigIntegerMath.SQRT2_PRECOMPUTE_THRESHOLD + 1), FLOOR),
+        sqrt(BigInteger.ZERO.setBit(2 * BigIntegerMath.SQRT2_PRECOMPUTE_THRESHOLD + 1), FLOOR),
         BigIntegerMath.SQRT2_PRECOMPUTED_BITS);
   }
 
@@ -298,15 +298,14 @@ public class BigIntegerMathTest extends TestCase {
   @GwtIncompatible // TODO
   public void testSqrtZeroAlwaysZero() {
     for (RoundingMode mode : ALL_ROUNDING_MODES) {
-      assertEquals(ZERO, BigIntegerMath.sqrt(ZERO, mode));
+      assertEquals(ZERO, sqrt(ZERO, mode));
     }
   }
 
   @GwtIncompatible // TODO
   public void testSqrtNegativeAlwaysThrows() {
     for (RoundingMode mode : ALL_ROUNDING_MODES) {
-      assertThrows(
-          IllegalArgumentException.class, () -> BigIntegerMath.sqrt(BigInteger.valueOf(-1), mode));
+      assertThrows(IllegalArgumentException.class, () -> sqrt(BigInteger.valueOf(-1), mode));
     }
   }
 
@@ -314,7 +313,7 @@ public class BigIntegerMathTest extends TestCase {
   public void testSqrtFloor() {
     for (BigInteger x : POSITIVE_BIGINTEGER_CANDIDATES) {
       for (RoundingMode mode : asList(FLOOR, DOWN)) {
-        BigInteger result = BigIntegerMath.sqrt(x, mode);
+        BigInteger result = sqrt(x, mode);
         assertThat(result).isGreaterThan(ZERO);
         assertThat(result.pow(2)).isAtMost(x);
         assertThat(result.add(ONE).pow(2)).isGreaterThan(x);
@@ -326,7 +325,7 @@ public class BigIntegerMathTest extends TestCase {
   public void testSqrtCeiling() {
     for (BigInteger x : POSITIVE_BIGINTEGER_CANDIDATES) {
       for (RoundingMode mode : asList(CEILING, UP)) {
-        BigInteger result = BigIntegerMath.sqrt(x, mode);
+        BigInteger result = sqrt(x, mode);
         assertThat(result).isGreaterThan(ZERO);
         assertThat(result.pow(2)).isAtLeast(x);
         assertTrue(result.signum() == 0 || result.subtract(ONE).pow(2).compareTo(x) < 0);
@@ -338,11 +337,11 @@ public class BigIntegerMathTest extends TestCase {
   @GwtIncompatible // TODO
   public void testSqrtExact() {
     for (BigInteger x : POSITIVE_BIGINTEGER_CANDIDATES) {
-      BigInteger floor = BigIntegerMath.sqrt(x, FLOOR);
+      BigInteger floor = sqrt(x, FLOOR);
       // We only expect an exception if x was not a perfect square.
       boolean isPerfectSquare = floor.pow(2).equals(x);
       try {
-        assertEquals(floor, BigIntegerMath.sqrt(x, UNNECESSARY));
+        assertEquals(floor, sqrt(x, UNNECESSARY));
         assertTrue(isPerfectSquare);
       } catch (ArithmeticException e) {
         assertFalse(isPerfectSquare);
@@ -353,7 +352,7 @@ public class BigIntegerMathTest extends TestCase {
   @GwtIncompatible // TODO
   public void testSqrtHalfUp() {
     for (BigInteger x : POSITIVE_BIGINTEGER_CANDIDATES) {
-      BigInteger result = BigIntegerMath.sqrt(x, HALF_UP);
+      BigInteger result = sqrt(x, HALF_UP);
       BigInteger plusHalfSquared = result.pow(2).add(result).shiftLeft(2).add(ONE);
       BigInteger x4 = x.shiftLeft(2);
       // sqrt(x) < result + 0.5, so 4 * x < (result + 0.5)^2 * 4
@@ -369,7 +368,7 @@ public class BigIntegerMathTest extends TestCase {
   @GwtIncompatible // TODO
   public void testSqrtHalfDown() {
     for (BigInteger x : POSITIVE_BIGINTEGER_CANDIDATES) {
-      BigInteger result = BigIntegerMath.sqrt(x, HALF_DOWN);
+      BigInteger result = sqrt(x, HALF_DOWN);
       BigInteger plusHalfSquared = result.pow(2).add(result).shiftLeft(2).add(ONE);
       BigInteger x4 = x.shiftLeft(2);
       // sqrt(x) <= result + 0.5, so 4 * x <= (result + 0.5)^2 * 4
@@ -386,11 +385,11 @@ public class BigIntegerMathTest extends TestCase {
   @GwtIncompatible // TODO
   public void testSqrtHalfEven() {
     for (BigInteger x : POSITIVE_BIGINTEGER_CANDIDATES) {
-      BigInteger halfEven = BigIntegerMath.sqrt(x, HALF_EVEN);
+      BigInteger halfEven = sqrt(x, HALF_EVEN);
       // Now figure out what rounding mode we should behave like (it depends if FLOOR was
       // odd/even).
-      boolean floorWasOdd = BigIntegerMath.sqrt(x, FLOOR).testBit(0);
-      assertEquals(BigIntegerMath.sqrt(x, floorWasOdd ? HALF_UP : HALF_DOWN), halfEven);
+      boolean floorWasOdd = sqrt(x, FLOOR).testBit(0);
+      assertEquals(sqrt(x, floorWasOdd ? HALF_UP : HALF_DOWN), halfEven);
     }
   }
 

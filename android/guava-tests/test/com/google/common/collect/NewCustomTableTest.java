@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Maps.newTreeMap;
 import static com.google.common.collect.Tables.newCustomTable;
 import static com.google.common.truth.Truth.assertThat;
 
@@ -42,7 +43,7 @@ public class NewCustomTableTest extends AbstractTableTest<Character> {
         new Supplier<TreeMap<Integer, Character>>() {
           @Override
           public TreeMap<Integer, Character> get() {
-            return Maps.newTreeMap();
+            return newTreeMap();
           }
         };
     Map<String, Map<Integer, Character>> backingMap = new LinkedHashMap<>();

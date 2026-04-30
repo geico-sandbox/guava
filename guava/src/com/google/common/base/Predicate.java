@@ -15,6 +15,7 @@
 package com.google.common.base;
 
 import com.google.common.annotations.GwtCompatible;
+import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -49,8 +50,8 @@ public interface Predicate<T extends @Nullable Object> extends java.util.functio
    *
    * <ul>
    *   <li>Its execution does not cause any observable side effects.
-   *   <li>The computation is <i>consistent with equals</i>; that is, {@link Objects#equal
-   *       Objects.equal}{@code (a, b)} implies that {@code predicate.apply(a) ==
+   *   <li>The computation is <i>consistent with equals</i>; that is, {@link Objects#equals
+   *       Objects.equals}{@code (a, b)} implies that {@code predicate.apply(a) ==
    *       predicate.apply(b))}.
    * </ul>
    *

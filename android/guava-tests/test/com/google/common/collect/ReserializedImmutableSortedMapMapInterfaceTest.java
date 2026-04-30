@@ -16,8 +16,9 @@
 
 package com.google.common.collect;
 
+import static com.google.common.testing.SerializableTester.reserialize;
+
 import com.google.common.annotations.GwtIncompatible;
-import com.google.common.testing.SerializableTester;
 import java.util.SortedMap;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -27,7 +28,7 @@ public class ReserializedImmutableSortedMapMapInterfaceTest
     extends AbstractImmutableSortedMapMapInterfaceTest<String, Integer> {
   @Override
   protected SortedMap<String, Integer> makePopulatedMap() {
-    return SerializableTester.reserialize(ImmutableSortedMap.of("one", 1, "two", 2, "three", 3));
+    return reserialize(ImmutableSortedMap.of("one", 1, "two", 2, "three", 3));
   }
 
   @Override

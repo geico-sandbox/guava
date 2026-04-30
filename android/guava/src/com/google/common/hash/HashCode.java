@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.Math.min;
+import static java.lang.System.arraycopy;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.UnsignedInts;
@@ -296,7 +297,7 @@ public abstract class HashCode {
 
     @Override
     void writeBytesToImpl(byte[] dest, int offset, int maxLength) {
-      System.arraycopy(bytes, 0, dest, offset, maxLength);
+      arraycopy(bytes, 0, dest, offset, maxLength);
     }
 
     @Override

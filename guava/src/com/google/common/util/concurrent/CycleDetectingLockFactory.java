@@ -16,6 +16,9 @@ package com.google.common.util.concurrent;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayListWithCapacity;
+import static com.google.common.collect.Maps.newEnumMap;
+import static com.google.common.collect.Sets.newIdentityHashSet;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -24,14 +27,10 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.MapMaker;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.j2objc.annotations.Weak;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -301,10 +300,10 @@ public class CycleDetectingLockFactory {
    */
   @VisibleForTesting
   static <E extends Enum<E>> Map<E, LockGraphNode> createNodes(Class<E> clazz) {
-    EnumMap<E, LockGraphNode> map = Maps.newEnumMap(clazz);
+    EnumMap<E, LockGraphNode> map = newEnumMap(clazz);
     E[] keys = clazz.getEnumConstants();
     int numKeys = keys.length;
-    ArrayList<LockGraphNode> nodes = Lists.newArrayListWithCapacity(numKeys);
+    ArrayList<LockGraphNode> nodes = newArrayListWithCapacity(numKeys);
     // Create a LockGraphNode for each enum value.
     for (E key : keys) {
       LockGraphNode node = new LockGraphNode(getLockName(key));
@@ -319,7 +318,7 @@ public class CycleDetectingLockFactory {
     for (int i = 0; i < numKeys - 1; i++) {
       nodes.get(i).checkAcquiredLocks(Policies.DISABLED, nodes.subList(i + 1, numKeys));
     }
-    return Collections.unmodifiableMap(map);
+    return unmodifiableMap(map);
   }
 
   /**
@@ -652,7 +651,7 @@ public class CycleDetectingLockFactory {
       }
       // Otherwise, it's the first time seeing this lock relationship. Look for
       // a path from the acquiredLock to this.
-      Set<LockGraphNode> seen = Sets.newIdentityHashSet();
+      Set<LockGraphNode> seen = newIdentityHashSet();
       ExampleStackTrace path = acquiredLock.findPathTo(this, seen);
 
       if (path == null) {

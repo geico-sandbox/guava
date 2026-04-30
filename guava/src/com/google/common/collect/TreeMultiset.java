@@ -942,8 +942,7 @@ public final class TreeMultiset<E extends @Nullable Object> extends AbstractSort
     }
 
     private void recomputeMultiset() {
-      this.distinctElements =
-          1 + TreeMultiset.distinctElements(left) + TreeMultiset.distinctElements(right);
+      this.distinctElements = 1 + distinctElements(left) + distinctElements(right);
       this.totalCount = elemCount + totalCount(left) + totalCount(right);
     }
 

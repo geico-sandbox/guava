@@ -70,7 +70,7 @@
       <groupId>org.gwtproject</groupId>
       <artifactId>gwt-user</artifactId>
       <version>${gwt.version}</version>
-      <scope>test</scope>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.google.truth</groupId>
@@ -302,9 +302,8 @@
           </execution>
         </executions>
       </plugin>
-      <!-- TODO(cpovirk): We really should try tbroyer's plugin instead of this legacy one. -->
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
+        <groupId>net.ltgt.gwt.maven</groupId>
         <artifactId>gwt-maven-plugin</artifactId>
         <version>${gwt-maven-plugin.version}</version>
         <executions>
@@ -314,18 +313,22 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <module>com.google.common.ForceGuavaCompilation</module>
+              <moduleName>com.google.common.ForceGuavaCompilation</moduleName>
               <failOnError>true</failOnError>
               <logLevel>${gwt.logLevel}</logLevel>
-              <generateJsInteropExports>true</generateJsInteropExports>
-              <validateOnly>true</validateOnly>
+              <compilerArgs>
+                <arg>-generateJsInteropExports</arg>
+                <arg>-validateOnly</arg>
+              </compilerArgs>
               <sourceLevel>1.8</sourceLevel>
               <!--
                 To avoid "java.io.IOException: User limit of inotify watches reached" under JDK10.
                 Presumably we don't need inotify, since we don't intend to change files during the
                 build?
                 -->
-              <extraJvmArgs>-Dgwt.watchFileChanges=false</extraJvmArgs>
+              <jvmArgs>
+                <arg>-Dgwt.watchFileChanges=false</arg>
+              </jvmArgs>
             </configuration>
           </execution>
           <!--
@@ -367,20 +370,22 @@
               <goal>test</goal>
             </goals>
             <configuration>
-              <module>com.google.common.GuavaTests</module>
+              <moduleName>com.google.common.GuavaTests</moduleName>
               <includes>**/GwtTestSuite.java</includes>
               <logLevel>${gwt.logLevel}</logLevel>
-              <mode>htmlunit</mode>
-              <htmlunit>FF38</htmlunit>
-              <productionMode>true</productionMode>
-              <!-- Fix OutOfMemoryError under Travis. -->
-              <extraJvmArgs>-Xms3500m -Xmx3500m -Xss1024k</extraJvmArgs>
-              <sourceLevel>1.8</sourceLevel>
-              <!-- Keep these timeouts very large because, if we hit the timeout, the tests silently pass :( -->
-              <testTimeOut>86400 <!-- seconds --></testTimeOut>
-              <testMethodTimeout>1440 <!-- minutes --></testMethodTimeout>
+              <testArgs>
+                <arg>-prod</arg>
+                <arg>-runStyle</arg>
+                <arg>HtmlUnit:FF38</arg>
+                <!-- Keep these timeouts very large because, if we hit the timeout, the tests silently pass :( -->
+                <arg>-testTimeOut</arg>
+                <arg>86400 <!-- seconds --></arg>
+                <arg>-testMethodTimeout</arg>
+                <arg>1440 <!-- minutes --></arg>
+              </testArgs>
               <!-- Presumably we want watchFileChanges=false here, since we want it for compile: -->
-              <extraJvmArgs>-Dgwt.watchFileChanges=false</extraJvmArgs>
+              <argLine>-Xms3500m -Xmx3500m -Xss1024k -Dgwt.watchFileChanges=false</argLine>
+              <sourceLevel>1.8</sourceLevel>
             </configuration>
           </execution>
         </executions>

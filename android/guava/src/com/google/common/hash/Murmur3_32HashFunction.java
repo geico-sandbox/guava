@@ -31,6 +31,7 @@ import static com.google.common.hash.Hashing.GOOD_FAST_HASH_SEED;
 import static java.lang.Byte.toUnsignedInt;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.primitives.Chars;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
@@ -51,6 +52,7 @@ import org.jspecify.annotations.Nullable;
  * @author Dimitris Andreou
  * @author Kurt Alfred Kluever
  */
+@J2ktIncompatible
 @Immutable
 @SuppressWarnings("IdentifierName") // the best we could do for adjacent digit blocks
 final class Murmur3_32HashFunction extends AbstractHashFunction implements Serializable {

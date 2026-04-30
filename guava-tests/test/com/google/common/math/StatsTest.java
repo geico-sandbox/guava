@@ -70,6 +70,8 @@ import static com.google.common.math.StatsTesting.TWO_VALUES_MIN;
 import static com.google.common.math.StatsTesting.TWO_VALUES_STATS;
 import static com.google.common.math.StatsTesting.TWO_VALUES_SUM_OF_SQUARES_OF_DELTAS;
 import static com.google.common.math.StatsTesting.megaPrimitiveDoubleStream;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.lang.Double.NEGATIVE_INFINITY;
@@ -86,7 +88,6 @@ import com.google.common.math.StatsTesting.ManyValues;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.google.common.testing.EqualsTester;
-import com.google.common.testing.SerializableTester;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -455,7 +456,7 @@ public class StatsTest extends TestCase {
             Stats.of(1.0, 1.0, 5.0, 5.0),
             Stats.of(ImmutableList.of(1.0, 1.0, 5.0, 5.0)),
             Stats.of(ImmutableList.of(1.0, 1.0, 5.0, 5.0).iterator()),
-            SerializableTester.reserialize(Stats.of(1.0, 1.0, 5.0, 5.0)))
+            reserialize(Stats.of(1.0, 1.0, 5.0, 5.0)))
         .addEqualityGroup(Stats.of(1.0, 5.0))
         .addEqualityGroup(Stats.of(1.0, 5.0, 1.0, 6.0))
         .addEqualityGroup(Stats.of(2.0, 6.0, 2.0, 6.0))
@@ -470,7 +471,7 @@ public class StatsTest extends TestCase {
   }
 
   public void testSerializable() {
-    SerializableTester.reserializeAndAssert(MANY_VALUES_STATS_ITERABLE);
+    reserializeAndAssert(MANY_VALUES_STATS_ITERABLE);
   }
 
   public void testToString() {
@@ -492,7 +493,7 @@ public class StatsTest extends TestCase {
 
   public void testMeanOf() {
     assertThrows(IllegalArgumentException.class, Stats::meanOf);
-    assertThrows(IllegalArgumentException.class, () -> Stats.meanOf(ImmutableList.<Number>of()));
+    assertThrows(IllegalArgumentException.class, () -> Stats.meanOf(ImmutableList.of()));
     assertThat(Stats.meanOf(ONE_VALUE)).isWithin(ALLOWED_ERROR).of(ONE_VALUE);
     assertThat(Stats.meanOf(POSITIVE_INFINITY)).isPositiveInfinity();
     assertThat(Stats.meanOf(NEGATIVE_INFINITY)).isNegativeInfinity();

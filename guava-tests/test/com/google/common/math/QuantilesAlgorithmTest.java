@@ -16,13 +16,13 @@
 
 package com.google.common.math;
 
+import static com.google.common.collect.Sets.difference;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.Map;
 import java.util.Random;
 import junit.framework.TestCase;
@@ -42,7 +42,7 @@ public class QuantilesAlgorithmTest extends TestCase {
   private static final double ALLOWED_ERROR = 1.0e-10;
   private static final QuantilesAlgorithm REFERENCE_ALGORITHM = QuantilesAlgorithm.SORTING;
   private static final ImmutableSet<QuantilesAlgorithm> NON_REFERENCE_ALGORITHMS =
-      Sets.difference(
+      difference(
               ImmutableSet.copyOf(QuantilesAlgorithm.values()),
               ImmutableSet.of(REFERENCE_ALGORITHM))
           .immutableCopy();

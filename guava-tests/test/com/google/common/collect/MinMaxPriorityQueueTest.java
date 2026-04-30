@@ -16,6 +16,10 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Collections2.permutations;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
+import static com.google.common.collect.Maps.newTreeMap;
 import static com.google.common.collect.Platform.reduceExponentIfGwt;
 import static com.google.common.collect.Platform.reduceIterationsIfGwt;
 import static com.google.common.collect.Sets.newHashSet;
@@ -218,7 +222,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
      * this map would contain the same exact elements as the MinMaxHeap; the
      * value in the map is the number of occurrences of the key.
      */
-    SortedMap<Integer, AtomicInteger> replica = Maps.newTreeMap();
+    SortedMap<Integer, AtomicInteger> replica = newTreeMap();
     assertTrue("Empty heap should be OK", mmHeap.isIntact());
     for (int i = 0; i < heapSize; i++) {
       int randomInt = random.nextInt();
@@ -294,7 +298,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
 
   public void testRemove() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
-    mmHeap.addAll(Lists.newArrayList(1, 2, 3, 4, 47, 1, 5, 3, 0));
+    mmHeap.addAll(newArrayList(1, 2, 3, 4, 47, 1, 5, 3, 0));
     assertTrue("Heap is not intact initially", mmHeap.isIntact());
     assertEquals(9, mmHeap.size());
     mmHeap.remove(5);
@@ -302,14 +306,14 @@ public class MinMaxPriorityQueueTest extends TestCase {
     assertTrue("Heap is not intact after remove()", mmHeap.isIntact());
     assertEquals(47, (int) mmHeap.pollLast());
     assertEquals(4, (int) mmHeap.pollLast());
-    mmHeap.removeAll(Lists.newArrayList(2, 3));
+    mmHeap.removeAll(newArrayList(2, 3));
     assertEquals(3, mmHeap.size());
     assertTrue("Heap is not intact after removeAll()", mmHeap.isIntact());
   }
 
   public void testContains() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
-    mmHeap.addAll(Lists.newArrayList(1, 1, 2));
+    mmHeap.addAll(newArrayList(1, 1, 2));
     assertEquals(3, mmHeap.size());
     assertFalse("Heap does not contain null", mmHeap.contains(null));
     assertFalse("Heap does not contain 3", mmHeap.contains(3));
@@ -329,7 +333,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
 
   public void testIteratorPastEndException() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
-    mmHeap.addAll(Lists.newArrayList(1, 2));
+    mmHeap.addAll(newArrayList(1, 2));
     Iterator<Integer> it = mmHeap.iterator();
     assertTrue("Iterator has reached end prematurely", it.hasNext());
     it.next();
@@ -339,7 +343,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
 
   public void testIteratorConcurrentModification() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
-    mmHeap.addAll(Lists.newArrayList(1, 2, 3, 4));
+    mmHeap.addAll(newArrayList(1, 2, 3, 4));
     Iterator<Integer> it = mmHeap.iterator();
     assertTrue("Iterator has reached end prematurely", it.hasNext());
     it.next();
@@ -350,7 +354,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
 
   /** Tests a failure caused by fix to childless uncle issue. */
   public void testIteratorRegressionChildlessUncle() {
-    ArrayList<Integer> initial = Lists.newArrayList(1, 15, 13, 8, 9, 10, 11, 14);
+    ArrayList<Integer> initial = newArrayList(1, 15, 13, 8, 9, 10, 11, 14);
     MinMaxPriorityQueue<Integer> q = MinMaxPriorityQueue.create(initial);
     assertIntact(q);
     q.remove(9);
@@ -358,7 +362,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
     q.remove(10);
     // Now we're in the critical state: [1, 15, 13, 8, 14]
     // Removing 8 while iterating caused duplicates in iteration result.
-    List<Integer> result = Lists.newArrayListWithCapacity(initial.size());
+    List<Integer> result = newArrayListWithCapacity(initial.size());
     for (Iterator<Integer> iter = q.iterator(); iter.hasNext(); ) {
       Integer value = iter.next();
       result.add(value);
@@ -377,8 +381,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
    */
   public void testInvalidatingRemove() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
-    mmHeap.addAll(
-        Lists.newArrayList(1, 20, 1000, 2, 3, 30, 40, 10, 11, 12, 13, 300, 400, 500, 600));
+    mmHeap.addAll(newArrayList(1, 20, 1000, 2, 3, 30, 40, 10, 11, 12, 13, 300, 400, 500, 600));
     assertEquals(15, mmHeap.size());
     assertTrue("Heap is not intact initially", mmHeap.isIntact());
     mmHeap.remove(12);
@@ -390,7 +393,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
   public void testInvalidatingRemove2() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
     List<Integer> values =
-        Lists.newArrayList(
+        newArrayList(
             1, 20, 1000, 2, 3, 30, 40, 10, 11, 12, 13, 300, 400, 500, 600, 4, 5, 6, 7, 8, 9, 4, 5,
             200, 250);
     mmHeap.addAll(values);
@@ -399,7 +402,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
     mmHeap.remove(2);
     assertEquals(24, mmHeap.size());
     assertTrue("Heap is not intact after remove()", mmHeap.isIntact());
-    values.removeAll(Lists.newArrayList(2));
+    values.removeAll(newArrayList(2));
     assertEquals(values.size(), mmHeap.size());
     assertTrue(values.containsAll(mmHeap));
     assertTrue(mmHeap.containsAll(values));
@@ -407,7 +410,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
 
   public void testIteratorInvalidatingIteratorRemove() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
-    mmHeap.addAll(Lists.newArrayList(1, 20, 100, 2, 3, 30, 40));
+    mmHeap.addAll(newArrayList(1, 20, 100, 2, 3, 30, 40));
     assertEquals(7, mmHeap.size());
     assertTrue("Heap is not intact initially", mmHeap.isIntact());
     Iterator<Integer> it = mmHeap.iterator();
@@ -446,8 +449,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
    */
   public void testIteratorInvalidatingIteratorRemove2() {
     MinMaxPriorityQueue<Integer> mmHeap = MinMaxPriorityQueue.create();
-    mmHeap.addAll(
-        Lists.newArrayList(1, 20, 1000, 2, 3, 30, 40, 10, 11, 12, 13, 200, 300, 500, 400));
+    mmHeap.addAll(newArrayList(1, 20, 1000, 2, 3, 30, 40, 10, 11, 12, 13, 200, 300, 500, 400));
     assertTrue("Heap is not intact initially", mmHeap.isIntact());
     Iterator<Integer> it = mmHeap.iterator();
     assertEquals((Integer) 1, it.next());
@@ -488,7 +490,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
     assertEquals(6, mmHeap.size());
     assertFalse("heap contains larry which has been removed", mmHeap.contains("larry"));
     assertTrue("heap does not contain sergey", mmHeap.contains("sergey"));
-    assertTrue("Could not remove larry", mmHeap.removeAll(Lists.newArrayList("sergey", "eric")));
+    assertTrue("Could not remove larry", mmHeap.removeAll(newArrayList("sergey", "eric")));
     assertFalse("Could remove nikesh which is not in the heap", mmHeap.remove("nikesh"));
     assertEquals(4, mmHeap.size());
   }
@@ -547,7 +549,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
   }
 
   public void testIteratorTesterLarger() throws Exception {
-    runIterator(Lists.newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 5);
+    runIterator(newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), 5);
   }
 
   public void testRemoveAt() {
@@ -571,7 +573,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
   public void testRemoveAt_exhaustive() {
     int size = reduceExponentIfGwt(8);
     List<Integer> expected = createOrderedList(size);
-    for (Collection<Integer> perm : Collections2.permutations(expected)) {
+    for (Collection<Integer> perm : permutations(expected)) {
       for (int i = 0; i < perm.size(); i++) {
         MinMaxPriorityQueue<Integer> q = MinMaxPriorityQueue.create(perm);
         q.removeAtForTesting(i);
@@ -694,9 +696,9 @@ public class MinMaxPriorityQueueTest extends TestCase {
   public void testExhaustive_pollAndPush() {
     int size = 5;
     List<Integer> expected = createOrderedList(size);
-    for (Collection<Integer> perm : Collections2.permutations(expected)) {
+    for (Collection<Integer> perm : permutations(expected)) {
       MinMaxPriorityQueue<Integer> q = MinMaxPriorityQueue.create(perm);
-      List<Integer> elements = Lists.newArrayListWithCapacity(size);
+      List<Integer> elements = newArrayListWithCapacity(size);
       while (!q.isEmpty()) {
         Integer next = q.pollFirst();
         for (int i = 0; i <= size; i++) {
@@ -717,7 +719,7 @@ public class MinMaxPriorityQueueTest extends TestCase {
     List<Integer> expected = createOrderedList(size);
     MinMaxPriorityQueue<Integer> q = MinMaxPriorityQueue.create(expected);
     List<Integer> contents = new ArrayList<>(expected);
-    List<Integer> elements = Lists.newArrayListWithCapacity(size);
+    List<Integer> elements = newArrayListWithCapacity(size);
     while (!q.isEmpty()) {
       assertThat(q).containsExactlyElementsIn(contents);
       Integer next = q.pollFirst();

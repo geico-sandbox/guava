@@ -67,7 +67,7 @@ public abstract class PerCollectionSizeTestSuiteBuilder<
     logger.fine(" Testing: " + name);
 
     // Split out all the specified sizes.
-    Set<Feature<?>> sizesToTest = Helpers.copyToSet(CollectionSize.values());
+    Set<Feature<?>> sizesToTest = copyToSet(CollectionSize.values());
     sizesToTest.retainAll(features);
     features.removeAll(sizesToTest);
 

@@ -20,6 +20,7 @@ import static com.google.common.collect.testing.Helpers.copyToList;
 import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE;
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
+import static com.google.common.testing.SerializableTester.reserialize;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.testing.features.CollectionFeature;
@@ -43,7 +44,6 @@ import com.google.common.collect.testing.testers.ListRetainAllTester;
 import com.google.common.collect.testing.testers.ListSetTester;
 import com.google.common.collect.testing.testers.ListSubListTester;
 import com.google.common.collect.testing.testers.ListToArrayTester;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -109,8 +109,7 @@ public final class ListTestSuiteBuilder<E>
 
     if (parentBuilder.getFeatures().contains(SERIALIZABLE)) {
       derivedSuites.add(
-          ListTestSuiteBuilder.using(
-                  new ReserializedListGenerator<E>(parentBuilder.getSubjectGenerator()))
+          using(new ReserializedListGenerator<E>(parentBuilder.getSubjectGenerator()))
               .named(getName() + " reserialized")
               .withFeatures(computeReserializedCollectionFeatures(parentBuilder.getFeatures()))
               .suppressing(parentBuilder.getSuppressedTests())
@@ -135,7 +134,7 @@ public final class ListTestSuiteBuilder<E>
 
     @Override
     public List<E> create(Object... elements) {
-      return (List<E>) SerializableTester.reserialize(gen.create(elements));
+      return (List<E>) reserialize(gen.create(elements));
     }
 
     @Override

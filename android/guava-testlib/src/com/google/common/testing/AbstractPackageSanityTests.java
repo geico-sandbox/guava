@@ -18,7 +18,11 @@ package com.google.common.testing;
 
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.not;
+import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Maps.newTreeMap;
 import static com.google.common.testing.AbstractPackageSanityTests.Chopper.suffix;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -26,8 +30,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.reflect.ClassPath;
 import com.google.common.testing.NullPointerTester.Visibility;
@@ -195,9 +197,9 @@ public abstract class AbstractPackageSanityTests extends TestCase {
           Object instance = tester.instantiate(classToTest);
           if (instance != null) {
             if (isEqualsDefined(classToTest)) {
-              SerializableTester.reserializeAndAssert(instance);
+              reserializeAndAssert(instance);
             } else {
-              SerializableTester.reserialize(instance);
+              reserialize(instance);
             }
           }
         } catch (Throwable e) {
@@ -233,15 +235,6 @@ public abstract class AbstractPackageSanityTests extends TestCase {
   @Test
   public void testNulls() throws Exception {
     for (Class<?> classToTest : findClassesToTest(loadClassesInPackage(), NULL_TEST_METHOD_NAMES)) {
-      if (classToTest.getSimpleName().equals("ReflectionFreeAssertThrows")) {
-        /*
-         * These classes handle null properly but throw IllegalArgumentException for the default
-         * Class argument that this test uses. Normally we'd fix that by declaring a
-         * ReflectionFreeAssertThrowsTest with a testNulls method, but that's annoying to have to do
-         * for a package-private utility class. So we skip the class entirely instead.
-         */
-        continue;
-      }
       try {
         tester.doTestNulls(classToTest, visibility);
       } catch (Throwable e) {
@@ -338,7 +331,7 @@ public abstract class AbstractPackageSanityTests extends TestCase {
   List<Class<?>> findClassesToTest(
       Iterable<? extends Class<?>> classes, Iterable<String> explicitTestNames) {
     // "a.b.Foo" -> a.b.Foo.class
-    TreeMap<String, Class<?>> classMap = Maps.newTreeMap();
+    TreeMap<String, Class<?>> classMap = newTreeMap();
     for (Class<?> cls : classes) {
       classMap.put(cls.getName(), cls);
     }
@@ -358,7 +351,7 @@ public abstract class AbstractPackageSanityTests extends TestCase {
     }
     List<Class<?>> result = new ArrayList<>();
     NEXT_CANDIDATE:
-    for (Class<?> candidate : Iterables.filter(candidateClasses, classFilter)) {
+    for (Class<?> candidate : filter(candidateClasses, classFilter)) {
       for (Class<?> testClass : testClasses.get(candidate)) {
         if (hasTest(testClass, explicitTestNames)) {
           // covered by explicit test

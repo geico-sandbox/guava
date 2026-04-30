@@ -18,6 +18,7 @@ package com.google.common.collect;
 
 import static com.google.common.collect.ImmutableSetMultimap.flatteningToImmutableSetMultimap;
 import static com.google.common.collect.ImmutableSetMultimap.toImmutableSetMultimap;
+import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.collect.testing.Helpers.mapEntry;
 import static com.google.common.collect.testing.features.CollectionFeature.KNOWN_ORDER;
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE;
@@ -111,14 +112,14 @@ public class ImmutableSetMultimapTest extends TestCase {
     ImmutableSetMultimap.Builder<String, String> builder =
         ImmutableSetMultimap.builderWithExpectedKeys(0);
     builder.put("key", "value");
-    assertThat(builder.build().entries()).containsExactly(Maps.immutableEntry("key", "value"));
+    assertThat(builder.build().entries()).containsExactly(immutableEntry("key", "value"));
   }
 
   public void testBuilderWithExpectedKeysPositive() {
     ImmutableSetMultimap.Builder<String, String> builder =
         ImmutableSetMultimap.builderWithExpectedKeys(1);
     builder.put("key", "value");
-    assertThat(builder.build().entries()).containsExactly(Maps.immutableEntry("key", "value"));
+    assertThat(builder.build().entries()).containsExactly(immutableEntry("key", "value"));
   }
 
   public void testBuilderWithExpectedValuesPerKeyNegative() {
@@ -130,14 +131,14 @@ public class ImmutableSetMultimapTest extends TestCase {
     ImmutableSetMultimap.Builder<String, String> builder =
         ImmutableSetMultimap.<String, String>builder().expectedValuesPerKey(0);
     builder.put("key", "value");
-    assertThat(builder.build().entries()).containsExactly(Maps.immutableEntry("key", "value"));
+    assertThat(builder.build().entries()).containsExactly(immutableEntry("key", "value"));
   }
 
   public void testBuilderWithExpectedValuesPerKeyPositive() {
     ImmutableSetMultimap.Builder<String, String> builder =
         ImmutableSetMultimap.<String, String>builder().expectedValuesPerKey(1);
     builder.put("key", "value");
-    assertThat(builder.build().entries()).containsExactly(Maps.immutableEntry("key", "value"));
+    assertThat(builder.build().entries()).containsExactly(immutableEntry("key", "value"));
   }
 
   public void testBuilderWithExpectedValuesPerKeyNegativeOrderValuesBy() {
@@ -152,7 +153,7 @@ public class ImmutableSetMultimapTest extends TestCase {
             .orderValuesBy(Ordering.natural())
             .expectedValuesPerKey(0);
     builder.put("key", "value");
-    assertThat(builder.build().entries()).containsExactly(Maps.immutableEntry("key", "value"));
+    assertThat(builder.build().entries()).containsExactly(immutableEntry("key", "value"));
   }
 
   public void testBuilderWithExpectedValuesPerKeyPositiveOrderValuesBy() {
@@ -161,7 +162,7 @@ public class ImmutableSetMultimapTest extends TestCase {
             .orderValuesBy(Ordering.natural())
             .expectedValuesPerKey(1);
     builder.put("key", "value");
-    assertThat(builder.build().entries()).containsExactly(Maps.immutableEntry("key", "value"));
+    assertThat(builder.build().entries()).containsExactly(immutableEntry("key", "value"));
   }
 
   static class HashHostileComparable implements Comparable<HashHostileComparable> {
@@ -196,16 +197,15 @@ public class ImmutableSetMultimapTest extends TestCase {
 
   public void testBuilder_withImmutableEntry() {
     ImmutableSetMultimap<String, Integer> multimap =
-        new Builder<String, Integer>().put(Maps.immutableEntry("one", 1)).build();
+        new Builder<String, Integer>().put(immutableEntry("one", 1)).build();
     assertEquals(ImmutableSet.of(1), multimap.get("one"));
   }
 
   public void testBuilder_withImmutableEntryAndNullContents() {
     Builder<String, Integer> builder = new Builder<>();
     assertThrows(
-        NullPointerException.class, () -> builder.put(Maps.immutableEntry("one", (Integer) null)));
-    assertThrows(
-        NullPointerException.class, () -> builder.put(Maps.immutableEntry((String) null, 1)));
+        NullPointerException.class, () -> builder.put(immutableEntry("one", (Integer) null)));
+    assertThrows(NullPointerException.class, () -> builder.put(immutableEntry((String) null, 1)));
   }
 
   private static class StringHolder {

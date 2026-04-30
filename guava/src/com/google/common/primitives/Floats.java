@@ -20,6 +20,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndexes;
 import static com.google.common.base.Strings.lenientFormat;
 import static java.lang.Float.parseFloat;
+import static java.lang.System.arraycopy;
+import static java.util.Arrays.sort;
+import static java.util.Collections.emptyList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -30,7 +33,6 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.RandomAccess;
@@ -278,7 +280,7 @@ public final class Floats extends FloatsMethodsForWeb {
     float[] result = new float[checkNoOverflow(length)];
     int pos = 0;
     for (float[] array : arrays) {
-      System.arraycopy(array, 0, result, pos, array.length);
+      arraycopy(array, 0, result, pos, array.length);
       pos += array.length;
     }
     return result;
@@ -437,7 +439,7 @@ public final class Floats extends FloatsMethodsForWeb {
   public static void sortDescending(float[] array, int fromIndex, int toIndex) {
     checkNotNull(array);
     checkPositionIndexes(fromIndex, toIndex, array.length);
-    Arrays.sort(array, fromIndex, toIndex);
+    sort(array, fromIndex, toIndex);
     reverse(array, fromIndex, toIndex);
   }
 
@@ -569,7 +571,7 @@ public final class Floats extends FloatsMethodsForWeb {
    */
   public static List<Float> asList(float... backingArray) {
     if (backingArray.length == 0) {
-      return Collections.emptyList();
+      return emptyList();
     }
     return new FloatArrayAsList(backingArray);
   }
@@ -650,7 +652,7 @@ public final class Floats extends FloatsMethodsForWeb {
       int size = size();
       checkPositionIndexes(fromIndex, toIndex, size);
       if (fromIndex == toIndex) {
-        return Collections.emptyList();
+        return emptyList();
       }
       return new FloatArrayAsList(array, start + fromIndex, start + toIndex);
     }
@@ -704,7 +706,7 @@ public final class Floats extends FloatsMethodsForWeb {
 
   /**
    * Parses the specified string as a single-precision floating point value. The ASCII character
-   * {@code '-'} (<code>'&#92;u002D'</code>) is recognized as the minus sign.
+   * {@code '-'} (U+002D) is recognized as the minus sign.
    *
    * <p>Unlike {@link Float#parseFloat(String)}, this method returns {@code null} instead of
    * throwing an exception if parsing fails. Valid inputs are exactly those accepted by {@link

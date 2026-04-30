@@ -16,6 +16,8 @@
 
 package com.google.common.collect.testing;
 
+import static java.util.Arrays.asList;
+
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.testing.testers.CollectionAddAllTester;
 import com.google.common.collect.testing.testers.CollectionAddTester;
@@ -37,7 +39,6 @@ import com.google.common.collect.testing.testers.CollectionSpliteratorTester;
 import com.google.common.collect.testing.testers.CollectionStreamTester;
 import com.google.common.collect.testing.testers.CollectionToArrayTester;
 import com.google.common.collect.testing.testers.CollectionToStringTester;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public abstract class AbstractCollectionTestSuiteBuilder<
   @SuppressWarnings("rawtypes") // class literals
   @Override
   protected List<Class<? extends AbstractTester>> getTesters() {
-    return Arrays.asList(
+    return asList(
         CollectionAddAllTester.class,
         CollectionAddTester.class,
         CollectionClearTester.class,

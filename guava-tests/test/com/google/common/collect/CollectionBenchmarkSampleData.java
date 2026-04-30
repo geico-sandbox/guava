@@ -17,6 +17,8 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static java.util.Collections.shuffle;
 
 import java.util.ArrayList;
@@ -64,7 +66,7 @@ class CollectionBenchmarkSampleData {
   }
 
   private Element[] createQueries(Set<Element> elementsInSet, int numQueries) {
-    List<Element> queryList = Lists.newArrayListWithCapacity(numQueries);
+    List<Element> queryList = newArrayListWithCapacity(numQueries);
 
     int numGoodQueries = (int) (numQueries * hitRate + 0.5);
 
@@ -94,7 +96,7 @@ class CollectionBenchmarkSampleData {
   }
 
   private Set<Element> createData() {
-    Set<Element> set = Sets.newHashSetWithExpectedSize(size);
+    Set<Element> set = newHashSetWithExpectedSize(size);
     while (set.size() < size) {
       set.add(newElement());
     }

@@ -88,7 +88,7 @@ public class FinalizableReferenceQueueClassLoaderUnloadingTest {
 
     Class<?> frqC = FinalizableReferenceQueue.class;
     Class<?> sepFrqC = sepLoader.loadClass(frqC.getName());
-    assertThat(frqC).isNotSameInstanceAs(sepFrqC);
+    assertThat(frqC).isNotEqualTo(sepFrqC);
     // Check the assumptions above.
 
     // FRQ tries to load the Finalizer class (for the reference-collecting thread) in a few ways.

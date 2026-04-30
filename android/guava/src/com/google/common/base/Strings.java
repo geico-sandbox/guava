@@ -17,10 +17,13 @@ package com.google.common.base;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.Math.min;
+import static java.lang.System.arraycopy;
 import static java.util.logging.Level.WARNING;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.errorprone.annotations.InlineMe;
+import com.google.errorprone.annotations.InlineMeValidationDisabled;
 import java.util.logging.Logger;
 import org.jspecify.annotations.Nullable;
 
@@ -135,12 +138,16 @@ public final class Strings {
    * Returns a string consisting of a specific number of concatenated copies of an input string. For
    * example, {@code repeat("hey", 3)} returns the string {@code "heyheyhey"}.
    *
+   * <p><b>Java 11+ users and Android users:</b> use {@code string.repeat(count)} instead.
+   *
    * @param string any non-null string
    * @param count the number of times to repeat it; a nonnegative integer
    * @return a string containing {@code string} repeated {@code count} times (the empty string if
    *     {@code count} is zero)
    * @throws IllegalArgumentException if {@code count} is negative
    */
+  @InlineMe(replacement = "string.repeat(count)")
+  @InlineMeValidationDisabled("Java 11+ API only")
   public static String repeat(String string, int count) {
     checkNotNull(string); // eager for GWT.
 
@@ -161,9 +168,9 @@ public final class Strings {
     string.getChars(0, len, array, 0);
     int n;
     for (n = len; n < size - n; n <<= 1) {
-      System.arraycopy(array, 0, array, n, n);
+      arraycopy(array, 0, array, n, n);
     }
-    System.arraycopy(array, 0, array, n, size - n);
+    arraycopy(array, 0, array, n, size - n);
     return new String(array);
   }
 
@@ -232,10 +239,8 @@ public final class Strings {
    *
    * <p><b>Note:</b> For most string-formatting needs, use {@link String#format String.format},
    * {@link java.io.PrintWriter#format PrintWriter.format}, and related methods. These support the
-   * full range of <a
-   * href="https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/util/Formatter.html#syntax">format
-   * specifiers</a>, and alert you to usage errors by throwing {@link
-   * java.util.IllegalFormatException}.
+   * full range of {@linkplain java.util.Formatter##syntax format specifiers}, and alert you to
+   * usage errors by throwing {@link java.util.IllegalFormatException}.
    *
    * <p>In certain cases, such as outputting debugging information or constructing a message to be
    * used for another unchecked exception, an exception during string formatting would serve little

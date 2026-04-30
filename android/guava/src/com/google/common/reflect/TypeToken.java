@@ -17,7 +17,9 @@ package com.google.common.reflect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.reflect.Types.newArrayType;
 import static java.lang.Math.max;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -42,7 +44,6 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -64,28 +65,28 @@ import org.jspecify.annotations.Nullable;
  *       TypeToken.of(method.getGenericReturnType())}.
  *   <li>Capture a generic type with a (usually anonymous) subclass. For example:
  *       {@snippet :
- * new TypeToken<List<String>>() {}
- * }
+ *       new TypeToken<List<String>>() {}
+ *       }
  *       <p>Note that it's critical that the actual type argument is carried by a subclass. The
  *       following code is wrong because it only captures the {@code <T>} type variable of the
  *       {@code listType()} method signature; while {@code <String>} is lost in erasure:
  *       {@snippet :
- * class Util {
- *   static <T> TypeToken<List<T>> listType() {
- *     return new TypeToken<List<T>>() {};
- *   }
- * }
+ *       class Util {
+ *         static <T> TypeToken<List<T>> listType() {
+ *           return new TypeToken<List<T>>() {};
+ *         }
+ *       }
  *
- * TypeToken<List<String>> stringListType = Util.<String>listType();
- * }
+ *       TypeToken<List<String>> stringListType = Util.listType();
+ *       }
  *   <li>Capture a generic type with a (usually anonymous) subclass and resolve it against a context
  *       class that knows what the type parameters are. For example:
  *       {@snippet :
- * abstract class IKnowMyType<T> {
- *   TypeToken<T> type = new TypeToken<T>(getClass()) {};
- * }
- * new IKnowMyType<String>() {}.type => String
- * }
+ *       abstract class IKnowMyType<T> {
+ *         TypeToken<T> type = new TypeToken<T>(getClass()) {};
+ *       }
+ *       new IKnowMyType<String>() {}.type => String
+ *       }
  * </ul>
  *
  * <p>{@code TypeToken} is serializable when no type variable is contained in the type.
@@ -1027,7 +1028,7 @@ public abstract class TypeToken<T> extends TypeCapture<T> implements Serializabl
       return canonicalizeWildcardsInParameterizedType((ParameterizedType) type);
     }
     if (type instanceof GenericArrayType) {
-      return Types.newArrayType(
+      return newArrayType(
           canonicalizeWildcardsInType(((GenericArrayType) type).getGenericComponentType()));
     }
     return type;
@@ -1167,7 +1168,7 @@ public abstract class TypeToken<T> extends TypeCapture<T> implements Serializabl
   static <T> TypeToken<? extends T> toGenericType(Class<T> cls) {
     if (cls.isArray()) {
       Type arrayOfGenericType =
-          Types.newArrayType(
+          newArrayType(
               // If we are passed with int[].class, don't turn it to GenericArrayType
               toGenericType(cls.getComponentType()).runtimeType);
       @SuppressWarnings("unchecked") // array is covariant
@@ -1351,7 +1352,7 @@ public abstract class TypeToken<T> extends TypeCapture<T> implements Serializabl
 
           @Override
           Iterable<? extends Class<?>> getInterfaces(Class<?> type) {
-            return Arrays.asList(type.getInterfaces());
+            return asList(type.getInterfaces());
           }
 
           @Override

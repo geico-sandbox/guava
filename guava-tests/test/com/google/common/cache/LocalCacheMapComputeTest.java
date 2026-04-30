@@ -20,6 +20,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static org.junit.Assert.assertThrows;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,8 @@ import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
 
 /** Test Java8 map.compute in concurrent cache context. */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class LocalCacheMapComputeTest extends TestCase {
   final int count = 10000;

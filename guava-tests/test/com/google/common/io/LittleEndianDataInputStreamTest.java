@@ -16,10 +16,10 @@
 
 package com.google.common.io;
 
+import static com.google.common.primitives.Bytes.asList;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import com.google.common.primitives.Bytes;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInput;
@@ -73,7 +73,7 @@ public class LittleEndianDataInputStreamTest extends TestCase {
     DataInput in = new LittleEndianDataInputStream(new ByteArrayInputStream(data));
     byte[] b = new byte[data.length];
     in.readFully(b);
-    assertEquals(Bytes.asList(data), Bytes.asList(b));
+    assertEquals(asList(data), asList(b));
   }
 
   public void testReadUnsignedByte_eof() throws IOException {

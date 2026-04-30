@@ -18,6 +18,7 @@ package com.google.common.base;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 import static org.junit.Assert.assertThrows;
 
@@ -51,18 +52,17 @@ public class JoinerTest extends TestCase {
   private static final Joiner J = Joiner.on("-");
 
   // <Integer> needed to prevent warning :(
-  private static final Iterable<Integer> iterable = Arrays.<Integer>asList();
-  private static final Iterable<Integer> iterable1 = Arrays.asList(1);
-  private static final Iterable<Integer> iterable12 = Arrays.asList(1, 2);
-  private static final Iterable<Integer> iterable123 = Arrays.asList(1, 2, 3);
-  private static final Iterable<@Nullable Integer> iterableNull = Arrays.asList((Integer) null);
-  private static final Iterable<@Nullable Integer> iterableNullNull =
-      Arrays.asList((Integer) null, null);
-  private static final Iterable<@Nullable Integer> iterableNull1 = Arrays.asList(null, 1);
-  private static final Iterable<@Nullable Integer> iterable1Null = Arrays.asList(1, null);
-  private static final Iterable<@Nullable Integer> iterable1Null2 = Arrays.asList(1, null, 2);
+  private static final Iterable<Integer> iterable = Arrays.asList();
+  private static final Iterable<Integer> iterable1 = asList(1);
+  private static final Iterable<Integer> iterable12 = asList(1, 2);
+  private static final Iterable<Integer> iterable123 = asList(1, 2, 3);
+  private static final Iterable<@Nullable Integer> iterableNull = asList((Integer) null);
+  private static final Iterable<@Nullable Integer> iterableNullNull = asList((Integer) null, null);
+  private static final Iterable<@Nullable Integer> iterableNull1 = asList(null, 1);
+  private static final Iterable<@Nullable Integer> iterable1Null = asList(1, null);
+  private static final Iterable<@Nullable Integer> iterable1Null2 = asList(1, null, 2);
   private static final Iterable<@Nullable Integer> iterableFourNulls =
-      Arrays.asList((Integer) null, null, null, null);
+      asList((Integer) null, null, null, null);
 
   /*
    * Both of these fields *are* immutable/constant. They don't use the type ImmutableList because
@@ -75,7 +75,7 @@ public class JoinerTest extends TestCase {
   private static final List<Integer> OVERREPORTING_SIZE_LIST;
 
   static {
-    List<Integer> collection123 = Arrays.asList(1, 2, 3);
+    List<Integer> collection123 = asList(1, 2, 3);
     UNDERREPORTING_SIZE_LIST = unmodifiableList(new MisleadingSizeList<>(collection123, -1));
     OVERREPORTING_SIZE_LIST = unmodifiableList(new MisleadingSizeList<>(collection123, 1));
   }

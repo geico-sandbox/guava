@@ -157,7 +157,7 @@ public abstract class AbstractHashFloodingTest<T> extends TestCase {
     }
 
     static final QueryOp<Map<Object, Object>> MAP_GET =
-        QueryOp.create(
+        create(
             "Map.get",
             (map, key) -> {
               Object unused = map.get(key);
@@ -165,7 +165,7 @@ public abstract class AbstractHashFloodingTest<T> extends TestCase {
             Math::log);
 
     static final QueryOp<Set<Object>> SET_CONTAINS =
-        QueryOp.create(
+        create(
             "Set.contains",
             (set, key) -> {
               boolean unused = set.contains(key);

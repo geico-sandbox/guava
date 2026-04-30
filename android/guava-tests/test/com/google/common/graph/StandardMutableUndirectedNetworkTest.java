@@ -16,8 +16,9 @@
 
 package com.google.common.graph;
 
+import static java.util.Arrays.asList;
+
 import com.google.common.collect.Ordering;
-import java.util.Arrays;
 import java.util.Collection;
 import org.jspecify.annotations.NullUnmarked;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public final class StandardMutableUndirectedNetworkTest
   public static Collection<Object[]> parameters() {
     ElementOrder<?> naturalElementOrder = ElementOrder.sorted(Ordering.natural());
 
-    return Arrays.asList(
+    return asList(
         new Object[][] {
           {false, false, ElementOrder.insertion(), ElementOrder.insertion()},
           {true, false, ElementOrder.insertion(), ElementOrder.insertion()},

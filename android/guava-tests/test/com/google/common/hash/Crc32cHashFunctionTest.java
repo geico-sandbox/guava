@@ -17,6 +17,7 @@ package com.google.common.hash;
 import static com.google.common.hash.Hashing.crc32c;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.google.common.annotations.J2ktIncompatible;
 import java.util.Arrays;
 import java.util.Random;
 import junit.framework.TestCase;
@@ -29,6 +30,7 @@ import org.jspecify.annotations.NullUnmarked;
  * @author Kurt Alfred Kluever
  */
 @NullUnmarked
+@J2ktIncompatible
 public class Crc32cHashFunctionTest extends TestCase {
   public void testEmpty() {
     assertCrc(0, new byte[0]);

@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Sets.newTreeSet;
 import static java.util.Arrays.asList;
 
 import com.google.common.base.Function;
@@ -180,7 +181,7 @@ public class ForwardingNavigableSetTest extends TestCase {
 
                   @Override
                   public List<String> order(List<String> insertionOrder) {
-                    return new ArrayList<>(Sets.newTreeSet(insertionOrder));
+                    return new ArrayList<>(newTreeSet(insertionOrder));
                   }
                 })
             .named("ForwardingNavigableSet[SafeTreeSet] with standard implementations")
@@ -201,7 +202,7 @@ public class ForwardingNavigableSetTest extends TestCase {
 
                   @Override
                   public List<String> order(List<String> insertionOrder) {
-                    return new ArrayList<>(Sets.newTreeSet(insertionOrder));
+                    return new ArrayList<>(newTreeSet(insertionOrder));
                   }
                 })
             .named(

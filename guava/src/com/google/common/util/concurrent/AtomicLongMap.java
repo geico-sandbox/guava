@@ -17,13 +17,13 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -276,7 +276,7 @@ public final class AtomicLongMap<K> implements Serializable {
   }
 
   private Map<K, Long> createAsMap() {
-    return Collections.unmodifiableMap(map);
+    return unmodifiableMap(map);
   }
 
   /** Returns true if this map contains a mapping for the specified key. */

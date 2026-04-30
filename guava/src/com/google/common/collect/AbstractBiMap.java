@@ -18,6 +18,9 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Maps.containsEntryImpl;
+import static com.google.common.collect.Maps.keyIterator;
+import static com.google.common.collect.Maps.valueIterator;
 import static com.google.common.collect.NullnessCasts.uncheckedCastNullableTToT;
 import static java.util.Objects.requireNonNull;
 
@@ -268,7 +271,7 @@ abstract class AbstractBiMap<K extends @Nullable Object, V extends @Nullable Obj
 
     @Override
     public Iterator<K> iterator() {
-      return Maps.keyIterator(entrySet().iterator());
+      return keyIterator(entrySet().iterator());
     }
   }
 
@@ -295,7 +298,7 @@ abstract class AbstractBiMap<K extends @Nullable Object, V extends @Nullable Obj
 
     @Override
     public Iterator<V> iterator() {
-      return Maps.valueIterator(entrySet().iterator());
+      return valueIterator(entrySet().iterator());
     }
 
     @Override
@@ -436,7 +439,7 @@ abstract class AbstractBiMap<K extends @Nullable Object, V extends @Nullable Obj
 
     @Override
     public boolean contains(@Nullable Object o) {
-      return Maps.containsEntryImpl(delegate(), o);
+      return containsEntryImpl(delegate(), o);
     }
 
     @Override

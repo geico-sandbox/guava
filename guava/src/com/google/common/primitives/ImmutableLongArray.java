@@ -16,6 +16,7 @@ package com.google.common.primitives;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.System.arraycopy;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Preconditions;
@@ -138,7 +139,7 @@ public final class ImmutableLongArray implements Serializable {
         rest.length <= Integer.MAX_VALUE - 1, "the total number of elements must fit in an int");
     long[] array = new long[rest.length + 1];
     array[0] = first;
-    System.arraycopy(rest, 0, array, 1, rest.length);
+    arraycopy(rest, 0, array, 1, rest.length);
     return new ImmutableLongArray(array);
   }
 
@@ -237,7 +238,7 @@ public final class ImmutableLongArray implements Serializable {
     @CanIgnoreReturnValue
     public Builder addAll(long[] values) {
       ensureRoomFor(values.length);
-      System.arraycopy(values, 0, array, count, values.length);
+      arraycopy(values, 0, array, count, values.length);
       count += values.length;
       return this;
     }
@@ -294,7 +295,7 @@ public final class ImmutableLongArray implements Serializable {
     @CanIgnoreReturnValue
     public Builder addAll(ImmutableLongArray values) {
       ensureRoomFor(values.length());
-      System.arraycopy(values.array, values.start, array, count, values.length());
+      arraycopy(values.array, values.start, array, count, values.length());
       count += values.length();
       return this;
     }

@@ -18,6 +18,8 @@ package com.google.common.util.concurrent;
 
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.util.concurrent.Uninterruptibles.awaitUninterruptibly;
+import static java.util.Arrays.asList;
+import static java.util.Arrays.sort;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -29,7 +31,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
@@ -222,12 +223,12 @@ public class GeneratedMonitorTest extends TestCase {
 
   /** Determines whether the given method can throw InterruptedException. */
   private static boolean isInterruptible(Method method) {
-    return Arrays.asList(method.getExceptionTypes()).contains(InterruptedException.class);
+    return asList(method.getExceptionTypes()).contains(InterruptedException.class);
   }
 
   /** Sorts the given methods primarily by name and secondarily by number of parameters. */
   private static void sortMethods(Method[] methods) {
-    Arrays.sort(
+    sort(
         methods,
         (m1, m2) -> {
           int nameComparison = m1.getName().compareTo(m2.getName());
@@ -493,10 +494,11 @@ public class GeneratedMonitorTest extends TestCase {
         expectedOutcome);
   }
 
+  @SuppressWarnings("TruthConstantAsserts") // HANG really is the actual value/result
   @Override
   protected void runTest() throws Throwable {
     FutureTask<@Nullable Void> task = new FutureTask<>(this::runChosenTest, null);
-    startThread(task::run);
+    startThread(task);
     awaitUninterruptibly(doingCallLatch);
     long hangDelayMillis =
         (expectedOutcome == Outcome.HANG)
@@ -504,7 +506,7 @@ public class GeneratedMonitorTest extends TestCase {
             : UNEXPECTED_HANG_DELAY_MILLIS;
     boolean hung = !awaitUninterruptibly(callCompletedLatch, hangDelayMillis, MILLISECONDS);
     if (hung) {
-      assertEquals(expectedOutcome, Outcome.HANG);
+      assertThat(Outcome.HANG).isEqualTo(expectedOutcome);
     } else {
       assertThat(task.get(UNEXPECTED_HANG_DELAY_MILLIS, MILLISECONDS)).isNull();
     }
@@ -560,7 +562,7 @@ public class GeneratedMonitorTest extends TestCase {
       assertFalse(monitor.isOccupiedByCurrentThread());
     }
 
-    assertEquals(expectedOutcome, actualOutcome);
+    assertThat(actualOutcome).isEqualTo(expectedOutcome);
     assertEquals(expectedOutcome == Outcome.SUCCESS, occupiedAfterCall);
     assertEquals(
         interruptedBeforeCall && expectedOutcome != Outcome.INTERRUPT, interruptedAfterCall);
@@ -600,7 +602,7 @@ public class GeneratedMonitorTest extends TestCase {
       boolean occupiedAfterCall = monitor.isOccupiedByCurrentThread();
       boolean interruptedAfterCall = Thread.currentThread().isInterrupted();
 
-      assertEquals(expectedOutcome, actualOutcome);
+      assertThat(actualOutcome).isEqualTo(expectedOutcome);
       assertTrue(occupiedAfterCall);
       assertEquals(
           interruptedBeforeCall && expectedOutcome != Outcome.INTERRUPT, interruptedAfterCall);

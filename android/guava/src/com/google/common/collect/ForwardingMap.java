@@ -16,6 +16,13 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Maps.containsKeyImpl;
+import static com.google.common.collect.Maps.containsValueImpl;
+import static com.google.common.collect.Maps.equalsImpl;
+import static com.google.common.collect.Maps.putAllImpl;
+import static com.google.common.collect.Maps.toStringImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.Collection;
@@ -144,7 +151,7 @@ public abstract class ForwardingMap<K extends @Nullable Object, V extends @Nulla
    * @since 7.0
    */
   protected void standardPutAll(Map<? extends K, ? extends V> map) {
-    Maps.putAllImpl(this, map);
+    putAllImpl(this, map);
   }
 
   /**
@@ -205,7 +212,7 @@ public abstract class ForwardingMap<K extends @Nullable Object, V extends @Nulla
    * @since 7.0
    */
   protected boolean standardContainsKey(@Nullable Object key) {
-    return Maps.containsKeyImpl(this, key);
+    return containsKeyImpl(this, key);
   }
 
   /**
@@ -232,7 +239,7 @@ public abstract class ForwardingMap<K extends @Nullable Object, V extends @Nulla
    * @since 7.0
    */
   protected boolean standardContainsValue(@Nullable Object value) {
-    return Maps.containsValueImpl(this, value);
+    return containsValueImpl(this, value);
   }
 
   /**
@@ -273,7 +280,7 @@ public abstract class ForwardingMap<K extends @Nullable Object, V extends @Nulla
    * @since 7.0
    */
   protected boolean standardEquals(@Nullable Object object) {
-    return Maps.equalsImpl(this, object);
+    return equalsImpl(this, object);
   }
 
   /**
@@ -284,7 +291,7 @@ public abstract class ForwardingMap<K extends @Nullable Object, V extends @Nulla
    * @since 7.0
    */
   protected int standardHashCode() {
-    return Sets.hashCodeImpl(entrySet());
+    return hashCodeImpl(entrySet());
   }
 
   /**
@@ -295,6 +302,6 @@ public abstract class ForwardingMap<K extends @Nullable Object, V extends @Nulla
    * @since 7.0
    */
   protected String standardToString() {
-    return Maps.toStringImpl(this);
+    return toStringImpl(this);
   }
 }

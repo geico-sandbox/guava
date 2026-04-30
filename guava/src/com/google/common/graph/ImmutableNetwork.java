@@ -17,10 +17,10 @@
 package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.asMap;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.Immutable;
 import com.google.errorprone.annotations.InlineMe;
@@ -101,15 +101,14 @@ public final class ImmutableNetwork<N, E> extends StandardNetwork<N, E> {
 
   private static <N, E> NetworkConnections<N, E> connectionsOf(Network<N, E> network, N node) {
     if (network.isDirected()) {
-      Map<E, N> inEdgeMap = Maps.asMap(network.inEdges(node), sourceNodeFn(network));
-      Map<E, N> outEdgeMap = Maps.asMap(network.outEdges(node), targetNodeFn(network));
+      Map<E, N> inEdgeMap = asMap(network.inEdges(node), sourceNodeFn(network));
+      Map<E, N> outEdgeMap = asMap(network.outEdges(node), targetNodeFn(network));
       int selfLoopCount = network.edgesConnecting(node, node).size();
       return network.allowsParallelEdges()
           ? DirectedMultiNetworkConnections.ofImmutable(inEdgeMap, outEdgeMap, selfLoopCount)
           : DirectedNetworkConnections.ofImmutable(inEdgeMap, outEdgeMap, selfLoopCount);
     } else {
-      Map<E, N> incidentEdgeMap =
-          Maps.asMap(network.incidentEdges(node), adjacentNodeFn(network, node));
+      Map<E, N> incidentEdgeMap = asMap(network.incidentEdges(node), adjacentNodeFn(network, node));
       return network.allowsParallelEdges()
           ? UndirectedMultiNetworkConnections.ofImmutable(incidentEdgeMap)
           : UndirectedNetworkConnections.ofImmutable(incidentEdgeMap);
@@ -235,7 +234,7 @@ public final class ImmutableNetwork<N, E> extends StandardNetwork<N, E> {
      * Builder}.
      */
     public ImmutableNetwork<N, E> build() {
-      return ImmutableNetwork.copyOf(mutableNetwork);
+      return copyOf(mutableNetwork);
     }
   }
 }

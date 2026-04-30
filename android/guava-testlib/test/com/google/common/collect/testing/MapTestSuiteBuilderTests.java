@@ -17,10 +17,10 @@
 package com.google.common.collect.testing;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.testing.features.MapFeature.ALLOWS_NULL_KEYS;
 import static com.google.common.collect.testing.features.MapFeature.ALLOWS_NULL_VALUES;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.Feature;
@@ -78,7 +78,7 @@ public final class MapTestSuiteBuilderTests extends TestCase {
 
   private static TestSuite wrappedHashMapTests(
       WrappedHashMapGenerator generator, String name, Feature<?>... features) {
-    List<Feature<?>> featuresList = Lists.newArrayList(features);
+    List<Feature<?>> featuresList = newArrayList(features);
     Collections.addAll(
         featuresList,
         MapFeature.GENERAL_PURPOSE,

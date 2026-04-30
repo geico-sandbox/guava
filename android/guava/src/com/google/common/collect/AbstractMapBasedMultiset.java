@@ -19,6 +19,7 @@ package com.google.common.collect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.CollectPreconditions.checkRemove;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -197,7 +198,7 @@ abstract class AbstractMapBasedMultiset<E extends @Nullable Object> extends Abst
     @Override
     public void remove() {
       checkForConcurrentModification();
-      CollectPreconditions.checkRemove(toRemove != -1);
+      checkRemove(toRemove != -1);
       size -= backingMap.removeEntry(toRemove);
       entryIndex = backingMap.nextIndexAfterRemove(entryIndex, toRemove);
       toRemove = -1;

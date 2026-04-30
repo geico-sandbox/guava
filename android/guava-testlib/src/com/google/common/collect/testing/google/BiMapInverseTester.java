@@ -17,6 +17,8 @@
 package com.google.common.collect.testing.google;
 
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static java.util.Collections.singletonList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -24,10 +26,8 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.testing.Helpers;
 import com.google.common.collect.testing.features.CollectionFeature;
-import com.google.common.testing.SerializableTester;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.List;
 import org.junit.Ignore;
 
@@ -52,7 +52,7 @@ public class BiMapInverseTester<K, V> extends AbstractBiMapTester<K, V> {
   @CollectionFeature.Require(SERIALIZABLE)
   public void testInverseSerialization() {
     BiMapPair<K, V> pair = new BiMapPair<>(getMap());
-    BiMapPair<K, V> copy = SerializableTester.reserialize(pair);
+    BiMapPair<K, V> copy = reserialize(pair);
     assertEquals(pair.forward, copy.forward);
     assertEquals(pair.backward, copy.backward);
     assertSame(copy.backward, copy.forward.inverse());
@@ -78,7 +78,7 @@ public class BiMapInverseTester<K, V> extends AbstractBiMapTester<K, V> {
   @J2ktIncompatible
   @GwtIncompatible // reflection
   public static List<Method> getInverseSameAfterSerializingMethods() {
-    return Collections.singletonList(getMethod("testInverseSerialization"));
+    return singletonList(getMethod("testInverseSerialization"));
   }
 
   @J2ktIncompatible

@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Maps.asMap;
 import static com.google.common.collect.Maps.immutableEnumMap;
 import static com.google.common.collect.Maps.toImmutableEnumMap;
 import static com.google.common.collect.testing.Helpers.mapEntry;
@@ -84,7 +85,7 @@ public class ImmutableEnumMapTest extends TestCase {
 
   public void testIteratesOnce() {
     Map<AnEnum, AnEnum> map =
-        Maps.asMap(
+        asMap(
             ImmutableSet.of(AnEnum.A),
             new Function<AnEnum, AnEnum>() {
               boolean used = false;

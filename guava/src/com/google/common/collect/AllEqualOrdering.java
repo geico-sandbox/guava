@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -40,7 +42,7 @@ final class AllEqualOrdering extends Ordering<@Nullable Object> implements Seria
 
   @Override
   public <E extends @Nullable Object> List<E> sortedCopy(Iterable<E> iterable) {
-    return Lists.newArrayList(iterable);
+    return newArrayList(iterable);
   }
 
   @Override

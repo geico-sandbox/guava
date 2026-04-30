@@ -16,6 +16,8 @@
 
 package com.google.common.reflect;
 
+import static com.google.common.reflect.Types.subtypeOf;
+
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -57,7 +59,7 @@ public class TypeVisitorTest extends TestCase {
   }
 
   public void testVisitWildcardType() {
-    WildcardType type = Types.subtypeOf(String.class);
+    WildcardType type = subtypeOf(String.class);
     assertVisited(type);
     new BaseTypeVisitor() {
       @Override

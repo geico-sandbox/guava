@@ -18,9 +18,9 @@ package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -52,7 +52,7 @@ abstract class AbstractUndirectedNetworkConnections<N, E> implements NetworkConn
 
   @Override
   public Set<E> incidentEdges() {
-    return Collections.unmodifiableSet(incidentEdgeMap.keySet());
+    return unmodifiableSet(incidentEdgeMap.keySet());
   }
 
   @Override

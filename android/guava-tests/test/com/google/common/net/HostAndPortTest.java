@@ -16,12 +16,12 @@
 
 package com.google.common.net;
 
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.testing.EqualsTester;
-import com.google.common.testing.SerializableTester;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
@@ -233,10 +233,10 @@ public class HostAndPortTest extends TestCase {
   }
 
   public void testSerialization() {
-    SerializableTester.reserializeAndAssert(HostAndPort.fromParts("host", 80));
-    SerializableTester.reserializeAndAssert(HostAndPort.fromString("host"));
-    SerializableTester.reserializeAndAssert(HostAndPort.fromString("host:80"));
-    SerializableTester.reserializeAndAssert(HostAndPort.fromString("[::1]:104"));
-    SerializableTester.reserializeAndAssert(HostAndPort.fromParts("1::2", 103));
+    reserializeAndAssert(HostAndPort.fromParts("host", 80));
+    reserializeAndAssert(HostAndPort.fromString("host"));
+    reserializeAndAssert(HostAndPort.fromString("host:80"));
+    reserializeAndAssert(HostAndPort.fromString("[::1]:104"));
+    reserializeAndAssert(HostAndPort.fromParts("1::2", 103));
   }
 }

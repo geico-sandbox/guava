@@ -16,7 +16,8 @@
 
 package com.google.common.graph;
 
-import java.util.Arrays;
+import static java.util.Arrays.asList;
+
 import java.util.Collection;
 import org.jspecify.annotations.NullUnmarked;
 import org.junit.runner.RunWith;
@@ -31,7 +32,7 @@ public class StandardMutableUndirectedGraphTest extends AbstractStandardUndirect
 
   @Parameters(name = "allowsSelfLoops={0}, incidentEdgeOrder={1}")
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(
+    return asList(
         new Object[][] {
           {false, ElementOrder.unordered()},
           {true, ElementOrder.unordered()},

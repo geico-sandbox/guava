@@ -17,11 +17,11 @@
 package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.asMap;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.google.common.graph.GraphConstants.Presence;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.Immutable;
@@ -97,8 +97,7 @@ public class ImmutableGraph<N> extends ForwardingGraph<N> {
         (Function<N, Presence>) Functions.constant(Presence.EDGE_EXISTS);
     return graph.isDirected()
         ? DirectedGraphConnections.ofImmutable(node, graph.incidentEdges(node), edgeValueFn)
-        : UndirectedGraphConnections.ofImmutable(
-            Maps.asMap(graph.adjacentNodes(node), edgeValueFn));
+        : UndirectedGraphConnections.ofImmutable(asMap(graph.adjacentNodes(node), edgeValueFn));
   }
 
   @Override
@@ -134,7 +133,7 @@ public class ImmutableGraph<N> extends ForwardingGraph<N> {
     Builder(GraphBuilder<N> graphBuilder) {
       // The incidentEdgeOrder for immutable graphs is always stable. However, we don't want to
       // modify this builder, so we make a copy instead.
-      this.mutableGraph = graphBuilder.copy().incidentEdgeOrder(ElementOrder.<N>stable()).build();
+      this.mutableGraph = graphBuilder.copy().incidentEdgeOrder(ElementOrder.stable()).build();
     }
 
     /**
@@ -196,7 +195,7 @@ public class ImmutableGraph<N> extends ForwardingGraph<N> {
      * Returns a newly-created {@code ImmutableGraph} based on the contents of this {@code Builder}.
      */
     public ImmutableGraph<N> build() {
-      return ImmutableGraph.copyOf(mutableGraph);
+      return copyOf(mutableGraph);
     }
   }
 }

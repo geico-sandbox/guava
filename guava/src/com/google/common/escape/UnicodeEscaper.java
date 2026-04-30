@@ -16,6 +16,7 @@ package com.google.common.escape;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.Character.charCount;
+import static java.lang.System.arraycopy;
 
 import com.google.common.annotations.GwtCompatible;
 import org.jspecify.annotations.Nullable;
@@ -189,7 +190,7 @@ public abstract class UnicodeEscaper extends Escaper {
           destIndex += charsSkipped;
         }
         if (escaped.length > 0) {
-          System.arraycopy(escaped, 0, dest, destIndex, escaped.length);
+          arraycopy(escaped, 0, dest, destIndex, escaped.length);
           destIndex += escaped.length;
         }
         // If we dealt with an escaped character, reset the unescaped range.
@@ -296,7 +297,7 @@ public abstract class UnicodeEscaper extends Escaper {
     }
     char[] copy = new char[size];
     if (index > 0) {
-      System.arraycopy(dest, 0, copy, 0, index);
+      arraycopy(dest, 0, copy, 0, index);
     }
     return copy;
   }

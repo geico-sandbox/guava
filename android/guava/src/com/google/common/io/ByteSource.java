@@ -16,6 +16,7 @@ package com.google.common.io;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.hash.Funnels.asOutputStream;
 import static com.google.common.io.ByteStreams.skipUpTo;
 import static java.lang.Math.min;
 
@@ -24,7 +25,6 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Ascii;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-import com.google.common.hash.Funnels;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hasher;
@@ -336,7 +336,7 @@ public abstract class ByteSource {
    */
   public HashCode hash(HashFunction hashFunction) throws IOException {
     Hasher hasher = hashFunction.newHasher();
-    copyTo(Funnels.asOutputStream(hasher));
+    copyTo(asOutputStream(hasher));
     return hasher.hash();
   }
 

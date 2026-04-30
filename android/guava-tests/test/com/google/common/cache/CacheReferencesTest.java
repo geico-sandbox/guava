@@ -15,12 +15,14 @@
 package com.google.common.cache;
 
 import static com.google.common.cache.LocalCache.Strength.STRONG;
+import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.truth.Truth.assertThat;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.cache.LocalCache.Strength;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import java.lang.ref.WeakReference;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
@@ -31,6 +33,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author mike nonemacher
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class CacheReferencesTest extends TestCase {
 
@@ -50,7 +54,7 @@ public class CacheReferencesTest extends TestCase {
 
   private Iterable<LoadingCache<Key, String>> caches() {
     CacheBuilderFactory factory = factoryWithAllKeyStrengths();
-    return Iterables.transform(
+    return transform(
         factory.buildAllPermutations(), builder -> builder.build(KEY_TO_STRING_LOADER));
   }
 

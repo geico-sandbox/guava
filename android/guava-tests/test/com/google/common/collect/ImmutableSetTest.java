@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singleton;
 import static org.junit.Assert.assertThrows;
@@ -202,9 +203,9 @@ public class ImmutableSetTest extends AbstractImmutableSetTest {
   }
 
   public void testCreation_allDuplicates() {
-    ImmutableSet<String> set = ImmutableSet.copyOf(Lists.newArrayList("a", "a"));
+    ImmutableSet<String> set = ImmutableSet.copyOf(newArrayList("a", "a"));
     assertTrue(set instanceof SingletonImmutableSet);
-    assertEquals(Lists.newArrayList("a"), new ArrayList<>(set));
+    assertEquals(newArrayList("a"), new ArrayList<>(set));
   }
 
   public void testCreation_oneDuplicate() {
@@ -213,7 +214,7 @@ public class ImmutableSetTest extends AbstractImmutableSetTest {
     ImmutableSet<String> set =
         ImmutableSet.of("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "a");
     assertEquals(
-        Lists.newArrayList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"),
+        newArrayList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"),
         new ArrayList<>(set));
   }
 
@@ -270,7 +271,7 @@ public class ImmutableSetTest extends AbstractImmutableSetTest {
 
   public void testCreation_arrayOfArray() {
     String[] array = new String[] {"a"};
-    Set<String[]> set = ImmutableSet.<String[]>of(array);
+    Set<String[]> set = ImmutableSet.of(array);
     assertEquals(singleton(array), set);
   }
 

@@ -17,6 +17,8 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Sets.equalsImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -141,12 +143,12 @@ abstract class AbstractMultimap<K extends @Nullable Object, V extends @Nullable 
   final class EntrySet extends Entries implements Set<Entry<K, V>> {
     @Override
     public int hashCode() {
-      return Sets.hashCodeImpl(this);
+      return hashCodeImpl(this);
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
-      return Sets.equalsImpl(this, obj);
+      return equalsImpl(this, obj);
     }
   }
 

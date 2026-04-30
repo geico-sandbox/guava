@@ -21,6 +21,7 @@ import static com.google.common.collect.testing.features.CollectionFeature.KNOWN
 import static com.google.common.collect.testing.features.CollectionFeature.RESTRICTS_ELEMENTS;
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE;
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.sort;
@@ -36,7 +37,6 @@ import com.google.common.collect.testing.OneSizeTestContainerGenerator;
 import com.google.common.collect.testing.SampleElements;
 import com.google.common.collect.testing.SetTestSuiteBuilder;
 import com.google.common.collect.testing.features.Feature;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -162,7 +162,7 @@ public class SortedMultisetTestSuiteBuilder<E> extends MultisetTestSuiteBuilder<
     E firstInclusive = samplesList.get(0);
     E lastInclusive = samplesList.get(samplesList.size() - 1);
 
-    return SortedMultisetTestSuiteBuilder.using(
+    return using(
             new ForwardingTestMultisetGenerator<E>(delegate) {
               @Override
               public SortedMultiset<E> create(Object... entries) {
@@ -244,7 +244,7 @@ public class SortedMultisetTestSuiteBuilder<E> extends MultisetTestSuiteBuilder<
       features.remove(SERIALIZABLE);
     }
 
-    return SortedMultisetTestSuiteBuilder.using(
+    return using(
             new ForwardingTestMultisetGenerator<E>(delegate) {
               @Override
               public SortedMultiset<E> create(Object... entries) {
@@ -270,11 +270,11 @@ public class SortedMultisetTestSuiteBuilder<E> extends MultisetTestSuiteBuilder<
     features.remove(SERIALIZABLE);
     features.remove(SERIALIZABLE_INCLUDING_VIEWS);
 
-    return SortedMultisetTestSuiteBuilder.using(
+    return using(
             new ForwardingTestMultisetGenerator<E>(delegate) {
               @Override
               public SortedMultiset<E> create(Object... entries) {
-                return SerializableTester.reserialize((SortedMultiset<E>) super.create(entries));
+                return reserialize((SortedMultiset<E>) super.create(entries));
               }
             })
         .named(parentBuilder.getName() + " reserialized")

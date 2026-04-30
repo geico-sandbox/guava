@@ -957,13 +957,13 @@ public class UninterruptiblesTest extends TestCase {
     void joinSuccessfully() {
       Uninterruptibles.joinUninterruptibly(thread);
       completed.assertCompletionExpected();
-      assertEquals(Thread.State.TERMINATED, thread.getState());
+      assertThat(thread.getState()).isEqualTo(Thread.State.TERMINATED);
     }
 
     void joinSuccessfully(long timeoutMillis) {
       Uninterruptibles.joinUninterruptibly(thread, timeoutMillis, MILLISECONDS);
       completed.assertCompletionExpected();
-      assertEquals(Thread.State.TERMINATED, thread.getState());
+      assertThat(thread.getState()).isEqualTo(Thread.State.TERMINATED);
     }
 
     void joinUnsuccessfully(long timeoutMillis) {

@@ -18,6 +18,8 @@ import static com.google.common.cache.TestingCacheLoaders.incrementingLoader;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.cache.TestingCacheLoaders.IncrementingLoader;
 import com.google.common.testing.FakeTicker;
 import junit.framework.TestCase;
@@ -28,6 +30,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author Charles Fry
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class CacheRefreshTest extends TestCase {
   public void testAutoRefresh() {

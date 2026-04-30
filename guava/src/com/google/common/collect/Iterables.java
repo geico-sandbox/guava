@@ -18,14 +18,21 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.instanceOf;
+import static com.google.common.collect.CollectPreconditions.checkNonnegativeIndex;
 import static com.google.common.collect.CollectPreconditions.checkRemove;
+import static com.google.common.collect.Collections2.safeContains;
+import static com.google.common.collect.Iterators.advance;
+import static com.google.common.collect.Iterators.consumingIterator;
+import static com.google.common.collect.Iterators.getNext;
+import static com.google.common.collect.Iterators.unmodifiableIterator;
+import static com.google.common.collect.Lists.newArrayList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.InlineMe;
 import java.util.Collection;
@@ -105,7 +112,7 @@ public final class Iterables {
 
     @Override
     public Iterator<T> iterator() {
-      return Iterators.unmodifiableIterator(iterable.iterator());
+      return unmodifiableIterator(iterable.iterator());
     }
 
     @Override
@@ -142,7 +149,7 @@ public final class Iterables {
   public static boolean contains(Iterable<?> iterable, @Nullable Object element) {
     if (iterable instanceof Collection) {
       Collection<?> collection = (Collection<?>) iterable;
-      return Collections2.safeContains(collection, element);
+      return safeContains(collection, element);
     }
     return Iterators.contains(iterable.iterator(), element);
   }
@@ -315,7 +322,7 @@ public final class Iterables {
       Iterable<E> iterable) {
     return (iterable instanceof Collection)
         ? (Collection<E>) iterable
-        : Lists.newArrayList(iterable.iterator());
+        : newArrayList(iterable.iterator());
   }
 
   /**
@@ -413,7 +420,7 @@ public final class Iterables {
    */
   @SafeVarargs
   public static <T extends @Nullable Object> Iterable<T> cycle(T... elements) {
-    return cycle(Lists.newArrayList(elements));
+    return cycle(newArrayList(elements));
   }
 
   /**
@@ -618,7 +625,7 @@ public final class Iterables {
   public static <T> Iterable<T> filter(Iterable<?> unfiltered, Class<T> desiredType) {
     checkNotNull(unfiltered);
     checkNotNull(desiredType);
-    return (Iterable<T>) filter(unfiltered, Predicates.instanceOf(desiredType));
+    return (Iterable<T>) filter(unfiltered, instanceOf(desiredType));
   }
 
   /**
@@ -792,14 +799,14 @@ public final class Iterables {
   public static <T extends @Nullable Object> T get(
       Iterable<? extends T> iterable, int position, @ParametricNullness T defaultValue) {
     checkNotNull(iterable);
-    Iterators.checkNonnegative(position);
+    checkNonnegativeIndex(position, "position");
     if (iterable instanceof List) {
       List<? extends T> list = (List<? extends T>) iterable;
       return (position < list.size()) ? list.get(position) : defaultValue;
     } else {
       Iterator<? extends T> iterator = iterable.iterator();
-      Iterators.advance(iterator, position);
-      return Iterators.getNext(iterator, defaultValue);
+      advance(iterator, position);
+      return getNext(iterator, defaultValue);
     }
   }
 
@@ -828,7 +835,7 @@ public final class Iterables {
   @ParametricNullness
   public static <T extends @Nullable Object> T getFirst(
       Iterable<? extends T> iterable, @ParametricNullness T defaultValue) {
-    return Iterators.getNext(iterable.iterator(), defaultValue);
+    return getNext(iterable.iterator(), defaultValue);
   }
 
   /**
@@ -931,7 +938,7 @@ public final class Iterables {
         }
         Iterator<T> iterator = iterable.iterator();
 
-        Iterators.advance(iterator, numberToSkip);
+        advance(iterator, numberToSkip);
 
         /*
          * We can't just return the iterator because an immediate call to its
@@ -1032,7 +1039,7 @@ public final class Iterables {
       public Iterator<T> iterator() {
         return (iterable instanceof Queue)
             ? new ConsumingQueueIterator<>((Queue<T>) iterable)
-            : Iterators.consumingIterator(iterable.iterator());
+            : consumingIterator(iterable.iterator());
       }
 
       @Override

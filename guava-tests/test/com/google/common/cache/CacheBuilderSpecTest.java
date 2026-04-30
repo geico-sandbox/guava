@@ -26,6 +26,8 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertThrows;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Suppliers;
 import com.google.common.cache.LocalCache.Strength;
 import com.google.common.testing.EqualsTester;
@@ -38,6 +40,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author Adam Winer
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class CacheBuilderSpecTest extends TestCase {
   public void testParse_empty() {

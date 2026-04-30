@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.FilteredCollectionsTestUtil.AbstractFilteredIterableTest;
 import org.jspecify.annotations.NullUnmarked;
@@ -25,7 +27,7 @@ public final class IterablesFilterArrayListTest
     extends AbstractFilteredIterableTest<Iterable<Integer>> {
   @Override
   Iterable<Integer> createUnfiltered(Iterable<Integer> contents) {
-    return Lists.newArrayList(contents);
+    return newArrayList(contents);
   }
 
   @Override

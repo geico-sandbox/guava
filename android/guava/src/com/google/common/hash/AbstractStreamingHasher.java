@@ -16,6 +16,7 @@ package com.google.common.hash;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -28,6 +29,7 @@ import java.nio.ByteOrder;
  * @author Dimitris Andreou
  */
 // TODO(kevinb): this class still needs some design-and-document-for-inheritance love
+@J2ktIncompatible
 abstract class AbstractStreamingHasher extends AbstractHasher {
   /** Buffer via which we pass data to the hash algorithm (the implementor) */
   private final ByteBuffer buffer;

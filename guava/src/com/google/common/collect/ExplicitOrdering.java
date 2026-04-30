@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Maps.indexMap;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -29,7 +31,7 @@ final class ExplicitOrdering<T> extends Ordering<T> implements Serializable {
   final ImmutableMap<T, Integer> rankMap;
 
   ExplicitOrdering(List<T> valuesInOrder) {
-    this(Maps.indexMap(valuesInOrder));
+    this(indexMap(valuesInOrder));
   }
 
   ExplicitOrdering(ImmutableMap<T, Integer> rankMap) {

@@ -16,11 +16,12 @@
 
 package com.google.common.io;
 
+import static com.google.common.collect.Lists.transform;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static java.util.Arrays.asList;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import java.io.BufferedReader;
 import java.io.FilterReader;
 import java.io.IOException;
@@ -28,7 +29,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -64,9 +64,8 @@ public class LineBufferTest extends IoTestCase {
 
   private static void bufferHelper(String input, String... expect) throws IOException {
 
-    List<String> expectProcess = Arrays.asList(expect);
-    List<String> expectRead =
-        Lists.transform(expectProcess, value -> value.replaceAll("[\\r\\n]", ""));
+    List<String> expectProcess = asList(expect);
+    List<String> expectRead = transform(expectProcess, value -> value.replaceAll("[\\r\\n]", ""));
 
     for (int chunk : CHUNK_SIZES) {
       chunk = max(1, min(chunk, input.length()));

@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.base.Predicates.in;
 import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.Multisets.difference;
 import static com.google.common.collect.Multisets.intersection;
@@ -27,7 +28,6 @@ import static java.util.Collections.sort;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.google.MultisetTestSuiteBuilder;
@@ -251,7 +251,7 @@ public class MultisetsCollectionTest extends TestCase {
   private static final ImmutableMultiset<String> ELEMENTS_TO_FILTER_OUT =
       ImmutableMultiset.of("foobar", "bazfoo", "foobar", "foobar");
 
-  private static final Predicate<String> PREDICATE = not(Predicates.in(ELEMENTS_TO_FILTER_OUT));
+  private static final Predicate<String> PREDICATE = not(in(ELEMENTS_TO_FILTER_OUT));
 
   private static TestStringMultisetGenerator filteredGenerator() {
     return new TestStringMultisetGenerator() {

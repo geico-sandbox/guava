@@ -46,6 +46,8 @@ import static com.google.common.math.StatsTesting.assertLinearTransformationNaN;
 import static com.google.common.math.StatsTesting.assertStatsApproxEqual;
 import static com.google.common.math.StatsTesting.assertVerticalLinearTransformation;
 import static com.google.common.math.StatsTesting.createPairedStatsOf;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static org.junit.Assert.assertThrows;
@@ -55,7 +57,6 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableList;
 import com.google.common.math.StatsTesting.ManyValues;
 import com.google.common.testing.EqualsTester;
-import com.google.common.testing.SerializableTester;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import junit.framework.TestCase;
@@ -219,7 +220,7 @@ public class PairedStatsTest extends TestCase {
         .addEqualityGroup(
             MANY_VALUES_PAIRED_STATS,
             DUPLICATE_MANY_VALUES_PAIRED_STATS,
-            SerializableTester.reserialize(MANY_VALUES_PAIRED_STATS))
+            reserialize(MANY_VALUES_PAIRED_STATS))
         .addEqualityGroup(
             new PairedStats(MANY_VALUES_STATS_ITERABLE, OTHER_MANY_VALUES_STATS, 1.23),
             new PairedStats(MANY_VALUES_STATS_VARARGS, OTHER_MANY_VALUES_STATS, 1.23))
@@ -235,7 +236,7 @@ public class PairedStatsTest extends TestCase {
   }
 
   public void testSerializable() {
-    SerializableTester.reserializeAndAssert(MANY_VALUES_PAIRED_STATS);
+    reserializeAndAssert(MANY_VALUES_PAIRED_STATS);
   }
 
   public void testToString() {

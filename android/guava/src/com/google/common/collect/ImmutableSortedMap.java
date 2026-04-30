@@ -72,7 +72,7 @@ public final class ImmutableSortedMap<K, V> extends ImmutableMap<K, V>
    * the collection operation is performed. (This differs from the {@code Collector} returned by
    * {@link Collectors#toMap(Function, Function)}, which throws an {@code IllegalStateException}.)
    *
-   * @since NEXT
+   * @since 33.6.0
    */
   @IgnoreJRERequirement // Users will use this only if they're already using streams.
   public static <T extends @Nullable Object, K extends Comparable<? super K>, V>
@@ -111,7 +111,7 @@ public final class ImmutableSortedMap<K, V> extends ImmutableMap<K, V>
    * <p>If the mapped keys contain duplicates, the values are merged using the specified merging
    * function.
    *
-   * @since NEXT
+   * @since 33.6.0
    */
   @IgnoreJRERequirement // Users will use this only if they're already using streams.
   public static <T extends @Nullable Object, K extends Comparable<? super K>, V>
@@ -328,11 +328,7 @@ public final class ImmutableSortedMap<K, V> extends ImmutableMap<K, V>
       V v8,
       K k9,
       V v9) {
-    /*
-     * This explicit type parameter works around what seems to be a javac bug in certain
-     * configurations: b/339186525#comment6
-     */
-    return ImmutableSortedMap.fromEntries(
+    return fromEntries(
         entryOf(k1, v1),
         entryOf(k2, v2),
         entryOf(k3, v3),

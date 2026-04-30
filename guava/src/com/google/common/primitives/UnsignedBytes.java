@@ -307,6 +307,7 @@ public final class UnsignedBytes {
       // b/345822163
       "SunApi",
       "deprecation",
+      "removal",
       // The `deprecation` suppression is for Unsafe APIs that aren't deprecated under some versions
       "UnnecessaryJavacSuppressWarnings"
     })

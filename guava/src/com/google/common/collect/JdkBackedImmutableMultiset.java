@@ -16,6 +16,7 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.asImmutableList;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -41,7 +42,7 @@ final class JdkBackedImmutableMultiset<E> extends ImmutableMultiset<E> {
   static <E> ImmutableMultiset<E> create(Collection<? extends Entry<? extends E>> entries) {
     @SuppressWarnings("unchecked")
     Entry<E>[] entriesArray = entries.toArray((Entry<E>[]) new Entry<?>[0]);
-    Map<E, Integer> delegateMap = Maps.newHashMapWithExpectedSize(entriesArray.length);
+    Map<E, Integer> delegateMap = newHashMapWithExpectedSize(entriesArray.length);
     long size = 0;
     for (int i = 0; i < entriesArray.length; i++) {
       Entry<E> entry = entriesArray[i];

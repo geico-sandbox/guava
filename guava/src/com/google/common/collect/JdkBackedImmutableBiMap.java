@@ -17,6 +17,7 @@ package com.google.common.collect;
 
 import static com.google.common.collect.ImmutableList.asImmutableList;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -33,8 +34,8 @@ import org.jspecify.annotations.Nullable;
 @GwtIncompatible
 final class JdkBackedImmutableBiMap<K, V> extends ImmutableBiMap<K, V> {
   static <K, V> ImmutableBiMap<K, V> create(int n, @Nullable Entry<K, V>[] entryArray) {
-    Map<K, V> forwardDelegate = Maps.newHashMapWithExpectedSize(n);
-    Map<V, K> backwardDelegate = Maps.newHashMapWithExpectedSize(n);
+    Map<K, V> forwardDelegate = newHashMapWithExpectedSize(n);
+    Map<V, K> backwardDelegate = newHashMapWithExpectedSize(n);
     for (int i = 0; i < n; i++) {
       // requireNonNull is safe because the first `n` elements have been filled in.
       Entry<K, V> e = RegularImmutableMap.makeImmutable(requireNonNull(entryArray[i]));

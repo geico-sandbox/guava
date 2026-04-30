@@ -311,7 +311,7 @@ public class ImmutableRangeMap<K extends Comparable<?>, V> implements RangeMap<K
   @Override
   public ImmutableRangeMap<K, V> subRangeMap(Range<K> range) {
     if (checkNotNull(range).isEmpty()) {
-      return ImmutableRangeMap.of();
+      return of();
     } else if (ranges.isEmpty() || range.encloses(span())) {
       return this;
     }
@@ -330,7 +330,7 @@ public class ImmutableRangeMap<K extends Comparable<?>, V> implements RangeMap<K
             KeyPresentBehavior.ANY_PRESENT,
             KeyAbsentBehavior.NEXT_HIGHER);
     if (lowerIndex >= upperIndex) {
-      return ImmutableRangeMap.of();
+      return of();
     }
     int off = lowerIndex;
     int len = upperIndex - lowerIndex;

@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
 import static com.google.common.collect.Hashing.closedTableSize;
 import static com.google.common.collect.Hashing.smearedHash;
+import static com.google.common.collect.Maps.capacity;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -106,8 +107,7 @@ public final class LinkedHashMultimap<K extends @Nullable Object, V extends @Nul
    */
   public static <K extends @Nullable Object, V extends @Nullable Object>
       LinkedHashMultimap<K, V> create(int expectedKeys, int expectedValuesPerKey) {
-    return new LinkedHashMultimap<>(
-        Maps.capacity(expectedKeys), Maps.capacity(expectedValuesPerKey));
+    return new LinkedHashMultimap<>(capacity(expectedKeys), capacity(expectedValuesPerKey));
   }
 
   /**

@@ -19,6 +19,7 @@ package com.google.common.reflect;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static java.util.Arrays.sort;
 
 import com.google.errorprone.annotations.Keep;
 import com.google.errorprone.annotations.Modifier;
@@ -29,7 +30,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import org.jspecify.annotations.NullUnmarked;
 import org.jspecify.annotations.Nullable;
 
@@ -141,7 +141,7 @@ abstract class SubtypeTester implements Cloneable {
   final void testAllDeclarations() throws Exception {
     checkState(method == null);
     Method[] methods = getClass().getMethods();
-    Arrays.sort(methods, (a, b) -> a.getName().compareTo(b.getName()));
+    sort(methods, (a, b) -> a.getName().compareTo(b.getName()));
     for (Method method : methods) {
       if (method.isAnnotationPresent(TestSubtype.class)) {
         method.setAccessible(true);

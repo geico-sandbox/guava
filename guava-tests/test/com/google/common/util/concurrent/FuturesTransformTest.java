@@ -16,6 +16,8 @@
 
 package com.google.common.util.concurrent;
 
+import static com.google.common.util.concurrent.AbstractChainedListenableFutureTest.Input.EXCEPTION_DATA;
+import static com.google.common.util.concurrent.AbstractChainedListenableFutureTest.Input.VALID_INPUT_DATA;
 import static com.google.common.util.concurrent.Futures.transform;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
@@ -39,7 +41,7 @@ public class FuturesTransformTest extends AbstractChainedListenableFutureTest<St
       new UndeclaredThrowableException(EXCEPTION);
 
   @Override
-  protected ListenableFuture<String> buildChainingFuture(ListenableFuture<Integer> inputFuture) {
+  protected ListenableFuture<String> buildChainingFuture(ListenableFuture<Input> inputFuture) {
     return transform(inputFuture, new ComposeFunction(), directExecutor());
   }
 
@@ -48,10 +50,10 @@ public class FuturesTransformTest extends AbstractChainedListenableFutureTest<St
     return RESULT_DATA;
   }
 
-  private static final class ComposeFunction implements Function<Integer, String> {
+  private static final class ComposeFunction implements Function<Input, String> {
     @Override
-    public String apply(Integer input) {
-      if (input.intValue() == VALID_INPUT_DATA) {
+    public String apply(Input input) {
+      if (input == VALID_INPUT_DATA) {
         return RESULT_DATA;
       } else {
         throw WRAPPED_EXCEPTION;

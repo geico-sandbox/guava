@@ -16,6 +16,8 @@ package com.google.common.reflect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.reflect.Types.newParameterizedType;
+import static java.lang.System.arraycopy;
 
 import com.google.common.collect.ImmutableList;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -447,7 +449,7 @@ public abstract class Invokable<T, R> implements AnnotatedElement, Member {
       Class<?> declaringClass = getDeclaringClass();
       TypeVariable<?>[] typeParams = declaringClass.getTypeParameters();
       if (typeParams.length > 0) {
-        return Types.newParameterizedType(declaringClass, typeParams);
+        return newParameterizedType(declaringClass, typeParams);
       } else {
         return declaringClass;
       }
@@ -502,8 +504,8 @@ public abstract class Invokable<T, R> implements AnnotatedElement, Member {
       TypeVariable<?>[] declaredByConstructor = constructor.getTypeParameters();
       TypeVariable<?>[] result =
           new TypeVariable<?>[declaredByClass.length + declaredByConstructor.length];
-      System.arraycopy(declaredByClass, 0, result, 0, declaredByClass.length);
-      System.arraycopy(
+      arraycopy(declaredByClass, 0, result, 0, declaredByClass.length);
+      arraycopy(
           declaredByConstructor, 0, result, declaredByClass.length, declaredByConstructor.length);
       return result;
     }

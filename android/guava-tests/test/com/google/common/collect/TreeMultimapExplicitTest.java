@@ -18,12 +18,12 @@ package com.google.common.collect;
 
 import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
-import com.google.common.testing.SerializableTester;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -67,7 +67,7 @@ public class TreeMultimapExplicitTest extends TestCase {
 
   /** Decreasing integer values. A {@code null} comes before any non-null value. */
   private static final Comparator<@Nullable Integer> DECREASING_INT_COMPARATOR =
-      Ordering.<Integer>natural().reverse().<Integer>nullsFirst();
+      Ordering.<Integer>natural().reverse().nullsFirst();
 
   private SetMultimap<String, Integer> create() {
     return TreeMultimap.create(StringLength.COMPARATOR, DECREASING_INT_COMPARATOR);
@@ -204,8 +204,7 @@ public class TreeMultimapExplicitTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testExplicitComparatorSerialization() {
     TreeMultimap<@Nullable String, @Nullable Integer> multimap = createPopulate();
-    TreeMultimap<@Nullable String, @Nullable Integer> copy =
-        SerializableTester.reserializeAndAssert(multimap);
+    TreeMultimap<@Nullable String, @Nullable Integer> copy = reserializeAndAssert(multimap);
     assertThat(copy.values()).containsExactly(7, 3, 1, null, 0, 6, 2).inOrder();
     assertThat(copy.keySet()).containsExactly(null, "tree", "google").inOrder();
     assertEquals(multimap.keyComparator(), copy.keyComparator());

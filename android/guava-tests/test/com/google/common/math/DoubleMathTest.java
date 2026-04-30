@@ -16,8 +16,10 @@
 
 package com.google.common.math;
 
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.get;
 import static com.google.common.collect.Iterables.size;
+import static com.google.common.math.DoubleMath.isMathematicalInteger;
 import static com.google.common.math.MathTesting.ALL_DOUBLE_CANDIDATES;
 import static com.google.common.math.MathTesting.ALL_ROUNDING_MODES;
 import static com.google.common.math.MathTesting.ALL_SAFE_ROUNDING_MODES;
@@ -44,13 +46,11 @@ import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.primitives.Doubles;
 import com.google.common.testing.NullPointerTester;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.util.Arrays;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -469,21 +469,21 @@ public class DoubleMathTest extends TestCase {
   @GwtIncompatible // DoubleMath.isMathematicalInteger
   public void testIsMathematicalIntegerIntegral() {
     for (double d : INTEGRAL_DOUBLE_CANDIDATES) {
-      assertTrue(DoubleMath.isMathematicalInteger(d));
+      assertTrue(isMathematicalInteger(d));
     }
   }
 
   @GwtIncompatible // DoubleMath.isMathematicalInteger
   public void testIsMathematicalIntegerFractional() {
     for (double d : FRACTIONAL_DOUBLE_CANDIDATES) {
-      assertFalse(DoubleMath.isMathematicalInteger(d));
+      assertFalse(isMathematicalInteger(d));
     }
   }
 
   @GwtIncompatible // DoubleMath.isMathematicalInteger
   public void testIsMathematicalIntegerNotFinite() {
-    for (double d : Arrays.asList(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NaN)) {
-      assertFalse(DoubleMath.isMathematicalInteger(d));
+    for (double d : asList(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NaN)) {
+      assertFalse(isMathematicalInteger(d));
     }
   }
 
@@ -512,8 +512,7 @@ public class DoubleMathTest extends TestCase {
 
   private static final Iterable<Double> TOLERANCE_CANDIDATES =
       ImmutableList.copyOf(
-          Iterables.concat(
-              FINITE_TOLERANCE_CANDIDATES, ImmutableList.of(Double.POSITIVE_INFINITY)));
+          concat(FINITE_TOLERANCE_CANDIDATES, ImmutableList.of(Double.POSITIVE_INFINITY)));
 
   private static final ImmutableList<Double> BAD_TOLERANCE_CANDIDATES =
       ImmutableList.copyOf(

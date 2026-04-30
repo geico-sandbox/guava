@@ -18,6 +18,7 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.ImmutableList.asImmutableList;
+import static com.google.common.collect.Maps.newHashMapWithExpectedSize;
 import static com.google.common.collect.RegularImmutableMap.makeImmutable;
 import static java.util.Objects.requireNonNull;
 
@@ -41,7 +42,7 @@ final class JdkBackedImmutableMap<K, V> extends ImmutableMap<K, V> {
    */
   static <K, V> ImmutableMap<K, V> create(
       int n, @Nullable Entry<K, V>[] entryArray, boolean throwIfDuplicateKeys) {
-    Map<K, V> delegateMap = Maps.newHashMapWithExpectedSize(n);
+    Map<K, V> delegateMap = newHashMapWithExpectedSize(n);
     // If duplicates are allowed, this map will track the last value for each duplicated key.
     // A second pass will retain only the first entry for that key, but with this last value. The
     // value will then be replaced by null, signaling that later entries with the same key should

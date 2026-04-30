@@ -17,11 +17,11 @@
 package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.AbstractIterator;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.Iterator;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -117,7 +117,7 @@ abstract class EndpointPairIterator<N> extends AbstractIterator<EndpointPair<N>>
 
     private Undirected(BaseGraph<N> graph) {
       super(graph);
-      this.visitedNodes = Sets.newHashSetWithExpectedSize(graph.nodes().size() + 1);
+      this.visitedNodes = newHashSetWithExpectedSize(graph.nodes().size() + 1);
     }
 
     @Override

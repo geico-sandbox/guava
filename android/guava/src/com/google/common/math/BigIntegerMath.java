@@ -19,6 +19,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.math.MathPreconditions.checkNonNegative;
 import static com.google.common.math.MathPreconditions.checkPositive;
 import static com.google.common.math.MathPreconditions.checkRoundingUnnecessary;
+import static java.lang.Math.log;
 import static java.math.RoundingMode.CEILING;
 import static java.math.RoundingMode.FLOOR;
 import static java.math.RoundingMode.HALF_EVEN;
@@ -205,8 +206,8 @@ public final class BigIntegerMath {
     throw new AssertionError();
   }
 
-  private static final double LN_10 = Math.log(10);
-  private static final double LN_2 = Math.log(2);
+  private static final double LN_10 = log(10);
+  private static final double LN_2 = log(2);
 
   /**
    * Returns the square root of {@code x}, rounded with the specified rounding mode.

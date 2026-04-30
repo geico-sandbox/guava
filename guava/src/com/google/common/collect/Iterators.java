@@ -20,7 +20,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Predicates.instanceOf;
+import static com.google.common.collect.CollectPreconditions.checkNonnegativeIndex;
 import static com.google.common.collect.CollectPreconditions.checkRemove;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.NullnessCasts.uncheckedCastNullableTToT;
 import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
@@ -350,7 +352,7 @@ public final class Iterators {
   @GwtIncompatible // Array.newInstance(Class, int)
   public static <T extends @Nullable Object> T[] toArray(
       Iterator<? extends T> iterator, Class<@NonNull T> type) {
-    List<T> list = Lists.newArrayList(iterator);
+    List<T> list = newArrayList(iterator);
     return Iterables.<T>toArray(list, type);
   }
 
@@ -452,7 +454,7 @@ public final class Iterators {
    */
   @SafeVarargs
   public static <T extends @Nullable Object> Iterator<T> cycle(T... elements) {
-    return cycle(Lists.newArrayList(elements));
+    return cycle(newArrayList(elements));
   }
 
   /**
@@ -841,7 +843,7 @@ public final class Iterators {
    */
   @ParametricNullness
   public static <T extends @Nullable Object> T get(Iterator<T> iterator, int position) {
-    checkNonnegative(position);
+    checkNonnegativeIndex(position, "position");
     int skipped = advance(iterator, position);
     if (!iterator.hasNext()) {
       throw new IndexOutOfBoundsException(
@@ -869,15 +871,9 @@ public final class Iterators {
   @ParametricNullness
   public static <T extends @Nullable Object> T get(
       Iterator<? extends T> iterator, int position, @ParametricNullness T defaultValue) {
-    checkNonnegative(position);
+    checkNonnegativeIndex(position, "position");
     advance(iterator, position);
     return getNext(iterator, defaultValue);
-  }
-
-  static void checkNonnegative(int position) {
-    if (position < 0) {
-      throw new IndexOutOfBoundsException("position (" + position + ") must not be negative");
-    }
   }
 
   /**
@@ -1086,7 +1082,7 @@ public final class Iterators {
 
     @Override
     @ParametricNullness
-    protected T get(int index) {
+    T get(int index) {
       return array[index];
     }
   }

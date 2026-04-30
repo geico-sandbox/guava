@@ -16,9 +16,11 @@
 
 package com.google.common.collect;
 
+import static com.google.common.base.Strings.lenientFormat;
 import static com.google.common.collect.Iterables.transform;
 import static com.google.common.collect.Iterators.emptyIterator;
 import static com.google.common.collect.Iterators.singletonIterator;
+import static com.google.common.collect.Lists.reverse;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.testing.IteratorFeature.UNMODIFIABLE;
 import static com.google.common.truth.Truth.assertThat;
@@ -29,7 +31,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
-import com.google.common.base.Strings;
 import com.google.common.collect.testing.IteratorTester;
 import com.google.common.collect.testing.MinimalCollection;
 import com.google.common.collect.testing.MinimalIterable;
@@ -361,7 +362,7 @@ public abstract class AbstractImmutableSetTest extends TestCase {
   public void testComplexBuilder() {
     List<Integer> colorElem = asList(0x00, 0x33, 0x66, 0x99, 0xCC, 0xFF);
     // javac won't compile this without "this.<Integer>"
-    ImmutableSet.Builder<Integer> webSafeColorsBuilder = this.<Integer>builder();
+    ImmutableSet.Builder<Integer> webSafeColorsBuilder = this.builder();
     for (Integer red : colorElem) {
       for (Integer green : colorElem) {
         for (Integer blue : colorElem) {
@@ -391,55 +392,55 @@ public abstract class AbstractImmutableSetTest extends TestCase {
 
   public void testBuilderAddHandlesNullsCorrectly() {
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.add((String) null));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.add((String[]) null));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.add("a", (String) null));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.add("a", "b", (String) null));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.add("a", "b", "c", null));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.add("a", "b", null, "c"));
     }
   }
 
   public void testBuilderAddAllHandlesNullsCorrectly() {
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.addAll((Iterable<String>) null));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       assertThrows(NullPointerException.class, () -> builder.addAll((Iterator<String>) null));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       List<@Nullable String> listWithNulls = asList("a", null, "b");
       assertThrows(NullPointerException.class, () -> builder.addAll((List<String>) listWithNulls));
     }
 
     {
-      ImmutableSet.Builder<String> builder = this.<String>builder();
+      ImmutableSet.Builder<String> builder = this.builder();
       Iterable<@Nullable String> iterableWithNulls = MinimalIterable.of("a", null, "b");
       assertThrows(
           NullPointerException.class, () -> builder.addAll((Iterable<String>) iterableWithNulls));
@@ -472,7 +473,7 @@ public abstract class AbstractImmutableSetTest extends TestCase {
           Iterables.cycle(
               byAscendingSize
                   ? distinctCandidatesByAscendingSize
-                  : Lists.reverse(distinctCandidatesByAscendingSize));
+                  : reverse(distinctCandidatesByAscendingSize));
       for (int startIndex = 0;
           startIndex < distinctCandidatesByAscendingSize.size();
           startIndex++) {
@@ -489,7 +490,7 @@ public abstract class AbstractImmutableSetTest extends TestCase {
             immutableCopy = copyOf(input);
           } catch (RuntimeException e) {
             throw new RuntimeException(
-                Strings.lenientFormat(
+                lenientFormat(
                     "byAscendingSize %s, startIndex %s, inputIsSet %s",
                     byAscendingSize, startIndex, inputIsSet),
                 e);

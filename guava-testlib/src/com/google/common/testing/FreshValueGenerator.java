@@ -18,7 +18,12 @@ package com.google.common.testing;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Throwables.throwIfUnchecked;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
+import static com.google.common.collect.Maps.newConcurrentMap;
+import static com.google.common.collect.Maps.newTreeMap;
+import static com.google.common.collect.Sets.newTreeSet;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -51,15 +56,12 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Range;
 import com.google.common.collect.RowSortedTable;
 import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
@@ -98,7 +100,6 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Currency;
@@ -243,7 +244,7 @@ class FreshValueGenerator {
     Method generate = GENERATORS.get(rawType);
     if (generate != null) {
       ImmutableList<Parameter> params = Invokable.from(generate).getParameters();
-      List<Object> args = Lists.newArrayListWithCapacity(params.size());
+      List<Object> args = newArrayListWithCapacity(params.size());
       TypeVariable<?>[] typeVars = rawType.getTypeParameters();
       for (int i = 0; i < params.size(); i++) {
         TypeToken<?> paramType = type.resolveType(typeVars[i]);
@@ -328,7 +329,7 @@ class FreshValueGenerator {
   }
 
   private <T> T pickInstance(T[] instances, T defaultValue) {
-    return pickInstance(Arrays.asList(instances), defaultValue);
+    return pickInstance(asList(instances), defaultValue);
   }
 
   private <T> T pickInstance(Collection<T> instances, T defaultValue) {
@@ -732,7 +733,7 @@ class FreshValueGenerator {
 
   @Generates
   static <E extends Comparable<? super E>> TreeSet<E> generateTreeSet(E freshElement) {
-    TreeSet<E> set = Sets.newTreeSet();
+    TreeSet<E> set = newTreeSet();
     set.add(freshElement);
     return set;
   }
@@ -809,12 +810,12 @@ class FreshValueGenerator {
 
   @Empty
   static <K, V> ConcurrentMap<K, V> generateConcurrentMap() {
-    return Maps.newConcurrentMap();
+    return newConcurrentMap();
   }
 
   @Generates
   static <K, V> ConcurrentMap<K, V> generateConcurrentMap(K key, V value) {
-    ConcurrentMap<K, V> map = Maps.newConcurrentMap();
+    ConcurrentMap<K, V> map = newConcurrentMap();
     map.put(key, value);
     return map;
   }
@@ -834,7 +835,7 @@ class FreshValueGenerator {
   @Generates
   static <K extends Comparable<? super K>, V> TreeMap<K, V> generateTreeMap(
       K key, @Nullable V value) {
-    TreeMap<K, V> map = Maps.newTreeMap();
+    TreeMap<K, V> map = newTreeMap();
     map.put(key, value);
     return map;
   }

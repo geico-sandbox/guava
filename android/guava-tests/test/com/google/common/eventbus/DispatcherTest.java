@@ -17,9 +17,9 @@
 package com.google.common.eventbus;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.util.concurrent.Uninterruptibles.awaitUninterruptibly;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.util.concurrent.Uninterruptibles;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
@@ -114,7 +114,7 @@ public class DispatcherTest extends TestCase {
             })
         .start();
 
-    Uninterruptibles.awaitUninterruptibly(latch);
+    awaitUninterruptibly(latch);
 
     // See Dispatcher.LegacyAsyncDispatcher for an explanation of why there aren't really any
     // useful testable guarantees about the behavior of that dispatcher in a multithreaded

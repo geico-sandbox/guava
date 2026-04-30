@@ -18,6 +18,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndexes;
+import static java.lang.System.arraycopy;
+import static java.util.Collections.emptyList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -27,7 +29,6 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.RandomAccess;
@@ -241,7 +242,7 @@ public final class Booleans {
     boolean[] result = new boolean[checkNoOverflow(length)];
     int pos = 0;
     for (boolean[] array : arrays) {
-      System.arraycopy(array, 0, result, pos, array.length);
+      arraycopy(array, 0, result, pos, array.length);
       pos += array.length;
     }
     return result;
@@ -382,7 +383,7 @@ public final class Booleans {
    */
   public static List<Boolean> asList(boolean... backingArray) {
     if (backingArray.length == 0) {
-      return Collections.emptyList();
+      return emptyList();
     }
     return new BooleanArrayAsList(backingArray);
   }
@@ -464,7 +465,7 @@ public final class Booleans {
       int size = size();
       checkPositionIndexes(fromIndex, toIndex, size);
       if (fromIndex == toIndex) {
-        return Collections.emptyList();
+        return emptyList();
       }
       return new BooleanArrayAsList(array, start + fromIndex, start + toIndex);
     }

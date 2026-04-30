@@ -17,6 +17,7 @@ package com.google.common.hash;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.hash.Hashing.murmur3_128;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.math.LongMath;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
@@ -37,6 +38,7 @@ import org.jspecify.annotations.Nullable;
  * @author Dimitris Andreou
  * @author Kurt Alfred Kluever
  */
+@J2ktIncompatible
 enum BloomFilterStrategies implements BloomFilter.Strategy {
   /**
    * See "Less Hashing, Same Performance: Building a Better Bloom Filter" by Adam Kirsch and Michael

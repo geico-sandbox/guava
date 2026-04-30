@@ -18,6 +18,7 @@ import static com.google.common.hash.Hashing.sipHash24;
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableSet;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullUnmarked;
@@ -28,6 +29,7 @@ import org.jspecify.annotations.NullUnmarked;
  * @author Kurt Alfred Kluever
  */
 @NullUnmarked
+@J2ktIncompatible
 public class SipHashFunctionTest extends TestCase {
 
   // From https://131002.net/siphash/siphash24.c

@@ -16,6 +16,8 @@
 
 package com.google.common.cache;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.testing.AbstractPackageSanityTests;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -24,6 +26,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author Ben Yu
  */
+@GwtIncompatible
+@J2ktIncompatible
 
 @NullUnmarked
 public class PackageSanityTests extends AbstractPackageSanityTests {

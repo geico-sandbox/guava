@@ -17,18 +17,22 @@ package com.google.common.cache;
 import static com.google.common.cache.CacheTesting.checkEmpty;
 import static com.google.common.cache.CacheTesting.checkValidState;
 import static com.google.common.cache.TestingCacheLoaders.identityLoader;
+import static com.google.common.collect.Iterables.getOnlyElement;
+import static com.google.common.collect.Iterables.transform;
+import static com.google.common.collect.Iterators.size;
+import static com.google.common.collect.Maps.immutableEntry;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertThrows;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.cache.CacheBuilderFactory.DurationSpec;
 import com.google.common.cache.LocalCache.Strength;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Maps;
 import com.google.common.testing.EqualsTester;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -45,6 +49,8 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author mike nonemacher
  */
+@GwtIncompatible
+@J2ktIncompatible
 
 @NullUnmarked
 public class PopulatedCachesTest extends TestCase {
@@ -274,7 +280,7 @@ public class PopulatedCachesTest extends TestCase {
   public void testWriteThroughEntry() {
     for (LoadingCache<Object, Object> cache : caches()) {
       cache.getUnchecked(1);
-      Entry<Object, Object> entry = Iterables.getOnlyElement(cache.asMap().entrySet());
+      Entry<Object, Object> entry = getOnlyElement(cache.asMap().entrySet());
 
       cache.invalidate(1);
       assertThat(cache.size()).isEqualTo(0);
@@ -295,7 +301,7 @@ public class PopulatedCachesTest extends TestCase {
   private Iterable<LoadingCache<Object, Object>> caches() {
     // lots of different ways to configure a LoadingCache
     CacheBuilderFactory factory = cacheFactory();
-    return Iterables.transform(
+    return transform(
         factory.buildAllPermutations(), builder -> builder.recordStats().build(identityLoader()));
   }
 
@@ -347,7 +353,7 @@ public class PopulatedCachesTest extends TestCase {
   }
 
   private Entry<Object, Object> entryOf(Object key, Object value) {
-    return Maps.immutableEntry(key, value);
+    return immutableEntry(key, value);
   }
 
   private void assertMapSize(Map<?, ?> map, int size) {
@@ -371,6 +377,6 @@ public class PopulatedCachesTest extends TestCase {
       assertThat(collection.isEmpty()).isTrue();
     }
     assertThat(Iterables.size(collection)).isEqualTo(size);
-    assertThat(Iterators.size(collection.iterator())).isEqualTo(size);
+    assertThat(size(collection.iterator())).isEqualTo(size);
   }
 }

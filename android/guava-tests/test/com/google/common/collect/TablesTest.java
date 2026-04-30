@@ -17,13 +17,13 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Tables.immutableCell;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.Table.Cell;
 import com.google.common.testing.EqualsTester;
-import com.google.common.testing.SerializableTester;
 import junit.framework.TestCase;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -40,7 +40,7 @@ public class TablesTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testImmutableEntrySerialization() {
     Cell<String, Integer, Character> entry = immutableCell("foo", 1, 'a');
-    SerializableTester.reserializeAndAssert(entry);
+    reserializeAndAssert(entry);
   }
 
   public void testImmutableEntryToString() {

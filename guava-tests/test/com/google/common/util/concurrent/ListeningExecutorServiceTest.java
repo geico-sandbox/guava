@@ -19,13 +19,14 @@ package com.google.common.util.concurrent;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.util.concurrent.Futures.immediateFailedFuture;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonList;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import java.time.Duration;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -48,7 +49,7 @@ public final class ListeningExecutorServiceTest extends TestCase {
   private final ListeningExecutorService executorService = new FakeExecutorService();
 
   public void testInvokeAny() throws Exception {
-    Set<Callable<String>> tasks = Collections.singleton(() -> "invokeAny");
+    Set<Callable<String>> tasks = singleton(() -> "invokeAny");
 
     String result = executorService.invokeAny(tasks, Duration.ofSeconds(7));
 
@@ -59,7 +60,7 @@ public final class ListeningExecutorServiceTest extends TestCase {
   }
 
   public void testInvokeAll() throws Exception {
-    Set<Callable<String>> tasks = Collections.singleton(() -> "invokeAll");
+    Set<Callable<String>> tasks = singleton(() -> "invokeAll");
 
     List<Future<String>> result = executorService.invokeAll(tasks, Duration.ofDays(365));
 
@@ -100,9 +101,9 @@ public final class ListeningExecutorServiceTest extends TestCase {
       recordedTimeout = timeout;
       recordedTimeUnit = unit;
       try {
-        return Collections.singletonList(immediateFuture(tasks.iterator().next().call()));
+        return singletonList(immediateFuture(tasks.iterator().next().call()));
       } catch (Exception e) {
-        return Collections.singletonList(immediateFailedFuture(e));
+        return singletonList(immediateFailedFuture(e));
       }
     }
 

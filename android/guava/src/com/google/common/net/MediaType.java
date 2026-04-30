@@ -20,6 +20,7 @@ import static com.google.common.base.MoreObjects.firstNonNull;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Maps.transformValues;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Objects.hash;
 
@@ -32,7 +33,6 @@ import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -106,8 +106,7 @@ public final class MediaType {
   private static final Map<MediaType, MediaType> knownTypes = new HashMap<>();
 
   private static MediaType createConstant(String type, String subtype) {
-    MediaType mediaType =
-        addKnownType(new MediaType(type, subtype, ImmutableListMultimap.<String, String>of()));
+    MediaType mediaType = addKnownType(new MediaType(type, subtype, ImmutableListMultimap.of()));
     mediaType.parsedCharset = Optional.absent();
     return mediaType;
   }
@@ -624,6 +623,14 @@ public final class MediaType {
   public static final MediaType NACL_APPLICATION = createConstant(APPLICATION_TYPE, "x-nacl");
 
   /**
+   * The <a href="https://pki-tutorial.readthedocs.io/en/latest/mime.html">PEM format</a>. See also
+   * <a href="https://github.com/ietf-wg-acme/acme/issues/120">ietf-wg-acme proposal</a>.
+   *
+   * @since NEXT
+   */
+  public static final MediaType PEM = createConstant(APPLICATION_TYPE, "x-pem-file");
+
+  /**
    * NaCl portable applications. For more information see <a
    * href="https://developer.chrome.com/native-client/devguide/coding/application-structure">the
    * Developer Guide for Native Client Application Structure</a>.
@@ -843,7 +850,7 @@ public final class MediaType {
   }
 
   private Map<String, ImmutableMultiset<String>> parametersAsMap() {
-    return Maps.transformValues(parameters.asMap(), ImmutableMultiset::copyOf);
+    return transformValues(parameters.asMap(), ImmutableMultiset::copyOf);
   }
 
   /**
@@ -1001,7 +1008,7 @@ public final class MediaType {
    *     type, but not the subtype.
    */
   public static MediaType create(String type, String subtype) {
-    MediaType mediaType = create(type, subtype, ImmutableListMultimap.<String, String>of());
+    MediaType mediaType = create(type, subtype, ImmutableListMultimap.of());
     mediaType.parsedCharset = Optional.absent();
     return mediaType;
   }

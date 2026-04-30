@@ -17,6 +17,7 @@ package com.google.common.io;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.io.FileWriteMode.APPEND;
+import static java.util.Arrays.asList;
 import static java.util.Collections.unmodifiableList;
 
 import com.google.common.annotations.Beta;
@@ -52,7 +53,6 @@ import java.nio.channels.FileChannel.MapMode;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.jspecify.annotations.Nullable;
 
@@ -848,7 +848,7 @@ public final class Files {
         if (file.isDirectory()) {
           File[] files = file.listFiles();
           if (files != null) {
-            return unmodifiableList(Arrays.asList(files));
+            return unmodifiableList(asList(files));
           }
         }
 

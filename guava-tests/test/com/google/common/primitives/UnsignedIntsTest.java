@@ -14,15 +14,16 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.collect.testing.Helpers.testComparator;
 import static com.google.common.primitives.UnsignedInts.max;
 import static com.google.common.primitives.UnsignedInts.min;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.testing.NullPointerTester;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -141,7 +142,7 @@ public class UnsignedIntsTest extends TestCase {
 
   public void testLexicographicalComparator() {
     List<int[]> ordered =
-        Arrays.asList(
+        asList(
             new int[] {},
             new int[] {LEAST},
             new int[] {LEAST, LEAST},
@@ -153,7 +154,7 @@ public class UnsignedIntsTest extends TestCase {
             new int[] {GREATEST, GREATEST, GREATEST});
 
     Comparator<int[]> comparator = UnsignedInts.lexicographicalComparator();
-    Helpers.testComparator(comparator, ordered);
+    testComparator(comparator, ordered);
   }
 
   public void testSort() {

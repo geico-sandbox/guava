@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Sets.filter;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Predicate;
 import java.util.Map.Entry;
@@ -57,7 +59,7 @@ final class FilteredEntrySetMultimap<K extends @Nullable Object, V extends @Null
 
   @Override
   Set<Entry<K, V>> createEntries() {
-    return Sets.filter(unfiltered().entries(), entryPredicate());
+    return filter(unfiltered().entries(), entryPredicate());
   }
 
   @Override

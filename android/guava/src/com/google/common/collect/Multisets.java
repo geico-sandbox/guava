@@ -18,18 +18,22 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.and;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
 import static com.google.common.collect.CollectPreconditions.checkRemove;
+import static com.google.common.collect.Iterators.addAll;
+import static com.google.common.collect.Iterators.unmodifiableIterator;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.util.Arrays.asList;
+import static java.util.Arrays.sort;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Multiset.Entry;
 import com.google.common.math.IntMath;
 import com.google.common.primitives.Ints;
@@ -37,9 +41,7 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.google.errorprone.annotations.InlineMe;
 import com.google.errorprone.annotations.concurrent.LazyInit;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -145,7 +147,7 @@ public final class Multisets {
     @LazyInit transient @Nullable Set<E> elementSet;
 
     Set<E> createElementSet() {
-      return Collections.unmodifiableSet(delegate.elementSet());
+      return unmodifiableSet(delegate.elementSet());
     }
 
     @Override
@@ -163,13 +165,13 @@ public final class Multisets {
       return (es == null)
           // Safe because the returned set is made unmodifiable and Entry
           // itself is readonly
-          ? entrySet = (Set) Collections.unmodifiableSet(delegate.entrySet())
+          ? entrySet = (Set) unmodifiableSet(delegate.entrySet())
           : es;
     }
 
     @Override
     public Iterator<E> iterator() {
-      return Iterators.unmodifiableIterator(delegate.iterator());
+      return unmodifiableIterator(delegate.iterator());
     }
 
     @Override
@@ -315,7 +317,7 @@ public final class Multisets {
       // Support clear(), removeAll(), and retainAll() when filtering a filtered
       // collection.
       FilteredMultiset<E> filtered = (FilteredMultiset<E>) unfiltered;
-      Predicate<E> combinedPredicate = Predicates.and(filtered.predicate, predicate);
+      Predicate<E> combinedPredicate = and(filtered.predicate, predicate);
       return new FilteredMultiset<>(filtered.unfiltered, combinedPredicate);
     }
     return new FilteredMultiset<>(unfiltered, predicate);
@@ -898,7 +900,7 @@ public final class Multisets {
     } else if (elements.isEmpty()) {
       return false;
     } else {
-      return Iterators.addAll(self, elements.iterator());
+      return addAll(self, elements.iterator());
     }
   }
 
@@ -1155,7 +1157,7 @@ public final class Multisets {
     @SuppressWarnings("unchecked") // generics+arrays
     // TODO(cpovirk): Consider storing an Entry<?> instead of Entry<E>.
     Entry<E>[] entries = (Entry<E>[]) multiset.entrySet().toArray((Entry<E>[]) new Entry<?>[0]);
-    Arrays.sort(entries, DecreasingCount.INSTANCE);
+    sort(entries, DecreasingCount.INSTANCE);
     return ImmutableMultiset.copyFromEntries(asList(entries));
   }
 

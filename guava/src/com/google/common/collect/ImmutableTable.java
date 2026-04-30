@@ -135,7 +135,7 @@ public abstract class ImmutableTable<R, C, V> extends AbstractTable<R, C, V>
 
   static <R, C, V> ImmutableTable<R, C, V> copyOf(
       Iterable<? extends Cell<? extends R, ? extends C, ? extends V>> cells) {
-    ImmutableTable.Builder<R, C, V> builder = ImmutableTable.builder();
+    ImmutableTable.Builder<R, C, V> builder = builder();
     for (Cell<? extends R, ? extends C, ? extends V> cell : cells) {
       builder.put(cell);
     }

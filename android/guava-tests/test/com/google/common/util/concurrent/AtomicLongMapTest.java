@@ -16,12 +16,13 @@
 
 package com.google.common.util.concurrent;
 
+import static com.google.common.testing.SerializableTester.reserialize;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
@@ -574,7 +575,7 @@ public class AtomicLongMapTest extends TestCase {
   public void testSerialization() {
     AtomicLongMap<String> map = AtomicLongMap.create();
     map.put("key", 1L);
-    AtomicLongMap<String> reserialized = SerializableTester.reserialize(map);
+    AtomicLongMap<String> reserialized = reserialize(map);
     assertEquals(map.asMap(), reserialized.asMap());
   }
 }

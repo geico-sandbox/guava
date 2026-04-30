@@ -18,6 +18,7 @@ package com.google.common.base;
 
 import static com.google.common.base.StandardSystemProperty.JAVA_CLASS_PATH;
 import static com.google.common.base.StandardSystemProperty.PATH_SEPARATOR;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -27,7 +28,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.testing.GcFinalization;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.io.File;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -117,9 +117,9 @@ public class EnumsTest extends TestCase {
 
   public void testStringConverter_convert() {
     Converter<String, TestEnum> converter = Enums.stringConverter(TestEnum.class);
-    assertEquals(TestEnum.CHEETO, converter.convert("CHEETO"));
-    assertEquals(TestEnum.HONDA, converter.convert("HONDA"));
-    assertEquals(TestEnum.POODLE, converter.convert("POODLE"));
+    assertThat(converter.convert("CHEETO")).isEqualTo(TestEnum.CHEETO);
+    assertThat(converter.convert("HONDA")).isEqualTo(TestEnum.HONDA);
+    assertThat(converter.convert("POODLE")).isEqualTo(TestEnum.POODLE);
     assertThat(converter.convert(null)).isNull();
     assertThat(converter.reverse().convert(null)).isNull();
   }
@@ -156,7 +156,7 @@ public class EnumsTest extends TestCase {
   }
 
   public void testStringConverter_serialization() {
-    SerializableTester.reserializeAndAssert(Enums.stringConverter(TestEnum.class));
+    reserializeAndAssert(Enums.stringConverter(TestEnum.class));
   }
 
   @J2ktIncompatible

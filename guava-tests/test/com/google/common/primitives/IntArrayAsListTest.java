@@ -17,6 +17,7 @@
 package com.google.common.primitives;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.System.arraycopy;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -120,8 +121,8 @@ public class IntArrayAsListTest extends TestCase {
 
   private static Integer[] concat(Integer[] left, Integer[] right) {
     Integer[] result = new Integer[left.length + right.length];
-    System.arraycopy(left, 0, result, 0, left.length);
-    System.arraycopy(right, 0, result, left.length, right.length);
+    arraycopy(left, 0, result, 0, left.length);
+    arraycopy(right, 0, result, left.length, right.length);
     return result;
   }
 

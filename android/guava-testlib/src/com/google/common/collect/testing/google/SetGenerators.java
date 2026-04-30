@@ -17,6 +17,7 @@
 package com.google.common.collect.testing.google;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newTreeSet;
 import static com.google.common.collect.testing.SampleElements.Strings.AFTER_LAST;
@@ -34,7 +35,6 @@ import com.google.common.collect.ContiguousSet;
 import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Range;
 import com.google.common.collect.testing.TestCollidingSetGenerator;
@@ -144,7 +144,7 @@ public class SetGenerators {
   public static class ImmutableSortedSetHeadsetGenerator extends TestStringSortedSetGenerator {
     @Override
     protected SortedSet<String> create(String[] elements) {
-      List<String> list = Lists.newArrayList(elements);
+      List<String> list = newArrayList(elements);
       list.add("zzz");
       return ImmutableSortedSet.copyOf(list).headSet("zzy");
     }
@@ -153,7 +153,7 @@ public class SetGenerators {
   public static class ImmutableSortedSetTailsetGenerator extends TestStringSortedSetGenerator {
     @Override
     protected SortedSet<String> create(String[] elements) {
-      List<String> list = Lists.newArrayList(elements);
+      List<String> list = newArrayList(elements);
       list.add("\0");
       return ImmutableSortedSet.copyOf(list).tailSet("\0\0");
     }
@@ -162,7 +162,7 @@ public class SetGenerators {
   public static class ImmutableSortedSetSubsetGenerator extends TestStringSortedSetGenerator {
     @Override
     protected SortedSet<String> create(String[] elements) {
-      List<String> list = Lists.newArrayList(elements);
+      List<String> list = newArrayList(elements);
       list.add("\0");
       list.add("zzz");
       return ImmutableSortedSet.copyOf(list).subSet("\0\0", "zzy");

@@ -17,6 +17,8 @@ package com.google.common.cache;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import junit.framework.TestCase;
@@ -25,6 +27,8 @@ import org.jspecify.annotations.NullUnmarked;
 /**
  * @author Charles Fry
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class CacheManualTest extends TestCase {
 

@@ -244,6 +244,7 @@ public abstract class ImmutableMap<K, V> implements Map<K, V>, Serializable {
   }
 
   /** ImmutableMap.ofEntries API that is friendly to use from JavaScript. */
+  @SuppressWarnings("unusable-by-js")
   @JsMethod(name = "ofEntries")
   static <K, V> ImmutableMap<K, V> jsOfEntries(Entry<? extends K, ? extends V>... entries) {
     return new RegularImmutableMap<>(entries);

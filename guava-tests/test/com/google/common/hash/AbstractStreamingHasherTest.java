@@ -16,18 +16,19 @@
 
 package com.google.common.hash;
 
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.truth.Truth.assertThat;
 import static java.nio.charset.StandardCharsets.UTF_16LE;
+import static java.util.Collections.singleton;
 import static org.junit.Assert.assertThrows;
 
-import com.google.common.collect.Iterables;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.hash.HashTestUtils.RandomHasherAction;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import junit.framework.TestCase;
@@ -38,6 +39,9 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author Dimitris Andreou
  */
+// All tests use Sink, which uses the currently J2KT-incompatible AbstractStreamingHasher
+// (Plus, testString in particular requires UTF_16LE support.)
+@J2ktIncompatible
 @NullUnmarked
 public class AbstractStreamingHasherTest extends TestCase {
   public void testBytes() {
@@ -146,8 +150,7 @@ public class AbstractStreamingHasherTest extends TestCase {
       Control control = new Control();
       Hasher controlSink = control.newHasher(1024);
 
-      Iterable<Hasher> sinksAndControl =
-          Iterables.concat(sinks, Collections.singleton(controlSink));
+      Iterable<Hasher> sinksAndControl = concat(sinks, singleton(controlSink));
       for (int insertion = 0; insertion < totalInsertions; insertion++) {
         RandomHasherAction.pickAtRandom(random).performAction(random, sinksAndControl);
       }

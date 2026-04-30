@@ -17,7 +17,11 @@
 package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Collections2.containsAllImpl;
+import static com.google.common.collect.Maps.containsEntryImpl;
+import static com.google.common.collect.Maps.removeEntryImpl;
 import static com.google.common.collect.Maps.transformValues;
+import static com.google.common.collect.Sets.equalsImpl;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -1009,14 +1013,14 @@ final class Synchronized {
     @Override
     public boolean contains(@Nullable Object o) {
       synchronized (mutex) {
-        return Maps.containsEntryImpl(delegate(), o);
+        return containsEntryImpl(delegate(), o);
       }
     }
 
     @Override
     public boolean containsAll(Collection<?> c) {
       synchronized (mutex) {
-        return Collections2.containsAllImpl(delegate(), c);
+        return containsAllImpl(delegate(), c);
       }
     }
 
@@ -1026,14 +1030,14 @@ final class Synchronized {
         return true;
       }
       synchronized (mutex) {
-        return Sets.equalsImpl(delegate(), o);
+        return equalsImpl(delegate(), o);
       }
     }
 
     @Override
     public boolean remove(@Nullable Object o) {
       synchronized (mutex) {
-        return Maps.removeEntryImpl(delegate(), o);
+        return removeEntryImpl(delegate(), o);
       }
     }
 
@@ -1490,7 +1494,7 @@ final class Synchronized {
     public NavigableSet<E> descendingSet() {
       synchronized (mutex) {
         if (descendingSet == null) {
-          NavigableSet<E> dS = Synchronized.navigableSet(delegate().descendingSet(), mutex);
+          NavigableSet<E> dS = navigableSet(delegate().descendingSet(), mutex);
           descendingSet = dS;
           return dS;
         }
@@ -1508,7 +1512,7 @@ final class Synchronized {
     @Override
     public NavigableSet<E> headSet(E toElement, boolean inclusive) {
       synchronized (mutex) {
-        return Synchronized.navigableSet(delegate().headSet(toElement, inclusive), mutex);
+        return navigableSet(delegate().headSet(toElement, inclusive), mutex);
       }
     }
 
@@ -1549,7 +1553,7 @@ final class Synchronized {
     public NavigableSet<E> subSet(
         E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
       synchronized (mutex) {
-        return Synchronized.navigableSet(
+        return navigableSet(
             delegate().subSet(fromElement, fromInclusive, toElement, toInclusive), mutex);
       }
     }
@@ -1562,7 +1566,7 @@ final class Synchronized {
     @Override
     public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
       synchronized (mutex) {
-        return Synchronized.navigableSet(delegate().tailSet(fromElement, inclusive), mutex);
+        return navigableSet(delegate().tailSet(fromElement, inclusive), mutex);
       }
     }
 
@@ -1632,7 +1636,7 @@ final class Synchronized {
     public NavigableSet<K> descendingKeySet() {
       synchronized (mutex) {
         if (descendingKeySet == null) {
-          return descendingKeySet = Synchronized.navigableSet(delegate().descendingKeySet(), mutex);
+          return descendingKeySet = navigableSet(delegate().descendingKeySet(), mutex);
         }
         return descendingKeySet;
       }
@@ -1729,7 +1733,7 @@ final class Synchronized {
     public NavigableSet<K> navigableKeySet() {
       synchronized (mutex) {
         if (navigableKeySet == null) {
-          return navigableKeySet = Synchronized.navigableSet(delegate().navigableKeySet(), mutex);
+          return navigableKeySet = navigableSet(delegate().navigableKeySet(), mutex);
         }
         return navigableKeySet;
       }

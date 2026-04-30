@@ -22,6 +22,8 @@ import static com.google.common.cache.TestingRemovalListeners.countingRemovalLis
 import static com.google.common.cache.TestingRemovalListeners.nullRemovalListener;
 import static com.google.common.cache.TestingRemovalListeners.queuingRemovalListener;
 import static com.google.common.cache.TestingWeighers.constantWeigher;
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
+import static com.google.common.collect.Sets.union;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.util.concurrent.Executors.newFixedThreadPool;
@@ -36,7 +38,6 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Ticker;
 import com.google.common.cache.TestingRemovalListeners.CountingRemovalListener;
 import com.google.common.cache.TestingRemovalListeners.QueuingRemovalListener;
-import com.google.common.collect.Sets;
 import com.google.common.testing.NullPointerTester;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.time.Duration;
@@ -457,7 +458,7 @@ public class CacheBuilderTest extends TestCase {
     int nThreads = 100;
     int nTasks = 1000;
     int nSeededEntries = 100;
-    Set<String> expectedKeys = Sets.newHashSetWithExpectedSize(nTasks + nSeededEntries);
+    Set<String> expectedKeys = newHashSetWithExpectedSize(nTasks + nSeededEntries);
     // seed the map, so its segments have a count>0; otherwise, clear() won't visit the in-progress
     // entries
     for (int i = 0; i < nSeededEntries; i++) {
@@ -510,7 +511,7 @@ public class CacheBuilderTest extends TestCase {
 
     // Each of the values added to the map should either still be there, or have seen a removal
     // notification.
-    assertThat(Sets.union(cache.asMap().keySet(), removalNotifications.keySet()))
+    assertThat(union(cache.asMap().keySet(), removalNotifications.keySet()))
         .isEqualTo(expectedKeys);
     assertThat(cache.asMap().keySet()).containsNoneIn(removalNotifications.keySet());
     threadPool.shutdown();

@@ -16,6 +16,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import com.google.common.base.Function;
 import com.google.common.collect.testing.ListTestSuiteBuilder;
 import com.google.common.collect.testing.TestStringListGenerator;
@@ -166,7 +168,7 @@ public class ForwardingListTest extends TestCase {
 
                   @Override
                   protected List<String> create(String[] elements) {
-                    return new StandardImplForwardingList<>(Lists.newArrayList(elements));
+                    return new StandardImplForwardingList<>(newArrayList(elements));
                   }
                 })
             .named("ForwardingList[ArrayList] with standard implementations")

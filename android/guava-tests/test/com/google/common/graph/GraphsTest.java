@@ -16,6 +16,7 @@
 
 package com.google.common.graph;
 
+import static com.google.common.graph.AbstractNetworkTest.validateNetwork;
 import static com.google.common.graph.Graphs.TransitiveClosureSelfLoopStrategy.ADD_SELF_LOOPS_ALWAYS;
 import static com.google.common.graph.Graphs.TransitiveClosureSelfLoopStrategy.ADD_SELF_LOOPS_FOR_CYCLES;
 import static com.google.common.graph.Graphs.copyOf;
@@ -456,7 +457,7 @@ public class GraphsTest {
     Network<Integer, String> transpose = transpose(directedGraph);
     assertThat(transpose).isEqualTo(expectedTranspose);
     assertThat(transpose(transpose)).isSameInstanceAs(directedGraph);
-    AbstractNetworkTest.validateNetwork(transpose);
+    validateNetwork(transpose);
 
     assertThat(transpose.edgesConnecting(N1, N2)).isEmpty();
     assertThat(transpose.edgeConnectingOrNull(N1, N2)).isNull();
@@ -470,8 +471,7 @@ public class GraphsTest {
     // View should be updated.
     assertThat(transpose.edgesConnecting(N1, N2)).containsExactly(E21);
     assertThat(transpose.edgeConnectingOrNull(N1, N2)).isEqualTo(E21);
-
-    AbstractNetworkTest.validateNetwork(transpose);
+    validateNetwork(transpose);
   }
 
   @Test

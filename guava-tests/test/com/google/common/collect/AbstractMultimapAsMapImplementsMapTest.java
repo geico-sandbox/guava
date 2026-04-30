@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
@@ -56,7 +57,7 @@ public abstract class AbstractMultimapAsMapImplementsMapTest
 
   @Override
   protected Collection<Integer> getValueNotInPopulatedMap() {
-    return Lists.newArrayList(0);
+    return newArrayList(0);
   }
 
   /**

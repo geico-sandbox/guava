@@ -17,11 +17,11 @@
 package com.google.common.collect.testing.features;
 
 import static com.google.common.collect.testing.Helpers.copyToSet;
+import static java.util.Collections.emptySet;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import java.util.Collections;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
 
@@ -46,7 +46,7 @@ public final class TesterRequirements {
   }
 
   public TesterRequirements() {
-    this(Collections.emptySet(), Collections.emptySet());
+    this(emptySet(), emptySet());
   }
 
   public final Set<Feature<?>> getPresentFeatures() {

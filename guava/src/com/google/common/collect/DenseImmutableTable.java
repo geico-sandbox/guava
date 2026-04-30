@@ -15,6 +15,7 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.indexMap;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -59,8 +60,8 @@ final class DenseImmutableTable<R, C, V> extends RegularImmutableTable<R, C, V> 
     @SuppressWarnings("unchecked")
     @Nullable V[][] array = (@Nullable V[][]) new Object[rowSpace.size()][columnSpace.size()];
     this.values = array;
-    this.rowKeyToIndex = Maps.indexMap(rowSpace);
-    this.columnKeyToIndex = Maps.indexMap(columnSpace);
+    this.rowKeyToIndex = indexMap(rowSpace);
+    this.columnKeyToIndex = indexMap(columnSpace);
     rowCounts = new int[rowKeyToIndex.size()];
     columnCounts = new int[columnKeyToIndex.size()];
     int[] cellRowIndices = new int[cellList.size()];

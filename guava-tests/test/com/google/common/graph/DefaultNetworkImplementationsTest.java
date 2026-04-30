@@ -20,10 +20,10 @@ import static com.google.common.graph.TestUtil.EdgeType.DIRECTED;
 import static com.google.common.graph.TestUtil.EdgeType.UNDIRECTED;
 import static com.google.common.graph.TestUtil.assertNodeNotInGraphErrorMessage;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.graph.TestUtil.EdgeType;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 import org.jspecify.annotations.NullUnmarked;
@@ -57,7 +57,7 @@ public final class DefaultNetworkImplementationsTest {
 
   @Parameters
   public static Collection<Object[]> parameters() {
-    return Arrays.asList(
+    return asList(
         new Object[][] {
           {UNDIRECTED}, {DIRECTED},
         });

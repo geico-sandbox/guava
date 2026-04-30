@@ -16,6 +16,7 @@ package com.google.common.cache;
 
 import static com.google.common.cache.TestingCacheLoaders.identityLoader;
 import static com.google.common.cache.TestingRemovalListeners.countingRemovalListener;
+import static com.google.common.collect.Iterators.size;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.lang.Integer.parseInt;
@@ -23,10 +24,11 @@ import static java.util.Arrays.asList;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.cache.TestingCacheLoaders.IdentityLoader;
 import com.google.common.cache.TestingRemovalListeners.CountingRemovalListener;
 import com.google.common.cache.TestingRemovalListeners.QueuingRemovalListener;
-import com.google.common.collect.Iterators;
 import com.google.common.testing.FakeTicker;
 import com.google.common.util.concurrent.Callables;
 import java.util.List;
@@ -43,6 +45,8 @@ import org.jspecify.annotations.NullUnmarked;
  * @author mike nonemacher
  */
 @SuppressWarnings("deprecation") // tests of deprecated method
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class CacheExpirationTest extends TestCase {
 
@@ -159,9 +163,9 @@ public class CacheExpirationTest extends TestCase {
     cache.getUnchecked(KEY_PREFIX + 11);
 
     // collections views shouldn't expose expired entries
-    assertThat(Iterators.size(cache.asMap().entrySet().iterator())).isEqualTo(1);
-    assertThat(Iterators.size(cache.asMap().keySet().iterator())).isEqualTo(1);
-    assertThat(Iterators.size(cache.asMap().values().iterator())).isEqualTo(1);
+    assertThat(size(cache.asMap().entrySet().iterator())).isEqualTo(1);
+    assertThat(size(cache.asMap().keySet().iterator())).isEqualTo(1);
+    assertThat(size(cache.asMap().values().iterator())).isEqualTo(1);
 
     CacheTesting.expireEntries((LoadingCache<?, ?>) cache, EXPIRING_TIME, ticker);
 

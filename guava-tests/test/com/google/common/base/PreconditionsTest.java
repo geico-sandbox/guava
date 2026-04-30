@@ -22,6 +22,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndex;
 import static com.google.common.base.Preconditions.checkPositionIndexes;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.base.Strings.lenientFormat;
+import static com.google.common.collect.Lists.cartesianProduct;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -30,7 +32,6 @@ import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 import com.google.common.testing.ArbitraryInstances;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -363,7 +364,7 @@ public class PreconditionsTest extends TestCase {
     } else {
       assertThat(throwable)
           .hasMessageThat()
-          .isEqualTo(Strings.lenientFormat("", Arrays.copyOfRange(params, 2, params.length)));
+          .isEqualTo(lenientFormat("", Arrays.copyOfRange(params, 2, params.length)));
     }
   }
 
@@ -405,13 +406,13 @@ public class PreconditionsTest extends TestCase {
     ImmutableSet.Builder<ImmutableList<Class<?>>> allOverloads = ImmutableSet.builder();
     // The first two are for the overloads that don't take formatting args, e.g.
     // checkArgument(boolean) and checkArgument(boolean, Object)
-    allOverloads.add(ImmutableList.<Class<?>>of(predicateType));
-    allOverloads.add(ImmutableList.<Class<?>>of(predicateType, Object.class));
+    allOverloads.add(ImmutableList.of(predicateType));
+    allOverloads.add(ImmutableList.of(predicateType, Object.class));
 
     List<List<Class<?>>> typesLists = new ArrayList<>();
     for (int i = 0; i < 2; i++) {
       typesLists.add(POSSIBLE_PARAM_TYPES);
-      for (List<Class<?>> curr : Lists.cartesianProduct(typesLists)) {
+      for (List<Class<?>> curr : cartesianProduct(typesLists)) {
         allOverloads.add(
             ImmutableList.<Class<?>>builder()
                 .add(predicateType)

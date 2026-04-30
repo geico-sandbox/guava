@@ -16,6 +16,8 @@
 
 package com.google.common.net;
 
+import static com.google.common.base.Strings.repeat;
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -23,9 +25,7 @@ import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Ascii;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
 import junit.framework.TestCase;
@@ -49,13 +49,13 @@ public final class InternetDomainNameTest extends TestCase {
 
   /** A domain part which is valid under lenient validation, but invalid under strict validation. */
   @SuppressWarnings("InlineMeInliner") // String.repeat unavailable under Java 8
-  static final String LOTS_OF_DELTAS = Strings.repeat(DELTA, 62);
+  static final String LOTS_OF_DELTAS = repeat(DELTA, 62);
 
   @SuppressWarnings("InlineMeInliner") // String.repeat unavailable under Java 8
-  private static final String ALMOST_TOO_MANY_LEVELS = Strings.repeat("a.", 127);
+  private static final String ALMOST_TOO_MANY_LEVELS = repeat("a.", 127);
 
   @SuppressWarnings("InlineMeInliner") // String.repeat unavailable under Java 8
-  private static final String ALMOST_TOO_LONG = Strings.repeat("aaaaa.", 40) + "1234567890.c";
+  private static final String ALMOST_TOO_LONG = repeat("aaaaa.", 40) + "1234567890.c";
 
   private static final ImmutableSet<String> VALID_NAME =
       ImmutableSet.of(
@@ -422,9 +422,8 @@ public final class InternetDomainNameTest extends TestCase {
   }
 
   public void testIsValid() {
-    Iterable<String> validCases = Iterables.concat(VALID_NAME, PS, NO_PS, NON_PS);
-    Iterable<String> invalidCases =
-        Iterables.concat(INVALID_NAME, VALID_IP_ADDRS, INVALID_IP_ADDRS);
+    Iterable<String> validCases = concat(VALID_NAME, PS, NO_PS, NON_PS);
+    Iterable<String> invalidCases = concat(INVALID_NAME, VALID_IP_ADDRS, INVALID_IP_ADDRS);
 
     for (String valid : validCases) {
       assertTrue(valid, InternetDomainName.isValid(valid));

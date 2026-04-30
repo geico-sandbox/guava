@@ -15,6 +15,7 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Strings.emptyToNull;
 import static com.google.common.util.concurrent.NullnessCasts.uncheckedNull;
 import static com.google.common.util.concurrent.Platform.interruptCurrentThread;
 import static com.google.common.util.concurrent.Platform.rethrowIfErrorOtherThanStackOverflow;
@@ -25,7 +26,6 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.logging.Level.SEVERE;
 
 import com.google.common.annotations.GwtCompatible;
-import com.google.common.base.Strings;
 import com.google.common.util.concurrent.internal.InternalFutureFailureAccess;
 import com.google.common.util.concurrent.internal.InternalFutures;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -123,17 +123,6 @@ public abstract class AbstractFuture<V extends @Nullable Object> extends Abstrac
     @Override
     public final boolean cancel(boolean mayInterruptIfRunning) {
       return super.cancel(mayInterruptIfRunning);
-    }
-
-    @Override
-    @ParametricNullness
-    public final V resultNow() {
-      return super.resultNow();
-    }
-
-    @Override
-    public final Throwable exceptionNow() {
-      return super.exceptionNow();
     }
   }
 
@@ -349,52 +338,6 @@ public abstract class AbstractFuture<V extends @Nullable Object> extends Abstrac
   public boolean isCancelled() {
     @RetainedLocalRef Object localValue = value();
     return localValue instanceof Cancellation;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since NEXT. Note, however, that Java 19+ users can call this method with any version of Guava.
-   */
-  @SuppressWarnings("MissingOverride") // not an override under J2CL
-  @ParametricNullness
-  public V resultNow() {
-    Object localValue = value();
-    if (localValue == null | localValue instanceof DelegatingToFuture) {
-      throw new IllegalStateException("Task has not completed");
-    }
-    if (localValue instanceof Failure) {
-      throw new IllegalStateException("Task completed with exception");
-    }
-    if (localValue instanceof Cancellation) {
-      throw new IllegalStateException("Task was cancelled");
-    }
-    if (localValue == NULL) {
-      return uncheckedNull();
-    }
-    @SuppressWarnings("unchecked") // The only other option is a V from set(V)
-    V asV = (V) localValue;
-    return asV;
-  }
-
-  /**
-   * {@inheritDoc}
-   *
-   * @since NEXT. Note, however, that Java 19+ users can call this method with any version of Guava.
-   */
-  @SuppressWarnings("MissingOverride") // not an override under J2CL
-  public Throwable exceptionNow() {
-    Object localValue = value();
-    if (localValue instanceof Failure) {
-      return ((Failure) localValue).exception;
-    }
-    if (localValue == null | localValue instanceof DelegatingToFuture) {
-      throw new IllegalStateException("Task has not completed");
-    }
-    if (localValue instanceof Cancellation) {
-      throw new IllegalStateException("Task was cancelled");
-    }
-    throw new IllegalStateException("Task completed with a result");
   }
 
   /**
@@ -980,7 +923,7 @@ public abstract class AbstractFuture<V extends @Nullable Object> extends Abstrac
     } else {
       String pendingDescription;
       try {
-        pendingDescription = Strings.emptyToNull(pendingToString());
+        pendingDescription = emptyToNull(pendingToString());
       } catch (Throwable e) {
         /*
          * We want to catch (Exception | StackOverflowError), but we can't under environments where

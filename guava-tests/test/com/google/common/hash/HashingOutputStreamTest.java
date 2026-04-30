@@ -20,6 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.testing.NullPointerTester;
 import java.io.ByteArrayOutputStream;
 import junit.framework.TestCase;
@@ -31,6 +32,7 @@ import org.jspecify.annotations.NullUnmarked;
  * @author Zoe Piepmeier
  */
 @NullUnmarked
+@J2ktIncompatible
 public class HashingOutputStreamTest extends TestCase {
   private Hasher hasher;
   private HashFunction hashFunction;

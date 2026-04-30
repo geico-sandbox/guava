@@ -17,12 +17,12 @@
 package com.google.common.testing;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertTrue;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -150,7 +150,7 @@ public final class CollectorTester<
   @CanIgnoreReturnValue
   @SuppressWarnings("nullness") // TODO(cpovirk): Remove after we fix whatever the bug is.
   public final CollectorTester<T, A, R> expectCollects(R expectedResult, T... inputs) {
-    List<T> list = Arrays.asList(inputs);
+    List<T> list = asList(inputs);
     doExpectCollects(expectedResult, list);
     if (collector.characteristics().contains(Collector.Characteristics.UNORDERED)) {
       Collections.reverse(list);

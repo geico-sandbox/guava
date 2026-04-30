@@ -17,6 +17,7 @@
 package com.google.common.base;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
@@ -25,7 +26,6 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.ImmutableMap;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import junit.framework.TestCase;
@@ -203,7 +203,7 @@ public class ToStringHelperTest extends TestCase {
     String toTest =
         MoreObjects.toStringHelper(new TestClass())
             .add("field1", "This is string.")
-            .add("field2", Arrays.asList("abc", "def", "ghi"))
+            .add("field2", asList("abc", "def", "ghi"))
             .add("field3", map)
             .toString();
     String expected =
@@ -219,7 +219,7 @@ public class ToStringHelperTest extends TestCase {
     String toTest =
         MoreObjects.toStringHelper(new TestClass())
             .add("field1", "This is string.")
-            .add("field2", Arrays.asList("abc", "def", "ghi"))
+            .add("field2", asList("abc", "def", "ghi"))
             .add("field3", map)
             .toString();
     String expectedRegex =
@@ -550,7 +550,7 @@ public class ToStringHelperTest extends TestCase {
             .add("field2", new StringBuilder())
             // nio CharBuffer (implements CharSequence) is tested separately below
             // Collections and Maps
-            .add("field11", Arrays.asList("Hello"))
+            .add("field11", asList("Hello"))
             .add("field12", new ArrayList<>())
             .add("field13", new HashMap<>())
             // Optionals

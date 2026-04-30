@@ -19,6 +19,7 @@ package com.google.common.collect.testing;
 import static com.google.common.collect.testing.Helpers.copyToList;
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE;
 import static com.google.common.collect.testing.features.CollectionFeature.SERIALIZABLE_INCLUDING_VIEWS;
+import static com.google.common.testing.SerializableTester.reserialize;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.testing.features.Feature;
@@ -29,7 +30,6 @@ import com.google.common.collect.testing.testers.SetCreationTester;
 import com.google.common.collect.testing.testers.SetEqualsTester;
 import com.google.common.collect.testing.testers.SetHashCodeTester;
 import com.google.common.collect.testing.testers.SetRemoveTester;
-import com.google.common.testing.SerializableTester;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -75,8 +75,7 @@ public class SetTestSuiteBuilder<E>
 
     if (parentBuilder.getFeatures().contains(SERIALIZABLE)) {
       derivedSuites.add(
-          SetTestSuiteBuilder.using(
-                  new ReserializedSetGenerator<E>(parentBuilder.getSubjectGenerator()))
+          using(new ReserializedSetGenerator<E>(parentBuilder.getSubjectGenerator()))
               .named(getName() + " reserialized")
               .withFeatures(computeReserializedCollectionFeatures(parentBuilder.getFeatures()))
               .suppressing(parentBuilder.getSuppressedTests())
@@ -101,7 +100,7 @@ public class SetTestSuiteBuilder<E>
 
     @Override
     public Set<E> create(Object... elements) {
-      return (Set<E>) SerializableTester.reserialize(gen.create(elements));
+      return (Set<E>) reserialize(gen.create(elements));
     }
 
     @Override

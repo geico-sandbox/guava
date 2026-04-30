@@ -16,6 +16,14 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.addAllImpl;
+import static com.google.common.collect.Lists.equalsImpl;
+import static com.google.common.collect.Lists.hashCodeImpl;
+import static com.google.common.collect.Lists.indexOfImpl;
+import static com.google.common.collect.Lists.lastIndexOfImpl;
+import static com.google.common.collect.Lists.listIteratorImpl;
+import static com.google.common.collect.Lists.subListImpl;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.Collection;
@@ -146,7 +154,7 @@ public abstract class ForwardingList<E extends @Nullable Object> extends Forward
    * @since 7.0
    */
   protected boolean standardAddAll(int index, Iterable<? extends E> elements) {
-    return Lists.addAllImpl(this, index, elements);
+    return addAllImpl(this, index, elements);
   }
 
   /**
@@ -157,7 +165,7 @@ public abstract class ForwardingList<E extends @Nullable Object> extends Forward
    * @since 7.0
    */
   protected int standardIndexOf(@Nullable Object element) {
-    return Lists.indexOfImpl(this, element);
+    return indexOfImpl(this, element);
   }
 
   /**
@@ -168,7 +176,7 @@ public abstract class ForwardingList<E extends @Nullable Object> extends Forward
    * @since 7.0
    */
   protected int standardLastIndexOf(@Nullable Object element) {
-    return Lists.lastIndexOfImpl(this, element);
+    return lastIndexOfImpl(this, element);
   }
 
   /**
@@ -202,7 +210,7 @@ public abstract class ForwardingList<E extends @Nullable Object> extends Forward
    * @since 7.0
    */
   protected ListIterator<E> standardListIterator(int start) {
-    return Lists.listIteratorImpl(this, start);
+    return listIteratorImpl(this, start);
   }
 
   /**
@@ -212,7 +220,7 @@ public abstract class ForwardingList<E extends @Nullable Object> extends Forward
    * @since 7.0
    */
   protected List<E> standardSubList(int fromIndex, int toIndex) {
-    return Lists.subListImpl(this, fromIndex, toIndex);
+    return subListImpl(this, fromIndex, toIndex);
   }
 
   /**
@@ -223,7 +231,7 @@ public abstract class ForwardingList<E extends @Nullable Object> extends Forward
    * @since 7.0
    */
   protected boolean standardEquals(@Nullable Object object) {
-    return Lists.equalsImpl(this, object);
+    return equalsImpl(this, object);
   }
 
   /**
@@ -234,6 +242,6 @@ public abstract class ForwardingList<E extends @Nullable Object> extends Forward
    * @since 7.0
    */
   protected int standardHashCode() {
-    return Lists.hashCodeImpl(this);
+    return hashCodeImpl(this);
   }
 }

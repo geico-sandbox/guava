@@ -17,11 +17,11 @@
 package com.google.common.reflect;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.testing.EqualsTester;
-import com.google.common.testing.SerializableTester;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -69,7 +69,7 @@ public class AbstractInvocationHandlerTest extends TestCase {
         .addEqualityGroup(
             newDelegatingListWithEquals(LIST1),
             newDelegatingListWithEquals(LIST1),
-            SerializableTester.reserialize(newDelegatingListWithEquals(LIST1)))
+            reserialize(newDelegatingListWithEquals(LIST1)))
         .addEqualityGroup(
             newDelegatingListWithEquals(LIST2),
             newProxyWithSubHandler1(LIST2), // Makes sure type of handler doesn't affect equality

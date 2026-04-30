@@ -17,6 +17,9 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.newTreeMap;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singletonMap;
 import static org.junit.Assert.assertThrows;
@@ -37,7 +40,6 @@ import com.google.common.collect.testing.google.SortedMapGenerators.ImmutableSor
 import com.google.common.collect.testing.google.SortedMapGenerators.ImmutableSortedMapKeyListGenerator;
 import com.google.common.collect.testing.google.SortedMapGenerators.ImmutableSortedMapValueListGenerator;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -202,9 +204,7 @@ public class ImmutableSortedMapTest extends TestCase {
 
   public void testBuilderPutAllWithEmptyMap() {
     ImmutableSortedMap<String, Integer> map =
-        ImmutableSortedMap.<String, Integer>naturalOrder()
-            .putAll(Collections.<String, Integer>emptyMap())
-            .build();
+        ImmutableSortedMap.<String, Integer>naturalOrder().putAll(Collections.emptyMap()).build();
     assertEquals(Collections.<String, Integer>emptyMap(), map);
   }
 
@@ -244,15 +244,13 @@ public class ImmutableSortedMapTest extends TestCase {
   public void testBuilderPutNullKeyViaPutAll() {
     Builder<String, Integer> builder = ImmutableSortedMap.naturalOrder();
     assertThrows(
-        NullPointerException.class,
-        () -> builder.putAll(Collections.<String, Integer>singletonMap(null, 1)));
+        NullPointerException.class, () -> builder.putAll(Collections.singletonMap(null, 1)));
   }
 
   public void testBuilderPutNullValueViaPutAll() {
     Builder<String, Integer> builder = ImmutableSortedMap.naturalOrder();
     assertThrows(
-        NullPointerException.class,
-        () -> builder.putAll(Collections.<String, Integer>singletonMap("one", null)));
+        NullPointerException.class, () -> builder.putAll(Collections.singletonMap("one", null)));
   }
 
   public void testPuttingTheSameKeyTwiceThrowsOnBuild() {
@@ -442,8 +440,7 @@ public class ImmutableSortedMapTest extends TestCase {
   }
 
   public void testCopyOfEmptyMap() {
-    ImmutableSortedMap<String, Integer> copy =
-        ImmutableSortedMap.copyOf(Collections.<String, Integer>emptyMap());
+    ImmutableSortedMap<String, Integer> copy = ImmutableSortedMap.copyOf(Collections.emptyMap());
     assertEquals(Collections.<String, Integer>emptyMap(), copy);
     assertThat(ImmutableSortedMap.copyOf(copy)).isSameInstanceAs(copy);
     assertThat(copy.comparator()).isEqualTo(Ordering.natural());
@@ -491,7 +488,7 @@ public class ImmutableSortedMapTest extends TestCase {
   }
 
   public void testCopyOfSortedNatural() {
-    SortedMap<String, Integer> original = Maps.newTreeMap();
+    SortedMap<String, Integer> original = newTreeMap();
     original.put("one", 1);
     original.put("two", 2);
     original.put("three", 3);
@@ -504,7 +501,7 @@ public class ImmutableSortedMapTest extends TestCase {
 
   public void testCopyOfSortedExplicit() {
     Comparator<String> comparator = Ordering.<String>natural().reverse();
-    SortedMap<String, Integer> original = Maps.newTreeMap(comparator);
+    SortedMap<String, Integer> original = newTreeMap(comparator);
     original.put("one", 1);
     original.put("two", 2);
     original.put("three", 3);
@@ -695,11 +692,9 @@ public class ImmutableSortedMapTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testViewSerialization() {
     Map<String, Integer> map = ImmutableSortedMap.of("one", 1, "two", 2, "three", 3);
-    SerializableTester.reserializeAndAssert(map.entrySet());
-    SerializableTester.reserializeAndAssert(map.keySet());
-    assertEquals(
-        new ArrayList<>(map.values()),
-        new ArrayList<>(SerializableTester.reserialize(map.values())));
+    reserializeAndAssert(map.entrySet());
+    reserializeAndAssert(map.keySet());
+    assertEquals(new ArrayList<>(map.values()), new ArrayList<>(reserialize(map.values())));
   }
 
   public void testHeadMapInclusive() {

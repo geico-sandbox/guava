@@ -16,11 +16,11 @@ package com.google.common.collect;
 
 import static com.google.common.collect.BoundType.OPEN;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.testing.CollectorTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import junit.framework.TestCase;
@@ -41,7 +41,7 @@ public class ImmutableRangeMapTest extends TestCase {
   static {
     ImmutableList.Builder<Range<Integer>> builder = ImmutableList.builder();
 
-    builder.add(Range.<Integer>all());
+    builder.add(Range.all());
 
     // Add one-ended ranges
     for (int i = MIN_BOUND; i <= MAX_BOUND; i++) {
@@ -186,8 +186,8 @@ public class ImmutableRangeMapTest extends TestCase {
           ImmutableMap<Range<Integer>, Integer> descendingMap = rangeMap.asDescendingMapOfRanges();
           assertEquals(expectedAsMap, asMap);
           assertEquals(expectedAsMap, descendingMap);
-          SerializableTester.reserializeAndAssert(asMap);
-          SerializableTester.reserializeAndAssert(descendingMap);
+          reserializeAndAssert(asMap);
+          reserializeAndAssert(descendingMap);
           assertEquals(
               ImmutableList.copyOf(asMap.entrySet()).reverse(),
               ImmutableList.copyOf(descendingMap.entrySet()));
@@ -228,7 +228,7 @@ public class ImmutableRangeMapTest extends TestCase {
 
   public void testSerialization() {
     ImmutableRangeMap<Integer, Integer> emptyRangeMap = ImmutableRangeMap.of();
-    SerializableTester.reserializeAndAssert(emptyRangeMap);
+    reserializeAndAssert(emptyRangeMap);
 
     ImmutableRangeMap<Integer, Integer> nonEmptyRangeMap =
         new ImmutableRangeMap.Builder<Integer, Integer>()
@@ -241,12 +241,12 @@ public class ImmutableRangeMapTest extends TestCase {
     ImmutableMap<Range<Integer>, Integer> test = nonEmptyRangeMap.asMapOfRanges();
 
     for (Range<Integer> range : test.keySet()) {
-      SerializableTester.reserializeAndAssert(range);
+      reserializeAndAssert(range);
     }
 
-    SerializableTester.reserializeAndAssert(test.keySet());
+    reserializeAndAssert(test.keySet());
 
-    SerializableTester.reserializeAndAssert(nonEmptyRangeMap);
+    reserializeAndAssert(nonEmptyRangeMap);
   }
 
   public void testToImmutableRangeMap() {

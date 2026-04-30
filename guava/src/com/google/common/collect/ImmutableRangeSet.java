@@ -17,6 +17,7 @@ package com.google.common.collect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static com.google.common.collect.Iterators.emptyIterator;
 import static com.google.common.collect.Iterators.peekingIterator;
@@ -421,7 +422,7 @@ public final class ImmutableRangeSet<C extends Comparable> extends AbstractRange
    * @since 21.0
    */
   public ImmutableRangeSet<C> union(RangeSet<C> other) {
-    return unionOf(Iterables.concat(asRanges(), other.asRanges()));
+    return unionOf(concat(asRanges(), other.asRanges()));
   }
 
   /**

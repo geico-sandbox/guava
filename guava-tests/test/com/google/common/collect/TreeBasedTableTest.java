@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.singleton;
 
@@ -28,7 +29,6 @@ import com.google.common.collect.testing.TestStringSortedMapGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
-import com.google.common.testing.SerializableTester;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -131,7 +131,7 @@ public class TreeBasedTableTest extends AbstractTableTest<Character> {
   @GwtIncompatible // SerializableTester
   public void testSerialization() {
     table = create("foo", 1, 'a', "bar", 1, 'b', "foo", 3, 'c');
-    SerializableTester.reserializeAndAssert(table);
+    reserializeAndAssert(table);
   }
 
   public void testToString_ordered() {

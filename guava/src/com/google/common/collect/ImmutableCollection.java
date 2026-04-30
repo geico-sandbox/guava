@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Predicate;
@@ -92,10 +93,8 @@ import org.jspecify.annotations.Nullable;
  *
  * <p>Expressing the immutability guarantee directly in the type that user code references is a
  * powerful advantage. Although Java offers certain immutable collection factory methods, such as
- * {@link Collections#singleton(Object)} and <a
- * href="https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/util/Set.html#unmodifiable">{@code
- * Set.of}</a>, we recommend using <i>these</i> classes instead for this reason (as well as for
- * consistency).
+ * {@link Collections#singleton(Object)} and {@link Set##unmodifiable Set.of}, we recommend using
+ * <i>these</i> classes instead for this reason (as well as for consistency).
  *
  * <h4>Creation</h4>
  *

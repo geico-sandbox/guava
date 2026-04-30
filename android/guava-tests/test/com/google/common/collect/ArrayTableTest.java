@@ -17,6 +17,7 @@
 package com.google.common.collect;
 
 import static com.google.common.collect.Tables.immutableCell;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
@@ -27,7 +28,6 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.collect.Table.Cell;
 import com.google.common.testing.EqualsTester;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -216,7 +216,7 @@ public class ArrayTableTest extends AbstractTableTest<@Nullable Character> {
 
   public void testCreateEmptyRowsXColumns() {
     ArrayTable<String, String, Character> table =
-        ArrayTable.create(Arrays.<String>asList(), Arrays.<String>asList());
+        ArrayTable.create(Arrays.asList(), Arrays.asList());
     assertThat(table).isEmpty();
     assertThat(table).hasSize(0);
     assertThat(table.columnKeyList()).isEmpty();
@@ -229,7 +229,7 @@ public class ArrayTableTest extends AbstractTableTest<@Nullable Character> {
   @GwtIncompatible // toArray
   public void testEmptyToArry() {
     ArrayTable<String, String, Character> table =
-        ArrayTable.create(Arrays.<String>asList(), Arrays.<String>asList());
+        ArrayTable.create(Arrays.asList(), Arrays.asList());
     assertThat(table.toArray(Character.class)).asList().isEmpty();
   }
 
@@ -274,7 +274,7 @@ public class ArrayTableTest extends AbstractTableTest<@Nullable Character> {
 
   public void testCreateCopyEmptyArrayTable() {
     Table<String, Integer, @Nullable Character> original =
-        ArrayTable.create(Arrays.<String>asList(), Arrays.<Integer>asList());
+        ArrayTable.create(Arrays.asList(), Arrays.asList());
     ArrayTable<String, Integer, Character> copy = ArrayTable.create(original);
     assertThat(copy).isEqualTo(original);
     assertThat(copy).isEmpty();
@@ -282,7 +282,7 @@ public class ArrayTableTest extends AbstractTableTest<@Nullable Character> {
 
   public void testSerialization() {
     table = create("foo", 1, 'a', "bar", 1, 'b', "foo", 3, 'c');
-    SerializableTester.reserializeAndAssert(table);
+    reserializeAndAssert(table);
   }
 
   @J2ktIncompatible
@@ -472,6 +472,6 @@ public class ArrayTableTest extends AbstractTableTest<@Nullable Character> {
   @GwtIncompatible
   @J2ktIncompatible
     public void testSerializable() {
-    SerializableTester.reserializeAndAssert(create());
+    reserializeAndAssert(create());
   }
 }

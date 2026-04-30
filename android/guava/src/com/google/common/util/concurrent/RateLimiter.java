@@ -17,6 +17,7 @@ package com.google.common.util.concurrent;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.util.concurrent.Internal.toNanosSaturated;
+import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
 import static java.lang.Math.max;
 import static java.util.concurrent.TimeUnit.MICROSECONDS;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
@@ -487,7 +488,7 @@ public abstract class RateLimiter {
         @Override
         protected void sleepMicrosUninterruptibly(long micros) {
           if (micros > 0) {
-            Uninterruptibles.sleepUninterruptibly(micros, MICROSECONDS);
+            sleepUninterruptibly(micros, MICROSECONDS);
           }
         }
       };

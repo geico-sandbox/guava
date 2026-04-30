@@ -16,6 +16,7 @@
 
 package com.google.common.collect.testing.google;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.testing.Helpers.assertContains;
 import static com.google.common.collect.testing.Helpers.assertEmpty;
 import static com.google.common.collect.testing.Helpers.assertEqualIgnoringOrder;
@@ -29,7 +30,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
@@ -105,7 +105,7 @@ public class MultimapPutTester<K extends @Nullable Object, V extends @Nullable O
 
     multimap().put(k3(), null);
 
-    assertGet(k3(), Lists.newArrayList((V) null)); // ImmutableList.of can't take null.
+    assertGet(k3(), newArrayList((V) null)); // ImmutableList.of can't take null.
     assertEquals(size + 1, multimap().size());
   }
 

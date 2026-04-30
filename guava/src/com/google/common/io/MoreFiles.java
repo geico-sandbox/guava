@@ -19,6 +19,7 @@ package com.google.common.io;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.getOnlyElement;
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtIncompatible;
@@ -742,7 +743,7 @@ public final class MoreFiles {
   /** Checks that the given options allow an insecure delete, throwing an exception if not. */
   private static void checkAllowsInsecure(Path path, RecursiveDeleteOption[] options)
       throws InsecureRecursiveDeleteException {
-    if (!Arrays.asList(options).contains(RecursiveDeleteOption.ALLOW_INSECURE)) {
+    if (!asList(options).contains(RecursiveDeleteOption.ALLOW_INSECURE)) {
       throw new InsecureRecursiveDeleteException(path.toString());
     }
   }

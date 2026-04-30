@@ -16,6 +16,7 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.util.concurrent.Uninterruptibles.awaitUninterruptibly;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.Assert.assertThrows;
 
@@ -198,7 +199,7 @@ public final class InterruptibleTaskTest extends TestCase {
 
     @Override
     protected void implCloseChannel() {
-      Uninterruptibles.awaitUninterruptibly(exitClose);
+      awaitUninterruptibly(exitClose);
     }
 
     void doBegin() {

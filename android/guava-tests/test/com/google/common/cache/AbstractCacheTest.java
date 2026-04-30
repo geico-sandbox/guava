@@ -37,7 +37,7 @@ import org.jspecify.annotations.Nullable;
 public class AbstractCacheTest extends TestCase {
 
   public void testGetIfPresent() {
-    AtomicReference<Object> valueRef = new AtomicReference<>();
+    AtomicReference<@Nullable Object> valueRef = new AtomicReference<>();
     Cache<Object, Object> cache =
         new AbstractCache<Object, Object>() {
           @Override

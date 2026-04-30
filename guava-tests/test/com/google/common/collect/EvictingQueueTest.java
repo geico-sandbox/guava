@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -23,7 +24,6 @@ import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.AbstractList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -199,7 +199,7 @@ public class EvictingQueueTest extends TestCase {
     original.add("two");
     original.add("three");
 
-    EvictingQueue<String> copy = SerializableTester.reserialize(original);
+    EvictingQueue<String> copy = reserialize(original);
     assertEquals(copy.maxSize, original.maxSize);
     assertThat(copy.remove()).isEqualTo("one");
     assertThat(copy.remove()).isEqualTo("two");

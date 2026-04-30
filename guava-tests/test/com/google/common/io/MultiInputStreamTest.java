@@ -17,13 +17,14 @@
 package com.google.common.io;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Collections.nCopies;
+import static java.util.Collections.singleton;
 
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -101,7 +102,7 @@ public class MultiInputStreamTest extends IoTestCase {
   public void testSkip() throws Exception {
     MultiInputStream multi =
         new MultiInputStream(
-            Collections.singleton(
+            singleton(
                     new ByteSource() {
                       @Override
                       public InputStream openStream() {
@@ -134,7 +135,7 @@ public class MultiInputStreamTest extends IoTestCase {
   }
 
   private static MultiInputStream tenMillionEmptySources() throws IOException {
-    return new MultiInputStream(Collections.nCopies(10_000_000, ByteSource.empty()).iterator());
+    return new MultiInputStream(nCopies(10_000_000, ByteSource.empty()).iterator());
   }
 
   private static ByteSource newByteSource(int start, int size) {

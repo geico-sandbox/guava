@@ -16,22 +16,25 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.collect.testing.Helpers.misleadingSizeCollection;
+import static com.google.common.collect.testing.Helpers.testComparator;
 import static com.google.common.primitives.Shorts.max;
 import static com.google.common.primitives.Shorts.min;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Converter;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -331,7 +334,7 @@ public class ShortsTest extends TestCase {
 
   public void testLexicographicalComparator() {
     List<short[]> ordered =
-        Arrays.asList(
+        asList(
             new short[] {},
             new short[] {LEAST},
             new short[] {LEAST, LEAST},
@@ -343,14 +346,14 @@ public class ShortsTest extends TestCase {
             new short[] {GREATEST, GREATEST, GREATEST});
 
     Comparator<short[]> comparator = Shorts.lexicographicalComparator();
-    Helpers.testComparator(comparator, ordered);
+    testComparator(comparator, ordered);
   }
 
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testLexicographicalComparatorSerializable() {
     Comparator<short[]> comparator = Shorts.lexicographicalComparator();
-    assertThat(SerializableTester.reserialize(comparator)).isSameInstanceAs(comparator);
+    assertThat(reserialize(comparator)).isSameInstanceAs(comparator);
   }
 
   public void testReverse() {
@@ -513,20 +516,20 @@ public class ShortsTest extends TestCase {
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testStringConverterSerialization() {
-    SerializableTester.reserializeAndAssert(Shorts.stringConverter());
+    reserializeAndAssert(Shorts.stringConverter());
   }
 
   public void testToArray() {
     // need explicit type parameter to avoid javac warning!?
-    List<Short> none = Arrays.<Short>asList();
+    List<Short> none = Arrays.asList();
     assertThat(Shorts.toArray(none)).isEqualTo(EMPTY);
 
-    List<Short> one = Arrays.asList((short) 1);
+    List<Short> one = asList((short) 1);
     assertThat(Shorts.toArray(one)).isEqualTo(ARRAY1);
 
     short[] array = {(short) 0, (short) 1, (short) 3};
 
-    List<Short> three = Arrays.asList((short) 0, (short) 1, (short) 3);
+    List<Short> three = asList((short) 0, (short) 1, (short) 3);
     assertThat(Shorts.toArray(three)).isEqualTo(array);
 
     assertThat(Shorts.toArray(Shorts.asList(array))).isEqualTo(array);
@@ -536,7 +539,7 @@ public class ShortsTest extends TestCase {
     for (int delta : new int[] {+1, 0, -1}) {
       for (int i = 0; i < VALUES.length; i++) {
         List<Short> list = Shorts.asList(VALUES).subList(0, i);
-        Collection<Short> misleadingSize = Helpers.misleadingSizeCollection(delta);
+        Collection<Short> misleadingSize = misleadingSizeCollection(delta);
         misleadingSize.addAll(list);
         short[] arr = Shorts.toArray(misleadingSize);
         assertThat(arr).hasLength(i);
@@ -549,19 +552,19 @@ public class ShortsTest extends TestCase {
 
   @SuppressWarnings("nullness") // test of a bogus call
   public void testToArray_withNull() {
-    List<@Nullable Short> list = Arrays.asList((short) 0, (short) 1, null);
+    List<@Nullable Short> list = asList((short) 0, (short) 1, null);
     assertThrows(NullPointerException.class, () -> Shorts.toArray(list));
   }
 
   public void testToArray_withConversion() {
     short[] array = {(short) 0, (short) 1, (short) 2};
 
-    List<Byte> bytes = Arrays.asList((byte) 0, (byte) 1, (byte) 2);
-    List<Short> shorts = Arrays.asList((short) 0, (short) 1, (short) 2);
-    List<Integer> ints = Arrays.asList(0, 1, 2);
-    List<Float> floats = Arrays.asList(0.0f, 1.0f, 2.0f);
-    List<Long> longs = Arrays.asList(0L, 1L, 2L);
-    List<Double> doubles = Arrays.asList(0.0, 1.0, 2.0);
+    List<Byte> bytes = asList((byte) 0, (byte) 1, (byte) 2);
+    List<Short> shorts = asList((short) 0, (short) 1, (short) 2);
+    List<Integer> ints = asList(0, 1, 2);
+    List<Float> floats = asList(0.0f, 1.0f, 2.0f);
+    List<Long> longs = asList(0L, 1L, 2L);
+    List<Double> doubles = asList(0.0, 1.0, 2.0);
 
     assertThat(Shorts.toArray(bytes)).isEqualTo(array);
     assertThat(Shorts.toArray(shorts)).isEqualTo(array);
@@ -604,7 +607,7 @@ public class ShortsTest extends TestCase {
   // `primitives` can't depend on `collect`, so this is what the prod code has to return.
   @SuppressWarnings("EmptyList")
   public void testAsListEmpty() {
-    assertThat(Shorts.asList(EMPTY)).isSameInstanceAs(Collections.emptyList());
+    assertThat(Shorts.asList(EMPTY)).isSameInstanceAs(emptyList());
   }
 
   @J2ktIncompatible

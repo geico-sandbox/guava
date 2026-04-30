@@ -18,6 +18,7 @@ package com.google.common.testing;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.newConcurrentMap;
 import static java.util.Arrays.stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Stream.concat;
@@ -28,7 +29,6 @@ import com.google.common.base.Converter;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
 import com.google.common.collect.MutableClassToInstanceMap;
 import com.google.common.reflect.Invokable;
 import com.google.common.reflect.Parameter;
@@ -316,7 +316,7 @@ public final class NullPointerTester {
     }
 
     final Iterable<Method> getInstanceMethods(Class<?> cls) {
-      ConcurrentMap<Signature, Method> map = Maps.newConcurrentMap();
+      ConcurrentMap<Signature, Method> map = newConcurrentMap();
       for (Method method : getVisibleMethods(cls)) {
         if (!Invokable.from(method).isStatic()) {
           map.putIfAbsent(new Signature(method), method);

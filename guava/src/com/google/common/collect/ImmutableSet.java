@@ -20,6 +20,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
 import static com.google.common.collect.ImmutableList.asImmutableList;
+import static com.google.common.collect.Sets.equalsImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
 import static com.google.common.math.IntMath.sqrt;
 import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
@@ -294,12 +297,12 @@ public abstract class ImmutableSet<E> extends ImmutableCollection<E> implements 
         && hashCode() != object.hashCode()) {
       return false;
     }
-    return Sets.equalsImpl(this, object);
+    return equalsImpl(this, object);
   }
 
   @Override
   public int hashCode() {
-    return Sets.hashCodeImpl(this);
+    return hashCodeImpl(this);
   }
 
   // This declaration is needed to make Set.iterator() and
@@ -676,7 +679,7 @@ public abstract class ImmutableSet<E> extends ImmutableCollection<E> implements 
 
     @Override
     ImmutableSet<E> build() {
-      return ImmutableSet.of();
+      return of();
     }
   }
 
@@ -944,7 +947,7 @@ public abstract class ImmutableSet<E> extends ImmutableCollection<E> implements 
 
     JdkBackedSetBuilderImpl(SetBuilderImpl<E> toCopy) {
       super(toCopy); // initializes dedupedElements and distinct
-      delegate = Sets.newHashSetWithExpectedSize(distinct);
+      delegate = newHashSetWithExpectedSize(distinct);
       for (int i = 0; i < distinct; i++) {
         /*
          * requireNonNull is safe because we ensure that the first `distinct` elements have been

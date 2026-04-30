@@ -18,7 +18,15 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Maps.asMap;
+import static com.google.common.collect.Maps.filterEntries;
+import static com.google.common.collect.Maps.filterKeys;
+import static com.google.common.collect.Maps.filterValues;
+import static com.google.common.collect.Maps.transformEntries;
 import static com.google.common.collect.Maps.transformValues;
+import static com.google.common.collect.Maps.unmodifiableBiMap;
+import static com.google.common.collect.Maps.unmodifiableNavigableMap;
+import static com.google.common.collect.Sets.newTreeSet;
 import static com.google.common.collect.testing.Helpers.mapEntry;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.sort;
@@ -77,7 +85,7 @@ public class MapsCollectionTest extends TestCase {
                   protected SortedMap<String, String> create(Entry<String, String>[] entries) {
                     SafeTreeMap<String, String> map = new SafeTreeMap<>();
                     putEntries(map, entries);
-                    return Maps.unmodifiableNavigableMap(map);
+                    return unmodifiableNavigableMap(map);
                   }
                 })
             .named("unmodifiableNavigableMap[SafeTreeMap]")
@@ -94,7 +102,7 @@ public class MapsCollectionTest extends TestCase {
                       checkArgument(!bimap.containsKey(entry.getKey()));
                       bimap.put(entry.getKey(), entry.getValue());
                     }
-                    return Maps.unmodifiableBiMap(bimap);
+                    return unmodifiableBiMap(bimap);
                   }
                 })
             .named("unmodifiableBiMap[HashBiMap]")
@@ -127,7 +135,7 @@ public class MapsCollectionTest extends TestCase {
                       checkNotNull(entry.getValue());
                       set.add((String) checkNotNull(entry.getKey()));
                     }
-                    return Maps.asMap(
+                    return asMap(
                         set,
                         new Function<String, Integer>() {
                           @Override
@@ -196,7 +204,7 @@ public class MapsCollectionTest extends TestCase {
                       checkNotNull(entry.getValue());
                       set.add((String) checkNotNull(entry.getKey()));
                     }
-                    return Maps.asMap(
+                    return asMap(
                         set,
                         new Function<String, Integer>() {
                           @Override
@@ -257,13 +265,13 @@ public class MapsCollectionTest extends TestCase {
 
                   @Override
                   public NavigableMap<String, Integer> create(Object... elements) {
-                    NavigableSet<String> set = Sets.newTreeSet(Ordering.natural());
+                    NavigableSet<String> set = newTreeSet(Ordering.natural());
                     for (Object e : elements) {
                       Entry<?, ?> entry = (Entry<?, ?>) e;
                       checkNotNull(entry.getValue());
                       set.add((String) checkNotNull(entry.getKey()));
                     }
-                    return Maps.asMap(
+                    return asMap(
                         set,
                         new Function<String, Integer>() {
                           @Override
@@ -323,7 +331,7 @@ public class MapsCollectionTest extends TestCase {
                     Map<String, String> map = new HashMap<>();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterKeys(map, FILTER_KEYS);
+                    return filterKeys(map, FILTER_KEYS);
                   }
                 })
             .named("Maps.filterKeys[Map, Predicate]")
@@ -342,7 +350,7 @@ public class MapsCollectionTest extends TestCase {
                     Map<String, String> map = new HashMap<>();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterValues(map, FILTER_VALUES);
+                    return filterValues(map, FILTER_VALUES);
                   }
                 })
             .named("Maps.filterValues[Map, Predicate]")
@@ -361,7 +369,7 @@ public class MapsCollectionTest extends TestCase {
                     Map<String, String> map = new HashMap<>();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterEntries(map, FILTER_ENTRIES);
+                    return filterEntries(map, FILTER_ENTRIES);
                   }
                 })
             .named("Maps.filterEntries[Map, Predicate]")
@@ -380,8 +388,8 @@ public class MapsCollectionTest extends TestCase {
                     Map<String, String> map = new HashMap<>();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    map = Maps.filterEntries(map, FILTER_ENTRIES_1);
-                    return Maps.filterEntries(map, FILTER_ENTRIES_2);
+                    map = filterEntries(map, FILTER_ENTRIES_1);
+                    return filterEntries(map, FILTER_ENTRIES_2);
                   }
                 })
             .named("Maps.filterEntries[Maps.filterEntries[Map, Predicate], Predicate]")
@@ -405,7 +413,7 @@ public class MapsCollectionTest extends TestCase {
                     BiMap<String, String> map = HashBiMap.create();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterKeys(map, FILTER_KEYS);
+                    return filterKeys(map, FILTER_KEYS);
                   }
                 })
             .named("Maps.filterKeys[BiMap, Predicate]")
@@ -423,7 +431,7 @@ public class MapsCollectionTest extends TestCase {
                     BiMap<String, String> map = HashBiMap.create();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterValues(map, FILTER_VALUES);
+                    return filterValues(map, FILTER_VALUES);
                   }
                 })
             .named("Maps.filterValues[BiMap, Predicate]")
@@ -442,7 +450,7 @@ public class MapsCollectionTest extends TestCase {
                     BiMap<String, String> map = HashBiMap.create();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterEntries(map, FILTER_ENTRIES);
+                    return filterEntries(map, FILTER_ENTRIES);
                   }
                 })
             .named("Maps.filterEntries[BiMap, Predicate]")
@@ -466,7 +474,7 @@ public class MapsCollectionTest extends TestCase {
                     SortedMap<String, String> map = new NonNavigableSortedMap();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterKeys(map, FILTER_KEYS);
+                    return filterKeys(map, FILTER_KEYS);
                   }
                 })
             .named("Maps.filterKeys[SortedMap, Predicate]")
@@ -481,7 +489,7 @@ public class MapsCollectionTest extends TestCase {
                     SortedMap<String, String> map = new NonNavigableSortedMap();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterValues(map, FILTER_VALUES);
+                    return filterValues(map, FILTER_VALUES);
                   }
                 })
             .named("Maps.filterValues[SortedMap, Predicate]")
@@ -496,7 +504,7 @@ public class MapsCollectionTest extends TestCase {
                     SortedMap<String, String> map = new NonNavigableSortedMap();
                     putEntries(map, entries);
                     map.putAll(ENTRIES_TO_FILTER);
-                    return Maps.filterEntries(map, FILTER_ENTRIES);
+                    return filterEntries(map, FILTER_ENTRIES);
                   }
                 })
             .named("Maps.filterEntries[SortedMap, Predicate]")
@@ -517,7 +525,7 @@ public class MapsCollectionTest extends TestCase {
                     putEntries(map, entries);
                     map.put("banana", "toast");
                     map.put("eggplant", "spam");
-                    return Maps.filterKeys(map, FILTER_KEYS);
+                    return filterKeys(map, FILTER_KEYS);
                   }
                 })
             .named("Maps.filterKeys[NavigableMap, Predicate]")
@@ -533,7 +541,7 @@ public class MapsCollectionTest extends TestCase {
                     putEntries(map, entries);
                     map.put("banana", "toast");
                     map.put("eggplant", "spam");
-                    return Maps.filterValues(map, FILTER_VALUES);
+                    return filterValues(map, FILTER_VALUES);
                   }
                 })
             .named("Maps.filterValues[NavigableMap, Predicate]")
@@ -549,7 +557,7 @@ public class MapsCollectionTest extends TestCase {
                     putEntries(map, entries);
                     map.put("banana", "toast");
                     map.put("eggplant", "spam");
-                    return Maps.filterEntries(map, FILTER_ENTRIES);
+                    return filterEntries(map, FILTER_ENTRIES);
                   }
                 })
             .named("Maps.filterEntries[NavigableMap, Predicate]")
@@ -619,7 +627,7 @@ public class MapsCollectionTest extends TestCase {
 
   private static class NonNavigableSortedSet extends ForwardingSortedSet<String> {
 
-    private final SortedSet<String> delegate = Sets.newTreeSet(Ordering.natural());
+    private final SortedSet<String> delegate = newTreeSet(Ordering.natural());
 
     @Override
     protected SortedSet<String> delegate() {
@@ -697,7 +705,7 @@ public class MapsCollectionTest extends TestCase {
                     for (Entry<String, String> entry : entries) {
                       map.put(entry.getKey(), encode(entry.getValue()));
                     }
-                    return Maps.transformEntries(map, DECODE_ENTRY_TRANSFORMER);
+                    return transformEntries(map, DECODE_ENTRY_TRANSFORMER);
                   }
                 })
             .named("Maps.transformEntries[Map, EntryTransformer]")
@@ -742,7 +750,7 @@ public class MapsCollectionTest extends TestCase {
                     for (Entry<String, String> entry : entries) {
                       map.put(entry.getKey(), encode(entry.getValue()));
                     }
-                    return Maps.transformEntries(map, DECODE_ENTRY_TRANSFORMER);
+                    return transformEntries(map, DECODE_ENTRY_TRANSFORMER);
                   }
                 })
             .named("Maps.transformEntries[SortedMap, EntryTransformer]")
@@ -785,7 +793,7 @@ public class MapsCollectionTest extends TestCase {
                     for (Entry<String, String> entry : entries) {
                       map.put(entry.getKey(), encode(entry.getValue()));
                     }
-                    return Maps.transformEntries(map, DECODE_ENTRY_TRANSFORMER);
+                    return transformEntries(map, DECODE_ENTRY_TRANSFORMER);
                   }
                 })
             .named("Maps.transformEntries[NavigableMap, EntryTransformer]")

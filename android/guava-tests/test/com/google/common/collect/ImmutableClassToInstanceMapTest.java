@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.singletonMap;
@@ -27,7 +28,6 @@ import com.google.common.collect.testing.MapTestSuiteBuilder;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
-import com.google.common.testing.SerializableTester;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -79,7 +79,7 @@ public class ImmutableClassToInstanceMapTest extends TestCase {
   }
 
   public void testSerialization_empty() {
-    assertThat(SerializableTester.reserialize(ImmutableClassToInstanceMap.of()))
+    assertThat(reserialize(ImmutableClassToInstanceMap.of()))
         .isSameInstanceAs(ImmutableClassToInstanceMap.of());
   }
 

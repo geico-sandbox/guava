@@ -14,6 +14,7 @@
 
 package com.google.common.hash;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.errorprone.annotations.Immutable;
 import java.nio.ByteBuffer;
 
@@ -23,6 +24,7 @@ import java.nio.ByteBuffer;
  *
  * @author Kurt Alfred Kluever
  */
+@J2ktIncompatible
 @Immutable
 final class Crc32cHashFunction extends AbstractHashFunction {
   static final HashFunction CRC_32_C = new Crc32cHashFunction();

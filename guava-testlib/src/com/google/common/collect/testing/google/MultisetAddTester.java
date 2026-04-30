@@ -18,11 +18,11 @@ package com.google.common.collect.testing.google;
 
 import static com.google.common.collect.testing.features.CollectionFeature.SUPPORTS_ADD;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptySet;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.collect.testing.features.CollectionFeature;
-import java.util.Collections;
 import org.junit.Ignore;
 
 /**
@@ -90,7 +90,7 @@ public class MultisetAddTester<E> extends AbstractMultisetTester<E> {
 
   @CollectionFeature.Require(SUPPORTS_ADD)
   public void testAddAll_emptySet() {
-    assertFalse(getMultiset().addAll(Collections.emptySet()));
+    assertFalse(getMultiset().addAll(emptySet()));
     expectUnchanged();
   }
 

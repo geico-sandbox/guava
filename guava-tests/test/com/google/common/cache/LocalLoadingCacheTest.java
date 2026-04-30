@@ -22,6 +22,8 @@ import static com.google.common.cache.TestingCacheLoaders.identityLoader;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import com.google.common.annotations.GwtIncompatible;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.cache.LocalCache.LocalLoadingCache;
 import com.google.common.cache.LocalCache.Segment;
 import com.google.common.collect.ImmutableMap;
@@ -38,6 +40,8 @@ import org.jspecify.annotations.NullUnmarked;
 /**
  * @author Charles Fry
  */
+@GwtIncompatible
+@J2ktIncompatible
 @NullUnmarked
 public class LocalLoadingCacheTest extends TestCase {
 

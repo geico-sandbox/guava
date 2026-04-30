@@ -17,9 +17,9 @@
 package com.google.common.graph;
 
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 
 import com.google.common.collect.Ordering;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public final class MapCacheTest {
   public static Collection<Object[]> parameters() {
     Comparator<String> nullsLast = Ordering.natural().nullsLast();
 
-    return Arrays.asList(
+    return asList(
         new Object[][] {
           {new MapIteratorCache<String, String>(new HashMap<String, String>())},
           {new MapIteratorCache<String, String>(new TreeMap<String, String>(nullsLast))},

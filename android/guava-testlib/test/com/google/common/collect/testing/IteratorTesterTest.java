@@ -21,7 +21,6 @@ import static com.google.common.collect.testing.IteratorFeature.MODIFIABLE;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -43,7 +42,7 @@ public class IteratorTesterTest extends TestCase {
             4, MODIFIABLE, newArrayList(1, 2, 3), IteratorTester.KnownOrder.KNOWN_ORDER) {
           @Override
           protected Iterator<Integer> newTargetIterator() {
-            return Lists.newArrayList(1, 2, 3, 4).iterator();
+            return newArrayList(1, 2, 3, 4).iterator();
           }
         };
     assertFailure(tester);
@@ -55,7 +54,7 @@ public class IteratorTesterTest extends TestCase {
             3, MODIFIABLE, newArrayList(1, 2, 3), IteratorTester.KnownOrder.KNOWN_ORDER) {
           @Override
           protected Iterator<Integer> newTargetIterator() {
-            return Lists.newArrayList(1, 3, 2).iterator();
+            return newArrayList(1, 3, 2).iterator();
           }
         };
     assertFailure(tester);
@@ -144,7 +143,7 @@ public class IteratorTesterTest extends TestCase {
           4, MODIFIABLE, newArrayList(1, 2), IteratorTester.KnownOrder.KNOWN_ORDER) {
         @Override
         protected Iterator<Integer> newTargetIterator() {
-          Iterator<Integer> iterator = Lists.newArrayList(1, 2).iterator();
+          Iterator<Integer> iterator = newArrayList(1, 2).iterator();
           return new IteratorWithJdkBug6529795<>(iterator);
         }
       }.test();
@@ -167,7 +166,7 @@ public class IteratorTesterTest extends TestCase {
     @Override
     protected Iterator<Integer> newTargetIterator() {
       numCallsToNewTargetIterator++;
-      return Lists.newArrayList(1).iterator();
+      return newArrayList(1).iterator();
     }
 
     @Override
@@ -195,7 +194,7 @@ public class IteratorTesterTest extends TestCase {
             1, MODIFIABLE, newArrayList(1, 2, 3), IteratorTester.KnownOrder.KNOWN_ORDER) {
           @Override
           protected Iterator<Integer> newTargetIterator() {
-            return Lists.newArrayList(1, 2, 3).iterator();
+            return newArrayList(1, 2, 3).iterator();
           }
 
           @Override

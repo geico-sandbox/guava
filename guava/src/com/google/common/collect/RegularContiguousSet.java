@@ -18,6 +18,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.BoundType.CLOSED;
+import static com.google.common.collect.Collections2.containsAllImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -184,7 +186,7 @@ final class RegularContiguousSet<C extends Comparable> extends ContiguousSet<C> 
 
   @Override
   public boolean containsAll(Collection<?> targets) {
-    return Collections2.containsAllImpl(this, targets);
+    return containsAllImpl(this, targets);
   }
 
   @Override
@@ -236,7 +238,7 @@ final class RegularContiguousSet<C extends Comparable> extends ContiguousSet<C> 
   // copied to make sure not to use the GWT-emulated version
   @Override
   public int hashCode() {
-    return Sets.hashCodeImpl(this);
+    return hashCodeImpl(this);
   }
 
   @GwtIncompatible

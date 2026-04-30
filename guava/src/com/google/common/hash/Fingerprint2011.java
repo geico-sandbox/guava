@@ -7,6 +7,7 @@ import static com.google.common.hash.LittleEndianByteArray.load64;
 import static com.google.common.hash.LittleEndianByteArray.load64Safely;
 import static java.lang.Long.rotateRight;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.annotations.VisibleForTesting;
 
 /**
@@ -28,6 +29,7 @@ import com.google.common.annotations.VisibleForTesting;
  * @author kylemaddison@google.com (Kyle Maddison)
  * @author gpike@google.com (Geoff Pike)
  */
+@J2ktIncompatible
 final class Fingerprint2011 extends AbstractNonStreamingHashFunction {
   static final HashFunction FINGERPRINT_2011 = new Fingerprint2011();
 

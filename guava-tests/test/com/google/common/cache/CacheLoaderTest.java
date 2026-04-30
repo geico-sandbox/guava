@@ -19,6 +19,7 @@ package com.google.common.cache;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
 
+import com.google.common.annotations.GwtIncompatible;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -36,6 +37,7 @@ import org.jspecify.annotations.NullUnmarked;
  *
  * @author Charles Fry
  */
+@GwtIncompatible
 @NullUnmarked
 public class CacheLoaderTest extends TestCase {
 
@@ -72,7 +74,7 @@ public class CacheLoaderTest extends TestCase {
           }
 
           @Override
-          public Map<Object, Object> loadAll(Iterable<?> keys) {
+          public Map<Object, Object> loadAll(Iterable<? extends Object> keys) {
             loadAllCount.incrementAndGet();
             return ImmutableMap.of();
           }

@@ -117,7 +117,7 @@ public class CycleDetectingLockFactoryTest extends TestCase {
     expected = assertThrows(PotentialDeadlockException.class, () -> lockA.lock());
     checkMessage(expected, "LockB -> LockA", "LockA -> LockB");
     // The causal chain should be cached.
-    assertThat(expected.getCause()).isEqualTo(firstException.getCause());
+    assertThat(expected).hasCauseThat().isEqualTo(firstException.getCause());
     // lockA should work after lockB is released.
     lockB.unlock();
     lockA.lock();

@@ -20,7 +20,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
+import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.keyPredicateOnEntries;
+import static com.google.common.collect.Maps.valuePredicateOnEntries;
+import static com.google.common.collect.Sets.filter;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.Collections.unmodifiableList;
@@ -93,9 +97,9 @@ class FilteredEntryMultimap<K extends @Nullable Object, V extends @Nullable Obje
   static <E extends @Nullable Object> Collection<E> filterCollection(
       Collection<E> collection, Predicate<? super E> predicate) {
     if (collection instanceof Set) {
-      return Sets.filter((Set<E>) collection, predicate);
+      return filter((Set<E>) collection, predicate);
     } else {
-      return Collections2.filter(collection, predicate);
+      return filter(collection, predicate);
     }
   }
 
@@ -230,12 +234,12 @@ class FilteredEntryMultimap<K extends @Nullable Object, V extends @Nullable Obje
 
         @Override
         public boolean removeAll(Collection<?> c) {
-          return removeEntriesIf(Maps.keyPredicateOnEntries(in(c)));
+          return removeEntriesIf(keyPredicateOnEntries(in(c)));
         }
 
         @Override
         public boolean retainAll(Collection<?> c) {
-          return removeEntriesIf(Maps.keyPredicateOnEntries(not(in(c))));
+          return removeEntriesIf(keyPredicateOnEntries(not(in(c))));
         }
 
         @Override
@@ -334,12 +338,12 @@ class FilteredEntryMultimap<K extends @Nullable Object, V extends @Nullable Obje
 
         @Override
         public boolean removeAll(Collection<?> c) {
-          return removeEntriesIf(Maps.valuePredicateOnEntries(in(c)));
+          return removeEntriesIf(valuePredicateOnEntries(in(c)));
         }
 
         @Override
         public boolean retainAll(Collection<?> c) {
-          return removeEntriesIf(Maps.valuePredicateOnEntries(not(in(c))));
+          return removeEntriesIf(valuePredicateOnEntries(not(in(c))));
         }
       }
       return new ValuesImpl();

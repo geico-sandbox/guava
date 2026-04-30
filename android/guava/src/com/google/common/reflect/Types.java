@@ -16,7 +16,10 @@ package com.google.common.reflect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.not;
+import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -24,7 +27,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Iterables;
 import com.google.errorprone.annotations.Keep;
 import java.io.Serializable;
 import java.lang.reflect.AnnotatedElement;
@@ -123,7 +125,7 @@ final class Types {
       // requireNonNull is safe because we're examining a type that's known to have a superclass.
       ParameterizedType parameterizedType =
           requireNonNull((ParameterizedType) subclass.getGenericSuperclass());
-      for (ClassOwnership behavior : ClassOwnership.values()) {
+      for (ClassOwnership behavior : values()) {
         if (behavior.getOwnerType(LocalClass.class) == parameterizedType.getOwnerType()) {
           return behavior;
         }
@@ -502,8 +504,8 @@ final class Types {
     public boolean equals(@Nullable Object obj) {
       if (obj instanceof WildcardType) {
         WildcardType that = (WildcardType) obj;
-        return lowerBounds.equals(Arrays.asList(that.getLowerBounds()))
-            && upperBounds.equals(Arrays.asList(that.getUpperBounds()));
+        return lowerBounds.equals(asList(that.getLowerBounds()))
+            && upperBounds.equals(asList(that.getUpperBounds()));
       }
       return false;
     }
@@ -533,7 +535,7 @@ final class Types {
   }
 
   private static Iterable<Type> filterUpperBounds(Iterable<Type> bounds) {
-    return Iterables.filter(bounds, Predicates.not(Predicates.<Type>equalTo(Object.class)));
+    return filter(bounds, not(Predicates.equalTo(Object.class)));
   }
 
   private static void disallowPrimitiveType(Type[] types, String usedAs) {

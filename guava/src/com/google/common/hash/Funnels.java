@@ -15,6 +15,7 @@
 package com.google.common.hash;
 
 import com.google.common.annotations.Beta;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Preconditions;
 import java.io.InvalidObjectException;
 import java.io.ObjectInputStream;
@@ -29,6 +30,7 @@ import org.jspecify.annotations.Nullable;
  * @author Dimitris Andreou
  * @since 11.0
  */
+@J2ktIncompatible
 @Beta
 public final class Funnels {
   private Funnels() {}

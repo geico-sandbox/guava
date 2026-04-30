@@ -20,6 +20,7 @@ import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import java.io.Serializable;
+import java.util.Objects;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -66,7 +67,7 @@ final class FunctionalEquivalence<F, T> extends Equivalence<F> implements Serial
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(function, resultEquivalence);
+    return Objects.hash(function, resultEquivalence);
   }
 
   @Override

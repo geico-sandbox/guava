@@ -26,7 +26,6 @@ import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -188,7 +187,7 @@ final class FuturesGetChecked {
   private static <X extends Exception> X newWithCause(Class<X> exceptionClass, Throwable cause) {
     // getConstructors() guarantees this as long as we don't modify the array.
     @SuppressWarnings({"unchecked", "rawtypes"})
-    List<Constructor<X>> constructors = (List) Arrays.asList(exceptionClass.getConstructors());
+    List<Constructor<X>> constructors = (List) asList(exceptionClass.getConstructors());
     for (Constructor<X> constructor : preferringStringsThenThrowables(constructors)) {
       X instance = newFromConstructor(constructor, cause);
       if (instance != null) {

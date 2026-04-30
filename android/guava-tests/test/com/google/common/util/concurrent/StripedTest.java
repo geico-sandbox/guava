@@ -17,6 +17,9 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.collect.Iterables.concat;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newHashSetWithExpectedSize;
+import static com.google.common.collect.Sets.newIdentityHashSet;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -25,9 +28,7 @@ import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Functions;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Sets;
 import com.google.common.testing.GcFinalization;
 import com.google.common.testing.NullPointerTester;
 import java.lang.ref.WeakReference;
@@ -161,7 +162,7 @@ public class StripedTest extends TestCase {
 
       // ensure that bulkGet returns locks in monotonically increasing order
       for (int objectsNum = 1; objectsNum <= striped.size() * 2; objectsNum++) {
-        Set<Object> objects = Sets.newHashSetWithExpectedSize(objectsNum);
+        Set<Object> objects = newHashSetWithExpectedSize(objectsNum);
         for (int i = 0; i < objectsNum; i++) {
           objects.add(new Object());
         }
@@ -171,7 +172,7 @@ public class StripedTest extends TestCase {
 
         // check idempotency
         Iterable<?> locks2 = striped.bulkGet(objects);
-        assertEquals(Lists.newArrayList(locks), Lists.newArrayList(locks2));
+        assertEquals(newArrayList(locks), newArrayList(locks2));
       }
     }
   }
@@ -184,7 +185,7 @@ public class StripedTest extends TestCase {
   }
 
   private static void assertBasicInvariants(Striped<?> striped) {
-    Set<Object> observed = Sets.newIdentityHashSet(); // for the sake of weakly referenced locks.
+    Set<Object> observed = newIdentityHashSet(); // for the sake of weakly referenced locks.
     // this gets the stripes with #getAt(index)
     for (int i = 0; i < striped.size(); i++) {
       Object object = striped.getAt(i);

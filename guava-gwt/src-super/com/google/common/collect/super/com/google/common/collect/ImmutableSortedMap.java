@@ -417,12 +417,12 @@ public final class ImmutableSortedMap<K, V> extends ForwardingImmutableMap<K, V>
 
   @Override
   ImmutableSortedSet<K> createKeySet() {
-    // the keySet() of the delegate is only a Set and TreeMap.navigatableKeySet
+    // the keySet() of the delegate is only a Set and TreeMap.navigableKeySet
     // is not available in GWT yet.  To keep the code simple and code size more,
     // we make a copy here, instead of creating a view of it.
     //
     // TODO: revisit if it's unbearably slow or when GWT supports
-    // TreeMap.navigatbleKeySet().
+    // TreeMap.navigableKeySet().
     return ImmutableSortedSet.copyOf(comparator, sortedDelegate.keySet());
   }
 

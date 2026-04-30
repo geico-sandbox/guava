@@ -21,12 +21,12 @@ import static com.google.common.io.TestOption.CLOSE_THROWS;
 import static com.google.common.io.TestOption.OPEN_THROWS;
 import static com.google.common.io.TestOption.READ_THROWS;
 import static com.google.common.io.TestOption.SKIP_THROWS;
+import static java.util.Arrays.asList;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import org.jspecify.annotations.NullUnmarked;
 
 /**
@@ -39,7 +39,7 @@ public class TestInputStream extends FilterInputStream {
   private boolean closed;
 
   public TestInputStream(InputStream in, TestOption... options) throws IOException {
-    this(in, Arrays.asList(options));
+    this(in, asList(options));
   }
 
   public TestInputStream(InputStream in, Iterable<TestOption> options) throws IOException {

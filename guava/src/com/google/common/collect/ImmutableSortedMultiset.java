@@ -16,6 +16,8 @@ package com.google.common.collect;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Lists.newArrayListWithCapacity;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -171,7 +173,7 @@ public abstract class ImmutableSortedMultiset<E> extends ImmutableMultiset<E>
   public static <E extends Comparable<? super E>> ImmutableSortedMultiset<E> of(
       E e1, E e2, E e3, E e4, E e5, E e6, E... remaining) {
     int size = remaining.length + 6;
-    List<E> all = Lists.newArrayListWithCapacity(size);
+    List<E> all = newArrayListWithCapacity(size);
     Collections.addAll(all, e1, e2, e3, e4, e5, e6);
     Collections.addAll(all, remaining);
     return copyOf(Ordering.natural(), all);
@@ -269,7 +271,7 @@ public abstract class ImmutableSortedMultiset<E> extends ImmutableMultiset<E>
         }
       }
     }
-    elements = Lists.newArrayList(elements); // defensive copy
+    elements = newArrayList(elements); // defensive copy
     TreeMultiset<E> sortedCopy = TreeMultiset.create(checkNotNull(comparator));
     Iterables.addAll(sortedCopy, elements);
     return copyOfSortedEntries(comparator, sortedCopy.entrySet());

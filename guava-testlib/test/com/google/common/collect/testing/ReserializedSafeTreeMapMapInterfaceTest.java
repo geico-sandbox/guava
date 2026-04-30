@@ -16,8 +16,9 @@
 
 package com.google.common.collect.testing;
 
+import static com.google.common.testing.SerializableTester.reserialize;
+
 import com.google.common.annotations.GwtIncompatible;
-import com.google.common.testing.SerializableTester;
 import java.util.NavigableMap;
 import java.util.SortedMap;
 
@@ -34,13 +35,13 @@ public class ReserializedSafeTreeMapMapInterfaceTest
     map.put("one", 1);
     map.put("two", 2);
     map.put("three", 3);
-    return SerializableTester.reserialize(map);
+    return reserialize(map);
   }
 
   @Override
   protected SortedMap<String, Integer> makeEmptyMap() {
     NavigableMap<String, Integer> map = new SafeTreeMap<>();
-    return SerializableTester.reserialize(map);
+    return reserialize(map);
   }
 
   @Override

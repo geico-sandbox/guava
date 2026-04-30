@@ -16,11 +16,17 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.collect.testing.Helpers.misleadingSizeCollection;
+import static com.google.common.collect.testing.Helpers.testComparator;
 import static com.google.common.primitives.Doubles.max;
 import static com.google.common.primitives.Doubles.min;
+import static com.google.common.testing.SerializableTester.reserialize;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.lang.Double.NaN;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
@@ -28,12 +34,9 @@ import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.base.Converter;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -310,7 +313,7 @@ public class DoublesTest extends TestCase {
 
   public void testLexicographicalComparator() {
     List<double[]> ordered =
-        Arrays.asList(
+        asList(
             new double[] {},
             new double[] {LEAST},
             new double[] {LEAST, LEAST},
@@ -322,7 +325,7 @@ public class DoublesTest extends TestCase {
             new double[] {GREATEST, GREATEST, GREATEST});
 
     Comparator<double[]> comparator = Doubles.lexicographicalComparator();
-    Helpers.testComparator(comparator, ordered);
+    testComparator(comparator, ordered);
   }
 
   public void testReverse() {
@@ -495,26 +498,26 @@ public class DoublesTest extends TestCase {
   @GwtIncompatible // SerializableTester
   public void testLexicographicalComparatorSerializable() {
     Comparator<double[]> comparator = Doubles.lexicographicalComparator();
-    assertThat(SerializableTester.reserialize(comparator)).isSameInstanceAs(comparator);
+    assertThat(reserialize(comparator)).isSameInstanceAs(comparator);
   }
 
   @J2ktIncompatible
   @GwtIncompatible // SerializableTester
   public void testStringConverterSerialization() {
-    SerializableTester.reserializeAndAssert(Doubles.stringConverter());
+    reserializeAndAssert(Doubles.stringConverter());
   }
 
   public void testToArray() {
     // need explicit type parameter to avoid javac warning!?
-    List<Double> none = Arrays.<Double>asList();
+    List<Double> none = Arrays.asList();
     assertThat(Doubles.toArray(none)).isEqualTo(EMPTY);
 
-    List<Double> one = Arrays.asList(1.0);
+    List<Double> one = asList(1.0);
     assertThat(Doubles.toArray(one)).isEqualTo(ARRAY1);
 
     double[] array = {0.0, 1.0, Math.PI};
 
-    List<Double> three = Arrays.asList(0.0, 1.0, Math.PI);
+    List<Double> three = asList(0.0, 1.0, Math.PI);
     assertThat(Doubles.toArray(three)).isEqualTo(array);
 
     assertThat(Doubles.toArray(Doubles.asList(array))).isEqualTo(array);
@@ -524,7 +527,7 @@ public class DoublesTest extends TestCase {
     for (int delta : new int[] {+1, 0, -1}) {
       for (int i = 0; i < VALUES.length; i++) {
         List<Double> list = Doubles.asList(VALUES).subList(0, i);
-        Collection<Double> misleadingSize = Helpers.misleadingSizeCollection(delta);
+        Collection<Double> misleadingSize = misleadingSizeCollection(delta);
         misleadingSize.addAll(list);
         double[] arr = Doubles.toArray(misleadingSize);
         assertThat(arr.length).isEqualTo(i);
@@ -537,19 +540,19 @@ public class DoublesTest extends TestCase {
 
   @SuppressWarnings("nullness") // test of a bogus call
   public void testToArray_withNull() {
-    List<@Nullable Double> list = Arrays.asList(0.0, 1.0, null);
+    List<@Nullable Double> list = asList(0.0, 1.0, null);
     assertThrows(NullPointerException.class, () -> Doubles.toArray(list));
   }
 
   public void testToArray_withConversion() {
     double[] array = {0.0, 1.0, 2.0};
 
-    List<Byte> bytes = Arrays.asList((byte) 0, (byte) 1, (byte) 2);
-    List<Short> shorts = Arrays.asList((short) 0, (short) 1, (short) 2);
-    List<Integer> ints = Arrays.asList(0, 1, 2);
-    List<Float> floats = Arrays.asList(0.0f, 1.0f, 2.0f);
-    List<Long> longs = Arrays.asList(0L, 1L, 2L);
-    List<Double> doubles = Arrays.asList(0.0, 1.0, 2.0);
+    List<Byte> bytes = asList((byte) 0, (byte) 1, (byte) 2);
+    List<Short> shorts = asList((short) 0, (short) 1, (short) 2);
+    List<Integer> ints = asList(0, 1, 2);
+    List<Float> floats = asList(0.0f, 1.0f, 2.0f);
+    List<Long> longs = asList(0L, 1L, 2L);
+    List<Double> doubles = asList(0.0, 1.0, 2.0);
 
     assertThat(Doubles.toArray(bytes)).isEqualTo(array);
     assertThat(Doubles.toArray(shorts)).isEqualTo(array);
@@ -592,7 +595,7 @@ public class DoublesTest extends TestCase {
   // `primitives` can't depend on `collect`, so this is what the prod code has to return.
   @SuppressWarnings("EmptyList")
   public void testAsListEmpty() {
-    assertThat(Doubles.asList(EMPTY)).isSameInstanceAs(Collections.emptyList());
+    assertThat(Doubles.asList(EMPTY)).isSameInstanceAs(emptyList());
   }
 
   /**

@@ -16,6 +16,7 @@
 
 package com.google.common.testing;
 
+import static com.google.common.collect.Maps.newConcurrentMap;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.base.CharMatcher;
@@ -47,7 +48,6 @@ import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.ListMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Ordering;
@@ -364,8 +364,7 @@ public class FreshValueGeneratorTest extends TestCase {
 
   public void testConcurrentMap() {
     assertFreshInstance(new TypeToken<ConcurrentMap<String, ?>>() {});
-    assertCanGenerateOnly(
-        new TypeToken<ConcurrentMap<EmptyEnum, String>>() {}, Maps.newConcurrentMap());
+    assertCanGenerateOnly(new TypeToken<ConcurrentMap<EmptyEnum, String>>() {}, newConcurrentMap());
   }
 
   public void testMultimap() {
@@ -499,7 +498,7 @@ public class FreshValueGeneratorTest extends TestCase {
 
   public void testAddSampleInstances_noInstance() {
     FreshValueGenerator generator = new FreshValueGenerator();
-    generator.addSampleInstances(String.class, ImmutableList.<String>of());
+    generator.addSampleInstances(String.class, ImmutableList.of());
     assertThat(generator.generateFresh(String.class))
         .isEqualTo(new FreshValueGenerator().generateFresh(String.class));
   }

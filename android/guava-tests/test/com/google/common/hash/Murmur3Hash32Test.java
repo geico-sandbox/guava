@@ -23,6 +23,7 @@ import static java.nio.charset.StandardCharsets.UTF_16;
 import static java.nio.charset.StandardCharsets.UTF_16LE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.hash.HashTestUtils.HashFn;
 import java.nio.charset.Charset;
 import java.util.Random;
@@ -31,6 +32,7 @@ import org.jspecify.annotations.NullUnmarked;
 
 /** Tests for {@link Murmur3_32HashFunction}. */
 @NullUnmarked
+@J2ktIncompatible
 public class Murmur3Hash32Test extends TestCase {
   public void testKnownIntegerInputs() {
     assertHash(593689054, murmur3_32().hashInt(0));

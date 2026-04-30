@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.base.Predicates.not;
+import static com.google.common.collect.Maps.valueIterator;
 import static com.google.common.collect.Maps.valuePredicateOnEntries;
 
 import com.google.common.annotations.GwtCompatible;
@@ -46,7 +47,7 @@ final class FilteredMultimapValues<K extends @Nullable Object, V extends @Nullab
 
   @Override
   public Iterator<V> iterator() {
-    return Maps.valueIterator(multimap.entries().iterator());
+    return valueIterator(multimap.entries().iterator());
   }
 
   @Override

@@ -300,8 +300,7 @@ public class LinkedListMultimapTest extends TestCase {
     Entry<String, Collection<Integer>> barEntry = entries.next();
     assertThat(barEntry.getKey()).isEqualTo("bar");
     assertThat(barEntry.getValue()).containsExactly(1, 3).inOrder();
-    assertThrows(
-        UnsupportedOperationException.class, () -> barEntry.setValue(Arrays.<Integer>asList()));
+    assertThrows(UnsupportedOperationException.class, () -> barEntry.setValue(Arrays.asList()));
     entries.remove(); // clear
     Entry<String, Collection<Integer>> fooEntry = entries.next();
     assertThat(fooEntry.getKey()).isEqualTo("foo");
@@ -342,7 +341,7 @@ public class LinkedListMultimapTest extends TestCase {
 
     for (int startIndex : new int[] {0, 3, 5}) {
       List<Entry<String, Integer>> list =
-          Lists.newArrayList(
+          newArrayList(
               immutableEntry("foo", 2),
               immutableEntry("foo", 3),
               immutableEntry("bar", 4),
@@ -403,7 +402,7 @@ public class LinkedListMultimapTest extends TestCase {
           3,
           addItems,
           ImmutableList.of(SUPPORTS_REMOVE, SUPPORTS_SET),
-          Lists.newArrayList(2, 3, 4, 5, 6),
+          newArrayList(2, 3, 4, 5, 6),
           startIndex) {
         private @Nullable LinkedListMultimap<String, Integer> multimap;
 

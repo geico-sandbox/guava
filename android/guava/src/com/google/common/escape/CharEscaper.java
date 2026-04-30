@@ -15,6 +15,7 @@
 package com.google.common.escape;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.lang.System.arraycopy;
 
 import com.google.common.annotations.GwtCompatible;
 import org.jspecify.annotations.Nullable;
@@ -134,7 +135,7 @@ public abstract class CharEscaper extends Escaper {
 
       // Copy the replacement string into the dest buffer as needed.
       if (rlen > 0) {
-        System.arraycopy(r, 0, dest, destIndex, rlen);
+        arraycopy(r, 0, dest, destIndex, rlen);
         destIndex += rlen;
       }
       lastEscape = index + 1;
@@ -165,7 +166,7 @@ public abstract class CharEscaper extends Escaper {
     }
     char[] copy = new char[size];
     if (index > 0) {
-      System.arraycopy(dest, 0, copy, 0, index);
+      arraycopy(dest, 0, copy, 0, index);
     }
     return copy;
   }

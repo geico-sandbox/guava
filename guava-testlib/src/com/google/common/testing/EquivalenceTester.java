@@ -17,13 +17,13 @@
 package com.google.common.testing;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Lists.asList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Equivalence;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.common.testing.RelationshipTester.Item;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayList;
@@ -77,7 +77,7 @@ public final class EquivalenceTester<T> {
    */
   @CanIgnoreReturnValue
   public EquivalenceTester<T> addEquivalenceGroup(T first, T... rest) {
-    addEquivalenceGroup(Lists.asList(first, rest));
+    addEquivalenceGroup(asList(first, rest));
     return this;
   }
 

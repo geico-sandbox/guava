@@ -21,6 +21,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.CollectPreconditions.checkNonnegative;
 import static com.google.common.collect.ImmutableList.asImmutableList;
 import static com.google.common.collect.ObjectArrays.checkElementNotNull;
+import static com.google.common.collect.Sets.equalsImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
 import static java.lang.Math.max;
 import static java.util.Objects.requireNonNull;
 
@@ -352,12 +354,12 @@ public abstract class ImmutableSet<E> extends ImmutableCollection<E> implements 
         && hashCode() != object.hashCode()) {
       return false;
     }
-    return Sets.equalsImpl(this, object);
+    return equalsImpl(this, object);
   }
 
   @Override
   public int hashCode() {
-    return Sets.hashCodeImpl(this);
+    return hashCodeImpl(this);
   }
 
   // This declaration is needed to make Set.iterator() and

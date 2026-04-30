@@ -1322,7 +1322,7 @@ public abstract class AbstractClosingFutureTest extends TestCase {
 
   void assertThatFutureFailsWithException(Future<?> future) {
     ExecutionException e = assertThrows(ExecutionException.class, () -> getUninterruptibly(future));
-    assertThat(e).hasCauseThat().isSameInstanceAs(exception);
+    assertThat(e).hasCauseThat().isEqualTo(exception);
   }
 
   static void assertThatFutureBecomesCancelled(Future<?> future) throws ExecutionException {

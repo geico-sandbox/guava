@@ -23,6 +23,7 @@ import static com.google.common.base.Predicates.in;
 import static com.google.common.base.Predicates.not;
 import static com.google.common.collect.Iterators.emptyIterator;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.newTreeMap;
 import static java.util.Collections.emptyMap;
 import static java.util.Objects.requireNonNull;
 
@@ -72,11 +73,11 @@ public final class TreeRangeMap<K extends Comparable, V> implements RangeMap<K, 
   public static <K extends Comparable<?>, V> TreeRangeMap<K, V> copyOf(
       RangeMap<K, ? extends V> rangeMap) {
     if (rangeMap instanceof TreeRangeMap) {
-      NavigableMap<Cut<K>, RangeMapEntry<K, V>> entriesByLowerBound = Maps.newTreeMap();
+      NavigableMap<Cut<K>, RangeMapEntry<K, V>> entriesByLowerBound = newTreeMap();
       entriesByLowerBound.putAll(((TreeRangeMap<K, V>) rangeMap).entriesByLowerBound);
       return new TreeRangeMap<>(entriesByLowerBound);
     } else {
-      NavigableMap<Cut<K>, RangeMapEntry<K, V>> entriesByLowerBound = Maps.newTreeMap();
+      NavigableMap<Cut<K>, RangeMapEntry<K, V>> entriesByLowerBound = newTreeMap();
       for (Entry<Range<K>, ? extends V> entry : rangeMap.asMapOfRanges().entrySet()) {
         entriesByLowerBound.put(
             entry.getKey().lowerBound(), new RangeMapEntry<K, V>(entry.getKey(), entry.getValue()));
@@ -86,7 +87,7 @@ public final class TreeRangeMap<K extends Comparable, V> implements RangeMap<K, 
   }
 
   private TreeRangeMap() {
-    this.entriesByLowerBound = Maps.newTreeMap();
+    this.entriesByLowerBound = newTreeMap();
   }
 
   private TreeRangeMap(NavigableMap<Cut<K>, RangeMapEntry<K, V>> entriesByLowerBound) {

@@ -16,6 +16,9 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Sets.equalsImpl;
+import static com.google.common.collect.Sets.hashCodeImpl;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Predicate;
 import java.util.Map.Entry;
@@ -68,12 +71,12 @@ final class FilteredKeySetMultimap<K extends @Nullable Object, V extends @Nullab
   private final class EntrySet extends Entries implements Set<Entry<K, V>> {
     @Override
     public int hashCode() {
-      return Sets.hashCodeImpl(this);
+      return hashCodeImpl(this);
     }
 
     @Override
     public boolean equals(@Nullable Object o) {
-      return Sets.equalsImpl(this, o);
+      return equalsImpl(this, o);
     }
   }
 }

@@ -40,14 +40,13 @@ public class FeatureEnumTest extends TestCase {
         .that(annotationClass.getAnnotation(TesterAnnotation.class))
         .isNotNull();
     Retention retentionPolicy = annotationClass.getAnnotation(Retention.class);
-    assertWithMessage(rootLocaleFormat("%s must have a @Retention annotation.", annotationClass))
+    assertWithMessage("%s must have a @Retention annotation.", annotationClass)
         .that(retentionPolicy)
         .isNotNull();
-    assertEquals(
-        rootLocaleFormat("%s must have RUNTIME RetentionPolicy.", annotationClass),
-        RetentionPolicy.RUNTIME,
-        retentionPolicy.value());
-    assertWithMessage(rootLocaleFormat("%s must be inherited.", annotationClass))
+    assertWithMessage("%s must have RUNTIME RetentionPolicy.", annotationClass)
+        .that(retentionPolicy.value())
+        .isEqualTo(RetentionPolicy.RUNTIME);
+    assertWithMessage("%s must be inherited.", annotationClass)
         .that(annotationClass.getAnnotation(Inherited.class))
         .isNotNull();
 

@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Arrays.asList;
 
@@ -27,7 +28,6 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.google.MultisetFeature;
 import com.google.common.collect.testing.google.MultisetTestSuiteBuilder;
 import com.google.common.collect.testing.google.TestStringMultisetGenerator;
-import com.google.common.testing.SerializableTester;
 import java.io.Serializable;
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -102,7 +102,7 @@ public class HashMultisetTest extends TestCase {
   public void testSerializationContainingSelf() {
     Multiset<Multiset<?>> multiset = HashMultiset.create();
     multiset.add(multiset, 2);
-    Multiset<Multiset<?>> copy = SerializableTester.reserialize(multiset);
+    Multiset<Multiset<?>> copy = reserialize(multiset);
     assertEquals(2, copy.size());
     assertThat(copy.iterator().next()).isSameInstanceAs(copy);
   }
@@ -125,7 +125,7 @@ public class HashMultisetTest extends TestCase {
     Multiset<MultisetHolder> multiset = HashMultiset.create();
     MultisetHolder holder = new MultisetHolder(multiset);
     multiset.add(holder, 2);
-    Multiset<MultisetHolder> copy = SerializableTester.reserialize(multiset);
+    Multiset<MultisetHolder> copy = reserialize(multiset);
     assertEquals(2, copy.size());
     assertThat(copy.iterator().next().member).isSameInstanceAs(copy);
   }

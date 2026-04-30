@@ -18,6 +18,9 @@ package com.google.common.math;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.equalTo;
+import static com.google.common.collect.Iterables.any;
+import static com.google.common.collect.Lists.partition;
 import static com.google.common.truth.Truth.assertThat;
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.NaN;
@@ -26,10 +29,7 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
 import java.math.BigInteger;
@@ -96,15 +96,15 @@ class StatsTesting {
     }
 
     boolean hasAnyPositiveInfinity() {
-      return Iterables.any(values, Predicates.equalTo(POSITIVE_INFINITY));
+      return any(values, equalTo(POSITIVE_INFINITY));
     }
 
     boolean hasAnyNegativeInfinity() {
-      return Iterables.any(values, Predicates.equalTo(NEGATIVE_INFINITY));
+      return any(values, equalTo(NEGATIVE_INFINITY));
     }
 
     boolean hasAnyNaN() {
-      return Iterables.any(values, Predicates.equalTo(NaN));
+      return any(values, equalTo(NaN));
     }
 
     boolean hasAnyNonFinite() {
@@ -310,7 +310,7 @@ class StatsTesting {
   // PairedStats instances:
 
   static final PairedStats EMPTY_PAIRED_STATS =
-      createPairedStatsOf(ImmutableList.<Double>of(), ImmutableList.<Double>of());
+      createPairedStatsOf(ImmutableList.of(), ImmutableList.of());
   static final PairedStats ONE_VALUE_PAIRED_STATS =
       createPairedStatsOf(ImmutableList.of(ONE_VALUE), ImmutableList.of(OTHER_ONE_VALUE));
   static final PairedStats TWO_VALUES_PAIRED_STATS =
@@ -501,8 +501,8 @@ class StatsTesting {
     checkArgument(xValues.size() == yValues.size());
     checkArgument(partitionSize > 0);
     PairedStatsAccumulator accumulator = new PairedStatsAccumulator();
-    List<List<Double>> xPartitions = Lists.partition(xValues, partitionSize);
-    List<List<Double>> yPartitions = Lists.partition(yValues, partitionSize);
+    List<List<Double>> xPartitions = partition(xValues, partitionSize);
+    List<List<Double>> yPartitions = partition(yValues, partitionSize);
     for (int index = 0; index < xPartitions.size(); index++) {
       accumulator.addAll(createPairedStatsOf(xPartitions.get(index), yPartitions.get(index)));
     }

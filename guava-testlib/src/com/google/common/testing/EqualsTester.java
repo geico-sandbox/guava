@@ -17,12 +17,12 @@
 package com.google.common.testing;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.concat;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.base.Equivalence;
-import com.google.common.collect.Iterables;
 import com.google.common.testing.RelationshipTester.Item;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.ArrayList;
@@ -139,7 +139,7 @@ public final class EqualsTester {
   }
 
   private void testItems() {
-    for (Object item : Iterables.concat(equalityGroups)) {
+    for (Object item : concat(equalityGroups)) {
       assertTrue(item + " must not be Object#equals to null", !item.equals(null));
       assertTrue(
           item + " must not be Object#equals to an arbitrary object of another class",

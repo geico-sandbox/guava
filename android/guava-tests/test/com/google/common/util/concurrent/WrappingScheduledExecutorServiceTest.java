@@ -17,7 +17,6 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.truth.Truth.assertThat;
-import static java.util.concurrent.Executors.callable;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -119,14 +118,14 @@ public class WrappingScheduledExecutorServiceTest extends TestCase {
     void assertLastMethodCalled(String method, long delay, TimeUnit unit) {
       assertThat(lastMethodCalled).isEqualTo(method);
       assertEquals(delay, lastDelay);
-      assertEquals(unit, lastUnit);
+      assertThat(lastUnit).isEqualTo(unit);
     }
 
     void assertLastMethodCalled(String method, long initialDelay, long delay, TimeUnit unit) {
       assertThat(lastMethodCalled).isEqualTo(method);
       assertEquals(initialDelay, lastInitialDelay);
       assertEquals(delay, lastDelay);
-      assertEquals(unit, lastUnit);
+      assertThat(lastUnit).isEqualTo(unit);
     }
 
     @Override

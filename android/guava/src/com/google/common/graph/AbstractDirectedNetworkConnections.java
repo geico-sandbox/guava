@@ -18,17 +18,17 @@ package com.google.common.graph;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Iterables.concat;
+import static com.google.common.collect.Iterators.unmodifiableIterator;
+import static com.google.common.collect.Sets.union;
 import static com.google.common.graph.Graphs.checkNonNegative;
 import static com.google.common.graph.Graphs.checkPositive;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Sets;
 import com.google.common.collect.UnmodifiableIterator;
 import com.google.common.math.IntMath;
 import java.util.AbstractSet;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import org.jspecify.annotations.Nullable;
@@ -58,7 +58,7 @@ abstract class AbstractDirectedNetworkConnections<N, E> implements NetworkConnec
 
   @Override
   public Set<N> adjacentNodes() {
-    return Sets.union(predecessors(), successors());
+    return union(predecessors(), successors());
   }
 
   @Override
@@ -68,9 +68,9 @@ abstract class AbstractDirectedNetworkConnections<N, E> implements NetworkConnec
       public UnmodifiableIterator<E> iterator() {
         Iterable<E> incidentEdges =
             (selfLoopCount == 0)
-                ? Iterables.concat(inEdgeMap.keySet(), outEdgeMap.keySet())
-                : Sets.union(inEdgeMap.keySet(), outEdgeMap.keySet());
-        return Iterators.unmodifiableIterator(incidentEdges.iterator());
+                ? concat(inEdgeMap.keySet(), outEdgeMap.keySet())
+                : union(inEdgeMap.keySet(), outEdgeMap.keySet());
+        return unmodifiableIterator(incidentEdges.iterator());
       }
 
       @Override
@@ -87,12 +87,12 @@ abstract class AbstractDirectedNetworkConnections<N, E> implements NetworkConnec
 
   @Override
   public Set<E> inEdges() {
-    return Collections.unmodifiableSet(inEdgeMap.keySet());
+    return unmodifiableSet(inEdgeMap.keySet());
   }
 
   @Override
   public Set<E> outEdges() {
-    return Collections.unmodifiableSet(outEdgeMap.keySet());
+    return unmodifiableSet(outEdgeMap.keySet());
   }
 
   @Override

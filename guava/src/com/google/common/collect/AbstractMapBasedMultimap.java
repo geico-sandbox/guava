@@ -19,9 +19,15 @@ package com.google.common.collect;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
+import static com.google.common.collect.Collections2.safeContains;
+import static com.google.common.collect.Iterators.emptyModifiableIterator;
+import static com.google.common.collect.Iterators.pollNext;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.safeContainsKey;
 import static com.google.common.collect.Maps.safeGet;
+import static com.google.common.collect.Maps.safeRemove;
 import static com.google.common.collect.NullnessCasts.uncheckedCastNullableTToT;
+import static com.google.common.collect.Sets.removeAllImpl;
 import static java.util.Objects.requireNonNull;
 
 import com.google.common.annotations.GwtCompatible;
@@ -32,7 +38,6 @@ import com.google.j2objc.annotations.WeakOuter;
 import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -267,10 +272,8 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
     return unmodifiableCollectionSubclass(output);
   }
 
-  <E extends @Nullable Object> Collection<E> unmodifiableCollectionSubclass(
-      Collection<E> collection) {
-    return Collections.unmodifiableCollection(collection);
-  }
+  abstract <E extends @Nullable Object> Collection<E> unmodifiableCollectionSubclass(
+      Collection<E> collection);
 
   @Override
   public void clear() {
@@ -302,9 +305,7 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
    * Generates a decorated collection that remains consistent with the values in the multimap for
    * the provided key. Changes to the multimap may alter the returned collection, and vice versa.
    */
-  Collection<V> wrapCollection(@ParametricNullness K key, Collection<V> collection) {
-    return new WrappedCollection(key, collection, null);
-  }
+  abstract Collection<V> wrapCollection(@ParametricNullness K key, Collection<V> collection);
 
   final List<V> wrapList(
       @ParametricNullness K key, List<V> list, @Nullable WrappedCollection ancestor) {
@@ -618,7 +619,7 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
       // Guava issue 1013: AbstractSet and most JDK set implementations are
       // susceptible to quadratic removeAll performance on lists;
       // use a slightly smarter implementation here
-      boolean changed = Sets.removeAllImpl((Set<V>) delegate, c);
+      boolean changed = removeAllImpl((Set<V>) delegate, c);
       if (changed) {
         int newSize = delegate.size();
         totalSize += newSize - oldSize;
@@ -721,12 +722,12 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
 
     @Override
     public @Nullable V pollFirst() {
-      return Iterators.pollNext(iterator());
+      return pollNext(iterator());
     }
 
     @Override
     public @Nullable V pollLast() {
-      return Iterators.pollNext(descendingIterator());
+      return pollNext(descendingIterator());
     }
 
     private NavigableSet<V> wrap(NavigableSet<V> wrapped) {
@@ -1089,12 +1090,12 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
 
     @Override
     public @Nullable K pollFirst() {
-      return Iterators.pollNext(iterator());
+      return pollNext(iterator());
     }
 
     @Override
     public @Nullable K pollLast() {
-      return Iterators.pollNext(descendingIterator());
+      return pollNext(descendingIterator());
     }
 
     @Override
@@ -1146,7 +1147,7 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
 
   /** Removes all values for the provided key. */
   private void removeValuesForKey(@Nullable Object key) {
-    Collection<V> collection = Maps.safeRemove(map, key);
+    Collection<V> collection = safeRemove(map, key);
 
     if (collection != null) {
       int count = collection.size();
@@ -1165,7 +1166,7 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
       keyIterator = map.entrySet().iterator();
       key = null;
       collection = null;
-      valueIterator = Iterators.emptyModifiableIterator();
+      valueIterator = emptyModifiableIterator();
     }
 
     abstract T output(@ParametricNullness K key, @ParametricNullness V value);
@@ -1349,7 +1350,7 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
 
     @Override
     public boolean containsKey(@Nullable Object key) {
-      return Maps.safeContainsKey(submap, key);
+      return safeContainsKey(submap, key);
     }
 
     @Override
@@ -1440,7 +1441,7 @@ abstract class AbstractMapBasedMultimap<K extends @Nullable Object, V extends @N
 
       @Override
       public boolean contains(@Nullable Object o) {
-        return Collections2.safeContains(submap.entrySet(), o);
+        return safeContains(submap.entrySet(), o);
       }
 
       @Override

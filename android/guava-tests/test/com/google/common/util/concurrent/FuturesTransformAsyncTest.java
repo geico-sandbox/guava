@@ -17,6 +17,10 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.truth.Truth.assertThat;
+import static com.google.common.util.concurrent.AbstractChainedListenableFutureTest.Input.EXCEPTION_DATA;
+import static com.google.common.util.concurrent.AbstractChainedListenableFutureTest.Input.SLOW_FUNC_VALID_INPUT_DATA;
+import static com.google.common.util.concurrent.AbstractChainedListenableFutureTest.Input.SLOW_OUTPUT_VALID_INPUT_DATA;
+import static com.google.common.util.concurrent.AbstractChainedListenableFutureTest.Input.VALID_INPUT_DATA;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static com.google.common.util.concurrent.Futures.transformAsync;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
@@ -40,8 +44,6 @@ import org.jspecify.annotations.NullUnmarked;
 @GwtIncompatible
 @J2ktIncompatible
 public class FuturesTransformAsyncTest extends AbstractChainedListenableFutureTest<String> {
-  protected static final int SLOW_OUTPUT_VALID_INPUT_DATA = 2;
-  protected static final int SLOW_FUNC_VALID_INPUT_DATA = 3;
   private static final String RESULT_DATA = "SUCCESS";
 
   private SettableFuture<String> outputFuture;
@@ -51,7 +53,7 @@ public class FuturesTransformAsyncTest extends AbstractChainedListenableFutureTe
   private CountDownLatch funcCompletionLatch;
 
   @Override
-  protected ListenableFuture<String> buildChainingFuture(ListenableFuture<Integer> inputFuture) {
+  protected ListenableFuture<String> buildChainingFuture(ListenableFuture<Input> inputFuture) {
     outputFuture = SettableFuture.create();
     funcIsWaitingLatch = new CountDownLatch(1);
     funcCompletionLatch = new CountDownLatch(1);
@@ -63,9 +65,9 @@ public class FuturesTransformAsyncTest extends AbstractChainedListenableFutureTe
     return RESULT_DATA;
   }
 
-  private class ChainingFunction implements AsyncFunction<Integer, String> {
+  private class ChainingFunction implements AsyncFunction<Input, String> {
     @Override
-    public ListenableFuture<String> apply(Integer input) throws Exception {
+    public ListenableFuture<String> apply(Input input) throws Exception {
       switch (input) {
         case VALID_INPUT_DATA:
           outputFuture.set(RESULT_DATA);
@@ -152,20 +154,20 @@ public class FuturesTransformAsyncTest extends AbstractChainedListenableFutureTe
   }
 
   public void testFutureGetThrowsRuntimeException() throws Exception {
-    BadFuture badInput = new BadFuture(immediateFuture(20));
+    BadFuture badInput = new BadFuture(immediateFuture(VALID_INPUT_DATA));
     ListenableFuture<String> chain = buildChainingFuture(badInput);
     ExecutionException e = assertThrows(ExecutionException.class, chain::get);
-    assertThat(e.getCause()).isInstanceOf(BadFutureRuntimeException.class);
+    assertThat(e).hasCauseThat().isInstanceOf(BadFutureRuntimeException.class);
   }
 
   /** Proxy to throw a {@link RuntimeException} out of the {@link #get()} method. */
-  public static class BadFuture extends SimpleForwardingListenableFuture<Integer> {
-    protected BadFuture(ListenableFuture<Integer> delegate) {
+  public static class BadFuture extends SimpleForwardingListenableFuture<Input> {
+    protected BadFuture(ListenableFuture<Input> delegate) {
       super(delegate);
     }
 
     @Override
-    public Integer get() {
+    public Input get() {
       throw new BadFutureRuntimeException();
     }
   }

@@ -16,6 +16,9 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Collections2.containsAllImpl;
+import static com.google.common.collect.Collections2.toStringImpl;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.util.Collection;
@@ -147,7 +150,7 @@ public abstract class ForwardingCollection<E extends @Nullable Object> extends F
    * @since 7.0
    */
   protected boolean standardContainsAll(Collection<?> collection) {
-    return Collections2.containsAllImpl(this, collection);
+    return containsAllImpl(this, collection);
   }
 
   /**
@@ -230,7 +233,7 @@ public abstract class ForwardingCollection<E extends @Nullable Object> extends F
    * @since 7.0
    */
   protected String standardToString() {
-    return Collections2.toStringImpl(this);
+    return toStringImpl(this);
   }
 
   /**

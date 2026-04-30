@@ -16,6 +16,9 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Iterators.getNext;
+import static com.google.common.collect.Iterators.pollNext;
+
 import com.google.common.annotations.GwtIncompatible;
 import java.util.Iterator;
 import java.util.NavigableSet;
@@ -69,7 +72,7 @@ public abstract class ForwardingNavigableSet<E extends @Nullable Object>
    * wish to override {@link #lower} to forward to this implementation.
    */
   protected @Nullable E standardLower(@ParametricNullness E e) {
-    return Iterators.getNext(headSet(e, false).descendingIterator(), null);
+    return getNext(headSet(e, false).descendingIterator(), null);
   }
 
   @Override
@@ -83,7 +86,7 @@ public abstract class ForwardingNavigableSet<E extends @Nullable Object>
    * wish to override {@link #floor} to forward to this implementation.
    */
   protected @Nullable E standardFloor(@ParametricNullness E e) {
-    return Iterators.getNext(headSet(e, true).descendingIterator(), null);
+    return getNext(headSet(e, true).descendingIterator(), null);
   }
 
   @Override
@@ -97,7 +100,7 @@ public abstract class ForwardingNavigableSet<E extends @Nullable Object>
    * override {@link #ceiling} to forward to this implementation.
    */
   protected @Nullable E standardCeiling(@ParametricNullness E e) {
-    return Iterators.getNext(tailSet(e, true).iterator(), null);
+    return getNext(tailSet(e, true).iterator(), null);
   }
 
   @Override
@@ -111,7 +114,7 @@ public abstract class ForwardingNavigableSet<E extends @Nullable Object>
    * override {@link #higher} to forward to this implementation.
    */
   protected @Nullable E standardHigher(@ParametricNullness E e) {
-    return Iterators.getNext(tailSet(e, false).iterator(), null);
+    return getNext(tailSet(e, false).iterator(), null);
   }
 
   @Override
@@ -125,7 +128,7 @@ public abstract class ForwardingNavigableSet<E extends @Nullable Object>
    * implementation.
    */
   protected @Nullable E standardPollFirst() {
-    return Iterators.pollNext(iterator());
+    return pollNext(iterator());
   }
 
   @Override
@@ -139,7 +142,7 @@ public abstract class ForwardingNavigableSet<E extends @Nullable Object>
    * forward to this implementation.
    */
   protected @Nullable E standardPollLast() {
-    return Iterators.pollNext(descendingIterator());
+    return pollNext(descendingIterator());
   }
 
   @ParametricNullness

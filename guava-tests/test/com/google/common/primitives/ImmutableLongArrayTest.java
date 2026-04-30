@@ -17,7 +17,9 @@ package com.google.common.primitives;
 import static com.google.common.primitives.TestPlatform.reduceIterationsIfGwt;
 import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
+import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
+import static java.util.Collections.emptySet;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtCompatible;
@@ -32,7 +34,6 @@ import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.testing.EqualsTester;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -119,36 +120,36 @@ public class ImmutableLongArrayTest extends TestCase {
   }
 
   public void testCopyOf_iterable_notCollection_empty() {
-    Iterable<Long> iterable = iterable(Collections.<Long>emptySet());
+    Iterable<Long> iterable = iterable(Collections.emptySet());
     assertThat(ImmutableLongArray.copyOf(iterable)).isSameInstanceAs(ImmutableLongArray.of());
   }
 
   public void testCopyOf_iterable_notCollection_nonempty() {
-    List<Long> list = Arrays.asList(0L, 1L, 3L);
+    List<Long> list = asList(0L, 1L, 3L);
     ImmutableLongArray iia = ImmutableLongArray.copyOf(iterable(list));
     list.set(2, 2L);
     assertThat(iia.asList()).containsExactly(0L, 1L, 3L).inOrder();
   }
 
   public void testCopyOf_iterable_collection_empty() {
-    Iterable<Long> iterable = Collections.emptySet();
+    Iterable<Long> iterable = emptySet();
     assertThat(ImmutableLongArray.copyOf(iterable)).isSameInstanceAs(ImmutableLongArray.of());
   }
 
   public void testCopyOf_iterable_collection_nonempty() {
-    List<Long> list = Arrays.asList(0L, 1L, 3L);
+    List<Long> list = asList(0L, 1L, 3L);
     ImmutableLongArray iia = ImmutableLongArray.copyOf((Iterable<Long>) list);
     list.set(2, 2L);
     assertThat(iia.asList()).containsExactly(0L, 1L, 3L).inOrder();
   }
 
   public void testCopyOf_collection_empty() {
-    Collection<Long> iterable = Collections.emptySet();
+    Collection<Long> iterable = emptySet();
     assertThat(ImmutableLongArray.copyOf(iterable)).isSameInstanceAs(ImmutableLongArray.of());
   }
 
   public void testCopyOf_collection_nonempty() {
-    List<Long> list = Arrays.asList(0L, 1L, 3L);
+    List<Long> list = asList(0L, 1L, 3L);
     ImmutableLongArray iia = ImmutableLongArray.copyOf(list);
     list.set(2, 2L);
     assertThat(iia.asList()).containsExactly(0L, 1L, 3L).inOrder();
@@ -478,7 +479,7 @@ public class ImmutableLongArrayTest extends TestCase {
   @GwtIncompatible // used only from suite
   @AndroidIncompatible
   private static ImmutableLongArray makeArray(Long[] values) {
-    return ImmutableLongArray.copyOf(Arrays.asList(values));
+    return ImmutableLongArray.copyOf(asList(values));
   }
 
   // Test generators.  To let the GWT test suite generator access them, they need to be public named

@@ -14,8 +14,12 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Collections2.safeContains;
+import static com.google.common.collect.Collections2.safeRemove;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.safeContainsKey;
 import static com.google.common.collect.Maps.safeGet;
+import static com.google.common.collect.Maps.safeRemove;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -44,12 +48,12 @@ abstract class AbstractTable<
 
   @Override
   public boolean containsRow(@Nullable Object rowKey) {
-    return Maps.safeContainsKey(rowMap(), rowKey);
+    return safeContainsKey(rowMap(), rowKey);
   }
 
   @Override
   public boolean containsColumn(@Nullable Object columnKey) {
-    return Maps.safeContainsKey(columnMap(), columnKey);
+    return safeContainsKey(columnMap(), columnKey);
   }
 
   @Override
@@ -75,7 +79,7 @@ abstract class AbstractTable<
   @Override
   public boolean contains(@Nullable Object rowKey, @Nullable Object columnKey) {
     Map<C, V> row = safeGet(rowMap(), rowKey);
-    return row != null && Maps.safeContainsKey(row, columnKey);
+    return row != null && safeContainsKey(row, columnKey);
   }
 
   @Override
@@ -98,7 +102,7 @@ abstract class AbstractTable<
   @Override
   public @Nullable V remove(@Nullable Object rowKey, @Nullable Object columnKey) {
     Map<C, V> row = safeGet(rowMap(), rowKey);
-    return (row == null) ? null : Maps.safeRemove(row, columnKey);
+    return (row == null) ? null : safeRemove(row, columnKey);
   }
 
   @CanIgnoreReturnValue
@@ -141,8 +145,7 @@ abstract class AbstractTable<
         Cell<?, ?, ?> cell = (Cell<?, ?, ?>) o;
         Map<C, V> row = safeGet(rowMap(), cell.getRowKey());
         return row != null
-            && Collections2.safeContains(
-                row.entrySet(), immutableEntry(cell.getColumnKey(), cell.getValue()));
+            && safeContains(row.entrySet(), immutableEntry(cell.getColumnKey(), cell.getValue()));
       }
       return false;
     }
@@ -153,8 +156,7 @@ abstract class AbstractTable<
         Cell<?, ?, ?> cell = (Cell<?, ?, ?>) o;
         Map<C, V> row = safeGet(rowMap(), cell.getRowKey());
         return row != null
-            && Collections2.safeRemove(
-                row.entrySet(), immutableEntry(cell.getColumnKey(), cell.getValue()));
+            && safeRemove(row.entrySet(), immutableEntry(cell.getColumnKey(), cell.getValue()));
       }
       return false;
     }

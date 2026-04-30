@@ -17,9 +17,12 @@ package com.google.common.hash;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.lang.Byte.toUnsignedInt;
+import static java.lang.Math.log;
 import static java.lang.Math.max;
+import static java.lang.Math.round;
 
 import com.google.common.annotations.Beta;
+import com.google.common.annotations.J2ktIncompatible;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
 import com.google.common.hash.BloomFilterStrategies.LockFreeBitArray;
@@ -68,6 +71,7 @@ import org.jspecify.annotations.Nullable;
  * @author Kevin Bourrillion
  * @since 11.0 (thread-safe since 23.0)
  */
+@J2ktIncompatible
 @Beta
 public final class BloomFilter<T extends @Nullable Object> implements Predicate<T>, Serializable {
   /**
@@ -121,7 +125,7 @@ public final class BloomFilter<T extends @Nullable Object> implements Predicate<
   private final Strategy strategy;
 
   /** Natural logarithm of 2, used to optimize calculations in Bloom filter sizing. */
-  private static final double LOG_TWO = Math.log(2);
+  private static final double LOG_TWO = log(2);
 
   /** Square of the natural logarithm of 2, reused to optimize the bit size calculation. */
   private static final double SQUARED_LOG_TWO = LOG_TWO * LOG_TWO;
@@ -232,7 +236,7 @@ public final class BloomFilter<T extends @Nullable Object> implements Predicate<
    * size before writing to pre-allocated space (e.g., for memory-mapped files or fixed-size
    * records).
    *
-   * @since NEXT
+   * @since 33.6.0
    */
   public long serializedSize() {
     // We return a long (and not an int) because the max serialized size is approximately
@@ -382,7 +386,7 @@ public final class BloomFilter<T extends @Nullable Object> implements Predicate<
     checkArgument(fpp > 0.0, "False positive probability (%s) must be > 0.0", fpp);
     checkArgument(fpp < 1.0, "False positive probability (%s) must be < 1.0", fpp);
     return Collector.of(
-        () -> BloomFilter.create(funnel, expectedInsertions, fpp),
+        () -> create(funnel, expectedInsertions, fpp),
         BloomFilter::put,
         (bf1, bf2) -> {
           bf1.putAll(bf2);
@@ -541,7 +545,7 @@ public final class BloomFilter<T extends @Nullable Object> implements Predicate<
   @VisibleForTesting
   static int optimalNumOfHashFunctions(double p) {
     // -log(p) / log(2), ensuring the result is rounded to avoid truncation.
-    return max(1, (int) Math.round(-Math.log(p) / LOG_TWO));
+    return max(1, (int) round(-log(p) / LOG_TWO));
   }
 
   /**
@@ -559,7 +563,7 @@ public final class BloomFilter<T extends @Nullable Object> implements Predicate<
     if (p == 0) {
       p = Double.MIN_VALUE;
     }
-    return (long) (-n * Math.log(p) / SQUARED_LOG_TWO);
+    return (long) (-n * log(p) / SQUARED_LOG_TWO);
   }
 
     private Object writeReplace() {

@@ -21,12 +21,19 @@ import static com.google.common.base.Predicates.alwaysTrue;
 import static com.google.common.base.Predicates.equalTo;
 import static com.google.common.base.Predicates.in;
 import static com.google.common.base.Predicates.not;
+import static com.google.common.collect.Collections2.safeContains;
 import static com.google.common.collect.Iterators.emptyIterator;
+import static com.google.common.collect.Iterators.emptyModifiableIterator;
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.asMapEntryIterator;
 import static com.google.common.collect.Maps.immutableEntry;
+import static com.google.common.collect.Maps.keyPredicateOnEntries;
 import static com.google.common.collect.Maps.safeContainsKey;
 import static com.google.common.collect.Maps.safeGet;
+import static com.google.common.collect.Maps.safeRemove;
+import static com.google.common.collect.Maps.valuePredicateOnEntries;
 import static com.google.common.collect.NullnessCasts.uncheckedCastNullableTToT;
+import static com.google.common.collect.Sets.removeAllImpl;
 import static com.google.common.collect.Tables.immutableCell;
 import static java.util.Objects.requireNonNull;
 
@@ -243,7 +250,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
   private final class CellIterator implements Iterator<Cell<R, C, V>> {
     final Iterator<Entry<R, Map<C, V>>> rowIterator = backingMap.entrySet().iterator();
     @Nullable Entry<R, Map<C, V>> rowEntry;
-    Iterator<Entry<C, V>> columnIterator = Iterators.emptyModifiableIterator();
+    Iterator<Entry<C, V>> columnIterator = emptyModifiableIterator();
 
     @Override
     public boolean hasNext() {
@@ -330,7 +337,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
     @Override
     public boolean containsKey(@Nullable Object key) {
       updateBackingRowMapField();
-      return (key != null && backingRowMap != null) && Maps.safeContainsKey(backingRowMap, key);
+      return key != null && backingRowMap != null && safeContainsKey(backingRowMap, key);
     }
 
     @Override
@@ -355,7 +362,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
       if (backingRowMap == null) {
         return null;
       }
-      V result = Maps.safeRemove(backingRowMap, key);
+      V result = safeRemove(backingRowMap, key);
       maintainEmptyInvariant();
       return result;
     }
@@ -379,7 +386,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
     Iterator<Entry<C, V>> entryIterator() {
       updateBackingRowMapField();
       if (backingRowMap == null) {
-        return Iterators.emptyModifiableIterator();
+        return emptyModifiableIterator();
       }
       Iterator<Entry<C, V>> iterator = backingRowMap.entrySet().iterator();
       return new Iterator<Entry<C, V>>() {
@@ -606,7 +613,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
 
       @Override
       public boolean retainAll(Collection<?> c) {
-        return removeFromColumnIf(Maps.keyPredicateOnEntries(not(in(c))));
+        return removeFromColumnIf(keyPredicateOnEntries(not(in(c))));
       }
     }
 
@@ -623,17 +630,17 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
 
       @Override
       public boolean remove(@Nullable Object obj) {
-        return obj != null && removeFromColumnIf(Maps.valuePredicateOnEntries(equalTo(obj)));
+        return obj != null && removeFromColumnIf(valuePredicateOnEntries(equalTo(obj)));
       }
 
       @Override
       public boolean removeAll(Collection<?> c) {
-        return removeFromColumnIf(Maps.valuePredicateOnEntries(in(c)));
+        return removeFromColumnIf(valuePredicateOnEntries(in(c)));
       }
 
       @Override
       public boolean retainAll(Collection<?> c) {
-        return removeFromColumnIf(Maps.valuePredicateOnEntries(not(in(c))));
+        return removeFromColumnIf(valuePredicateOnEntries(not(in(c))));
       }
     }
   }
@@ -828,7 +835,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
           Entry<?, ?> entry = (Entry<?, ?>) obj;
           return entry.getKey() != null
               && entry.getValue() instanceof Map
-              && Collections2.safeContains(backingMap.entrySet(), entry);
+              && safeContains(backingMap.entrySet(), entry);
         }
         return false;
       }
@@ -937,14 +944,14 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
          * which is unsupported.
          */
         checkNotNull(c);
-        return Sets.removeAllImpl(this, c.iterator());
+        return removeAllImpl(this, c.iterator());
       }
 
       @Override
       public boolean retainAll(Collection<?> c) {
         checkNotNull(c);
         boolean changed = false;
-        for (C columnKey : Lists.newArrayList(columnKeySet().iterator())) {
+        for (C columnKey : newArrayList(columnKeySet().iterator())) {
           if (!c.contains(immutableEntry(columnKey, column(columnKey)))) {
             removeColumn(columnKey);
             changed = true;
@@ -975,7 +982,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
       public boolean removeAll(Collection<?> c) {
         checkNotNull(c);
         boolean changed = false;
-        for (C columnKey : Lists.newArrayList(columnKeySet().iterator())) {
+        for (C columnKey : newArrayList(columnKeySet().iterator())) {
           if (c.contains(column(columnKey))) {
             removeColumn(columnKey);
             changed = true;
@@ -988,7 +995,7 @@ class StandardTable<R, C, V> extends AbstractTable<R, C, V> implements Serializa
       public boolean retainAll(Collection<?> c) {
         checkNotNull(c);
         boolean changed = false;
-        for (C columnKey : Lists.newArrayList(columnKeySet().iterator())) {
+        for (C columnKey : newArrayList(columnKeySet().iterator())) {
           if (!c.contains(column(columnKey))) {
             removeColumn(columnKey);
             changed = true;

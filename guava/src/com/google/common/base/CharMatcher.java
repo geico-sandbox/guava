@@ -17,6 +17,7 @@ package com.google.common.base;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndex;
+import static java.util.Arrays.sort;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -40,10 +41,9 @@ import java.util.BitSet;
  * points</a> in the range {@code 0x10000} to {@code 0x10FFFF} which includes the majority of
  * assigned characters, including important CJK characters and emoji.
  *
- * <p>Supplementary characters are <a
- * href="https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/lang/Character.html#supplementary">encoded
- * into a {@code String} using surrogate pairs</a>, and a {@code CharMatcher} treats these just as
- * two separate characters. {@link #countIn} counts each supplementary character as 2 {@code char}s.
+ * <p>Supplementary characters are {@linkplain Character##supplementary encoded into a string using
+ * surrogate pairs}, and a {@code CharMatcher} treats these just as two separate characters. {@link
+ * #countIn} counts each supplementary character as 2 {@code char}s.
  *
  * <p>For up-to-date Unicode character properties (digit, letter, etc.) and support for
  * supplementary code points, use ICU4J UCharacter and UnicodeSet (freeze() after building). For
@@ -1754,7 +1754,7 @@ public abstract class CharMatcher implements Predicate<Character> {
 
     AnyOf(CharSequence chars) {
       this.chars = chars.toString().toCharArray();
-      Arrays.sort(this.chars);
+      sort(this.chars);
     }
 
     @Override

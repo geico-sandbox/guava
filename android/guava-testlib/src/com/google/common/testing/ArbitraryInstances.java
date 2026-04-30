@@ -17,8 +17,17 @@
 package com.google.common.testing;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Predicates.alwaysTrue;
 import static com.google.common.collect.Iterators.peekingIterator;
+import static com.google.common.collect.Maps.difference;
+import static com.google.common.collect.Maps.newConcurrentMap;
+import static com.google.common.collect.Maps.newTreeMap;
+import static com.google.common.collect.Maps.unmodifiableNavigableMap;
+import static com.google.common.collect.Sets.newTreeSet;
+import static com.google.common.collect.Sets.unmodifiableNavigableSet;
+import static com.google.common.collect.Tables.unmodifiableRowSortedTable;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.sort;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -29,7 +38,6 @@ import com.google.common.base.Defaults;
 import com.google.common.base.Equivalence;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.base.Stopwatch;
 import com.google.common.base.Ticker;
@@ -51,7 +59,6 @@ import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.MapDifference;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Multiset;
@@ -60,12 +67,10 @@ import com.google.common.collect.PeekingIterator;
 import com.google.common.collect.Range;
 import com.google.common.collect.RowSortedTable;
 import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
 import com.google.common.collect.SortedMapDifference;
 import com.google.common.collect.SortedMultiset;
 import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.Table;
-import com.google.common.collect.Tables;
 import com.google.common.collect.TreeBasedTable;
 import com.google.common.collect.TreeMultimap;
 import com.google.common.io.ByteSink;
@@ -109,7 +114,6 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 import java.nio.charset.Charset;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Currency;
@@ -217,7 +221,7 @@ public final class ArbitraryInstances {
           .put(Joiner.class, Joiner.on(','))
           .put(Splitter.class, Splitter.on(','))
           .put(com.google.common.base.Optional.class, com.google.common.base.Optional.absent())
-          .put(Predicate.class, Predicates.alwaysTrue())
+          .put(Predicate.class, alwaysTrue())
           .put(Equivalence.class, Equivalence.equals())
           .put(Ticker.class, Ticker.systemTicker())
           .put(Stopwatch.class, Stopwatch.createUnstarted())
@@ -253,12 +257,12 @@ public final class ArbitraryInstances {
           .put(ImmutableSet.class, ImmutableSet.of())
           .put(SortedSet.class, ImmutableSortedSet.of())
           .put(ImmutableSortedSet.class, ImmutableSortedSet.of())
-          .put(NavigableSet.class, Sets.unmodifiableNavigableSet(Sets.newTreeSet()))
+          .put(NavigableSet.class, unmodifiableNavigableSet(newTreeSet()))
           .put(Map.class, ImmutableMap.of())
           .put(ImmutableMap.class, ImmutableMap.of())
           .put(SortedMap.class, ImmutableSortedMap.of())
           .put(ImmutableSortedMap.class, ImmutableSortedMap.of())
-          .put(NavigableMap.class, Maps.unmodifiableNavigableMap(Maps.newTreeMap()))
+          .put(NavigableMap.class, unmodifiableNavigableMap(newTreeMap()))
           .put(Multimap.class, ImmutableMultimap.of())
           .put(ImmutableMultimap.class, ImmutableMultimap.of())
           .put(ListMultimap.class, ImmutableListMultimap.of())
@@ -276,17 +280,17 @@ public final class ArbitraryInstances {
           .put(ImmutableBiMap.class, ImmutableBiMap.of())
           .put(Table.class, ImmutableTable.of())
           .put(ImmutableTable.class, ImmutableTable.of())
-          .put(RowSortedTable.class, Tables.unmodifiableRowSortedTable(TreeBasedTable.create()))
+          .put(RowSortedTable.class, unmodifiableRowSortedTable(TreeBasedTable.create()))
           .put(ClassToInstanceMap.class, ImmutableClassToInstanceMap.builder().build())
           .put(ImmutableClassToInstanceMap.class, ImmutableClassToInstanceMap.builder().build())
           .put(Comparable.class, ByToString.INSTANCE)
           .put(Comparator.class, AlwaysEqual.INSTANCE)
           .put(Ordering.class, AlwaysEqual.INSTANCE)
           .put(Range.class, Range.all())
-          .put(MapDifference.class, Maps.difference(ImmutableMap.of(), ImmutableMap.of()))
+          .put(MapDifference.class, difference(ImmutableMap.of(), ImmutableMap.of()))
           .put(
               SortedMapDifference.class,
-              Maps.difference(ImmutableSortedMap.of(), ImmutableSortedMap.of()))
+              difference(ImmutableSortedMap.of(), ImmutableSortedMap.of()))
           // reflect
           .put(AnnotatedElement.class, Object.class)
           .put(GenericDeclaration.class, Object.class)
@@ -297,7 +301,7 @@ public final class ArbitraryInstances {
    * type → implementation. Inherently mutable interfaces and abstract classes are mapped to their
    * default implementations and are "new"d upon get().
    */
-  private static final ConcurrentMap<Class<?>, Class<?>> implementations = Maps.newConcurrentMap();
+  private static final ConcurrentMap<Class<?>, Class<?>> implementations = newConcurrentMap();
 
   private static <T> void setImplementation(Class<T> type, Class<? extends T> implementation) {
     checkArgument(type != implementation, "Don't register %s to itself!", type);
@@ -384,7 +388,7 @@ public final class ArbitraryInstances {
 
   private static <T> @Nullable T arbitraryConstantInstanceOrNull(Class<T> type) {
     Field[] fields = type.getDeclaredFields();
-    Arrays.sort(fields, BY_FIELD_NAME);
+    sort(fields, BY_FIELD_NAME);
     for (Field field : fields) {
       if (Modifier.isPublic(field.getModifiers())
           && Modifier.isStatic(field.getModifiers())

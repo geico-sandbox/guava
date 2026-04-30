@@ -14,6 +14,8 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Sets.powerSet;
+import static com.google.common.testing.SerializableTester.reserializeAndAssert;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
@@ -23,7 +25,6 @@ import com.google.common.collect.testing.SampleElements;
 import com.google.common.collect.testing.TestSetGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
-import com.google.common.testing.SerializableTester;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Set;
@@ -150,8 +151,8 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
     assertThat(rangeSet.asRanges()).contains(Range.<Integer>all());
     assertTrue(rangeSet.contains(0));
     assertTrue(rangeSet.intersects(Range.singleton(0)));
-    assertTrue(rangeSet.intersects(Range.<Integer>all()));
-    assertTrue(rangeSet.encloses(Range.<Integer>all()));
+    assertTrue(rangeSet.intersects(Range.all()));
+    assertTrue(rangeSet.encloses(Range.all()));
     assertTrue(rangeSet.enclosesAll(rangeSet));
     assertEquals(ImmutableRangeSet.<Integer>of(), rangeSet.complement());
   }
@@ -338,8 +339,7 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
             .build();
 
     assertThrows(
-        UnsupportedOperationException.class,
-        () -> rangeSet.addAll(ImmutableRangeSet.<Integer>of()));
+        UnsupportedOperationException.class, () -> rangeSet.addAll(ImmutableRangeSet.of()));
   }
 
   @SuppressWarnings("DoNotCall")
@@ -362,8 +362,7 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
             .build();
 
     assertThrows(
-        UnsupportedOperationException.class,
-        () -> rangeSet.removeAll(ImmutableRangeSet.<Integer>of()));
+        UnsupportedOperationException.class, () -> rangeSet.removeAll(ImmutableRangeSet.of()));
 
     assertThrows(
         UnsupportedOperationException.class,
@@ -374,8 +373,8 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
   public void testExhaustive() {
     ImmutableSet<Range<Integer>> ranges =
         ImmutableSet.of(
-            Range.<Integer>all(),
-            Range.<Integer>closedOpen(3, 5),
+            Range.all(),
+            Range.closedOpen(3, 5),
             Range.singleton(1),
             Range.lessThan(2),
             Range.greaterThan(10),
@@ -386,7 +385,7 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
             Range.openClosed(5, 7),
             Range.open(3, 4));
     subsets:
-    for (Set<Range<Integer>> subset : Sets.powerSet(ranges)) {
+    for (Set<Range<Integer>> subset : powerSet(ranges)) {
       assertEquals(TreeRangeSet.create(subset), ImmutableRangeSet.unionOf(subset));
 
       RangeSet<Integer> mutable = TreeRangeSet.create();
@@ -429,8 +428,8 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
         assertEquals(mutable.contains(i), built.contains(i));
       }
 
-      SerializableTester.reserializeAndAssert(built);
-      SerializableTester.reserializeAndAssert(built.asRanges());
+      reserializeAndAssert(built);
+      reserializeAndAssert(built.asRanges());
     }
   }
 
@@ -491,7 +490,7 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
     assertEquals(expectedSet, asSet);
     assertThat(asSet).containsExactlyElementsIn(expectedSet).inOrder();
     assertTrue(asSet.containsAll(expectedSet));
-    SerializableTester.reserializeAndAssert(asSet);
+    reserializeAndAssert(asSet);
   }
 
   public void testAsSetHeadSet() {
@@ -530,7 +529,7 @@ public class ImmutableRangeSetTest extends AbstractRangeSetTest {
 
   public void testSubRangeSet() {
     ImmutableList.Builder<Range<Integer>> rangesBuilder = ImmutableList.builder();
-    rangesBuilder.add(Range.<Integer>all());
+    rangesBuilder.add(Range.all());
     for (int i = -2; i <= 2; i++) {
       for (BoundType boundType : BoundType.values()) {
         rangesBuilder.add(Range.upTo(i, boundType));

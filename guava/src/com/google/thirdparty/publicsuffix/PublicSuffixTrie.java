@@ -14,6 +14,8 @@
 
 package com.google.thirdparty.publicsuffix;
 
+import static java.lang.Math.min;
+
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -209,7 +211,7 @@ public final class PublicSuffixTrie {
   private int compareLabel(String label, int offset) {
     int labelLen = label.length();
     int nodeLabelLen = stringPool.charAt(offset);
-    int minLen = Math.min(nodeLabelLen, labelLen);
+    int minLen = min(nodeLabelLen, labelLen);
     for (int i = 0; i < minLen; i++) {
       char c1 = label.charAt(i);
       char c2 = stringPool.charAt(offset + 1 + i);

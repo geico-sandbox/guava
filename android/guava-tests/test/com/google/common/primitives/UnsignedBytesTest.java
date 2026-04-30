@@ -16,20 +16,21 @@
 
 package com.google.common.primitives;
 
+import static com.google.common.collect.testing.Helpers.testComparator;
 import static com.google.common.primitives.UnsignedBytes.max;
 import static com.google.common.primitives.UnsignedBytes.min;
+import static com.google.common.testing.SerializableTester.reserialize;
 import static com.google.common.truth.Truth.assertThat;
 import static com.google.common.truth.Truth.assertWithMessage;
 import static java.lang.Byte.toUnsignedInt;
 import static java.lang.Math.signum;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertThrows;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
-import com.google.common.collect.testing.Helpers;
 import com.google.common.primitives.UnsignedBytes.LexicographicalComparatorHolder.UnsafeComparator;
 import com.google.common.testing.NullPointerTester;
-import com.google.common.testing.SerializableTester;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -232,7 +233,7 @@ public class UnsignedBytesTest extends TestCase {
 
   public void testLexicographicalComparator() {
     List<byte[]> ordered =
-        Arrays.asList(
+        asList(
             new byte[] {},
             new byte[] {LEAST},
             new byte[] {LEAST, LEAST},
@@ -245,13 +246,13 @@ public class UnsignedBytesTest extends TestCase {
 
     // The VarHandle, Unsafe, or Java implementation.
     Comparator<byte[]> comparator = UnsignedBytes.lexicographicalComparator();
-    Helpers.testComparator(comparator, ordered);
-    assertThat(SerializableTester.reserialize(comparator)).isSameInstanceAs(comparator);
+    testComparator(comparator, ordered);
+    assertThat(reserialize(comparator)).isSameInstanceAs(comparator);
 
     // The Java implementation.
     Comparator<byte[]> javaImpl = UnsignedBytes.lexicographicalComparatorJavaImpl();
-    Helpers.testComparator(javaImpl, ordered);
-    assertThat(SerializableTester.reserialize(javaImpl)).isSameInstanceAs(javaImpl);
+    testComparator(javaImpl, ordered);
+    assertThat(reserialize(javaImpl)).isSameInstanceAs(javaImpl);
   }
 
   public void testLexicographicalComparatorLongPseudorandomInputs() {

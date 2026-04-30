@@ -16,6 +16,7 @@
 
 package com.google.common.graph;
 
+import static com.google.common.graph.AbstractNetworkTest.validateNetwork;
 import static com.google.common.graph.GraphConstants.ENDPOINTS_MISMATCH;
 import static com.google.common.graph.TestUtil.assertStronglyEquivalent;
 import static com.google.common.truth.Truth.assertThat;
@@ -57,7 +58,7 @@ public final class ValueGraphTest {
     assertThat(graph.allowsSelfLoops()).isEqualTo(asGraph.allowsSelfLoops());
 
     Network<Integer, EndpointPair<Integer>> asNetwork = graph.asNetwork();
-    AbstractNetworkTest.validateNetwork(asNetwork);
+    validateNetwork(asNetwork);
     assertThat(graph.nodes()).isEqualTo(asNetwork.nodes());
     assertThat(graph.edges()).hasSize(asNetwork.edges().size());
     assertThat(graph.nodeOrder()).isEqualTo(asNetwork.nodeOrder());

@@ -15,6 +15,8 @@
 package com.google.common.util.concurrent;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Arrays.sort;
+import static java.util.Collections.unmodifiableList;
 
 import com.google.common.annotations.GwtIncompatible;
 import com.google.common.annotations.J2ktIncompatible;
@@ -30,8 +32,6 @@ import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
 import java.math.RoundingMode;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.Semaphore;
@@ -148,7 +148,7 @@ public abstract class Striped<L> {
     for (int i = 0; i < result.size(); i++) {
       stripes[i] = indexFor(result.get(i));
     }
-    Arrays.sort(stripes);
+    sort(stripes);
     // optimize for runs of identical stripes
     int previousStripe = stripes[0];
     result.set(0, getAt(previousStripe));
@@ -180,7 +180,7 @@ public abstract class Striped<L> {
      */
     @SuppressWarnings("unchecked") // we carefully replaced all keys with their respective L's
     List<L> asStripes = (List<L>) result;
-    return Collections.unmodifiableList(asStripes);
+    return unmodifiableList(asStripes);
   }
 
   // Static factories

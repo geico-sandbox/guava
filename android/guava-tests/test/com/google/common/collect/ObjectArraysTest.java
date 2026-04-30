@@ -16,6 +16,7 @@
 
 package com.google.common.collect;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.annotations.GwtCompatible;
@@ -126,7 +127,7 @@ public class ObjectArraysTest extends TestCase {
 
   public void testToArrayImpl1() {
     doTestToArrayImpl1(new ArrayList<Integer>());
-    doTestToArrayImpl1(Lists.newArrayList(1));
+    doTestToArrayImpl1(newArrayList(1));
     doTestToArrayImpl1(Lists.<@Nullable Integer>newArrayList(1, null, 3));
   }
 
@@ -141,9 +142,9 @@ public class ObjectArraysTest extends TestCase {
     doTestToArrayImpl2(new ArrayList<Integer>(), new Integer[0], false);
     doTestToArrayImpl2(new ArrayList<Integer>(), new Integer[1], true);
 
-    doTestToArrayImpl2(Lists.newArrayList(1), new Integer[0], false);
-    doTestToArrayImpl2(Lists.newArrayList(1), new Integer[1], true);
-    doTestToArrayImpl2(Lists.newArrayList(1), new Integer[] {2, 3}, true);
+    doTestToArrayImpl2(newArrayList(1), new Integer[0], false);
+    doTestToArrayImpl2(newArrayList(1), new Integer[1], true);
+    doTestToArrayImpl2(newArrayList(1), new Integer[] {2, 3}, true);
 
     doTestToArrayImpl2(Lists.<@Nullable Integer>newArrayList(1, null, 3), new Integer[0], false);
     doTestToArrayImpl2(Lists.<@Nullable Integer>newArrayList(1, null, 3), new Integer[2], false);

@@ -16,6 +16,7 @@
 
 package com.google.common.graph;
 
+import static com.google.common.collect.Sets.intersection;
 import static com.google.common.graph.TestUtil.assertEdgeNotInGraphErrorMessage;
 import static com.google.common.graph.TestUtil.assertEdgeRemovedFromGraphErrorMessage;
 import static com.google.common.graph.TestUtil.assertNodeNotInGraphErrorMessage;
@@ -29,7 +30,6 @@ import static org.junit.Assert.assertThrows;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 import java.util.Set;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
@@ -241,7 +241,7 @@ public abstract class AbstractNetworkTest {
         boolean connected = !edgesConnecting.isEmpty();
         if (network.isDirected() || !isSelfLoop) {
           assertThat(edgesConnecting)
-              .isEqualTo(Sets.intersection(network.outEdges(node), network.inEdges(otherNode)));
+              .isEqualTo(intersection(network.outEdges(node), network.inEdges(otherNode)));
         }
         if (!network.allowsParallelEdges()) {
           assertThat(edgesConnecting.size()).isAtMost(1);

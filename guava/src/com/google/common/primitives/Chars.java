@@ -18,6 +18,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkPositionIndexes;
+import static java.lang.System.arraycopy;
+import static java.util.Arrays.sort;
+import static java.util.Collections.emptyList;
 
 import com.google.common.annotations.GwtCompatible;
 import com.google.common.annotations.GwtIncompatible;
@@ -28,7 +31,6 @@ import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.RandomAccess;
@@ -285,7 +287,7 @@ public final class Chars {
     char[] result = new char[checkNoOverflow(length)];
     int pos = 0;
     for (char[] array : arrays) {
-      System.arraycopy(array, 0, result, pos, array.length);
+      arraycopy(array, 0, result, pos, array.length);
       pos += array.length;
     }
     return result;
@@ -467,7 +469,7 @@ public final class Chars {
   public static void sortDescending(char[] array, int fromIndex, int toIndex) {
     checkNotNull(array);
     checkPositionIndexes(fromIndex, toIndex, array.length);
-    Arrays.sort(array, fromIndex, toIndex);
+    sort(array, fromIndex, toIndex);
     reverse(array, fromIndex, toIndex);
   }
 
@@ -568,7 +570,7 @@ public final class Chars {
    */
   public static List<Character> asList(char... backingArray) {
     if (backingArray.length == 0) {
-      return Collections.emptyList();
+      return emptyList();
     }
     return new CharArrayAsList(backingArray);
   }
@@ -650,7 +652,7 @@ public final class Chars {
       int size = size();
       checkPositionIndexes(fromIndex, toIndex, size);
       if (fromIndex == toIndex) {
-        return Collections.emptyList();
+        return emptyList();
       }
       return new CharArrayAsList(array, start + fromIndex, start + toIndex);
     }
